@@ -1,0 +1,480 @@
+{
+  "upstream_commit": "8723a05d1993bf0199a453b47dc6ee167d493c23",
+  "python": "3.12.14 (main, Sep  1 2026, 14:16:52) [Clang 22.1.3 ]",
+  "numpy": "2.5.1",
+  "source_sha256": {
+    "gcopter_solver.hpp": "9617ee6d45a0a41d528d3487bd7ed39f27419827937d3d158e864717db306026",
+    "gcopter/minco.hpp": "4f84983cd53e2ec23e1467994d0402a6ea0fda4cfd262982589e2c1e1de47965",
+    "gcopter/flatness.hpp": "6b7f45b5b313a3981b3eb79a63e37f8025c262d90d6edc6eeabb6503ec9390b2",
+    "gcopter/lbfgs.hpp": "fdc6b0d4c4b4c50e0368d6983dd28ffd893c824df461aebe9e3b24dd8a99b3ca",
+    "gcopter/geo_utils.hpp": "597a214e8eb5b61b68c8bfe3094c3e2b80a314bd92d4565ebbaa5b8c9da1020d"
+  },
+  "runtime_sha256": {
+    "src/isaac_pathcover/trajectory/lbfgs.py": "363ef8621bfdf451c9814bd9031bc11dc5ed46d5734da39dd876912957250bfc",
+    "src/isaac_pathcover/trajectory/diagnostics.py": "7a4b991ed72fcf24077c60cd3d5f6dd6908f420fdbd6a0cac7229c243e152fd2",
+    "src/isaac_pathcover/trajectory/flatness.py": "4eb3178ec5526ac1116bb69a637eb53740b638762bcb6ca10b8fd9f9f602aff8",
+    "src/isaac_pathcover/trajectory/__init__.py": "91b1643bd07cd1ec519a16fb2c4aabeab79bf3f7f6141aecb1c97e4b8ac9579f",
+    "src/isaac_pathcover/trajectory/gcopter.py": "d9037d193f9b0789b02274b545c856f8755625e3becf1302471d56b1b621d15b",
+    "src/isaac_pathcover/trajectory/minco.py": "9d00af85454dd6d00f8e89c9feda749a396acaf63bf551e53dfa76690168bdf3",
+    "src/isaac_pathcover/planning/geometry.py": "4bfb2c17b63668d9cc4e4c01a4849a552c73a7c13f73047db3b0b062e02fb876"
+  },
+  "tests": {
+    "trajectory_cases": 29,
+    "trajectory_and_geometry_total_cases": 38,
+    "elapsed_s": 8.68,
+    "command": "PYTHONPATH=src OPENBLAS_NUM_THREADS=1 PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 python -m pytest tests/test_trajectory_reference.py tests/test_trajectory_scenes.py tests/test_corridor.py tests/test_risp_reference.py -q"
+  },
+  "reference_errors": {
+    "MINCO_S3": {
+      "coefficients_abs": 1.0658141036401503e-14,
+      "energy_abs": 1.1937117960769683e-12,
+      "coefficient_gradient_abs": 1.3642420526593924e-12,
+      "partial_time_gradient_abs": 1.8758328224066645e-12,
+      "point_gradient_abs": 1.5347723092418164e-12,
+      "time_gradient_abs": 3.126388037344441e-12
+    },
+    "MINCO_S4": {
+      "coefficients_abs": 1.270095140171179e-13,
+      "energy_abs": 8.640199666842818e-12,
+      "coefficient_gradient_abs": 5.238689482212067e-10,
+      "partial_time_gradient_abs": 4.4224179873708636e-11,
+      "point_gradient_abs": 1.7462298274040222e-10,
+      "time_gradient_abs": 1.053194864653051e-09
+    },
+    "flatness": {
+      "thrust": 0.0,
+      "quat": 0.0,
+      "omega": 2.7755575615628914e-17,
+      "grad_pos": 0.0,
+      "grad_vel": 2.7755575615628914e-17,
+      "grad_acc": 1.1102230246251565e-16,
+      "grad_jer": 6.938893903907228e-18,
+      "grad_yaw": 0.0,
+      "grad_yaw_rate": 0.0
+    }
+  },
+  "scene_validation": {
+    "medium": {
+      "random_seed": 0,
+      "source_start_index": 1,
+      "input_sha256": "43b99b4dc76022feaae8f7ee9226964c65aec3524017ba97166e97da77942fe0",
+      "same_initial_x_bitwise": true,
+      "pieces": 6,
+      "variables": 241,
+      "initial_errors": {
+        "cost_abs_error": 1.6689300537109375e-05,
+        "cost_relative_error": 5.404877462708717e-14,
+        "gradient_abs_error": 0.0004825294017791748,
+        "gradient_scaled_error": 9.131326242563344e-11,
+        "gradient_l2_relative_error": 6.860132698332291e-13
+      },
+      "python_final_x_cross_errors": {
+        "cost_abs_error": 7.958078640513122e-13,
+        "cost_relative_error": 1.4840586130646254e-15,
+        "gradient_abs_error": 4.37326264091098e-09,
+        "gradient_scaled_error": 1.0624636155244217e-10,
+        "gradient_l2_relative_error": 4.1353645611569454e-11
+      },
+      "cpp_final_x_cross_errors": {
+        "cost_abs_error": 9.094947017729282e-13,
+        "cost_relative_error": 1.7004154372819482e-15,
+        "gradient_abs_error": 1.767034518707078e-09,
+        "gradient_scaled_error": 3.972203838919399e-11,
+        "gradient_l2_relative_error": 1.3442119098187125e-11
+      },
+      "cost_python": 536.237488900756,
+      "cost_cpp": 534.8661755427969,
+      "final_cost_relative_difference": 0.0025638438560215407,
+      "iterations_python": 111,
+      "iterations_cpp": 132,
+      "success_python": true,
+      "status_cpp": 1,
+      "python_times_s": [
+        0.4313914221711457,
+        0.4669552680570632,
+        0.47524290112778544
+      ],
+      "cpp_time_s": 0.014862478,
+      "diagnostics": {
+        "max_speed": 3.0008348107017366,
+        "max_acceleration": 2.9610859635957367,
+        "max_body_rate": 1.215636506047387,
+        "max_tilt": 0.3013876109072123,
+        "min_thrust": 7.0857324422492605,
+        "max_thrust": 7.94509126562862,
+        "max_corridor_residual_m": -0.12049404675219133,
+        "piece_corridor_residual_m": [
+          -0.12049404675219133,
+          -0.26021912166307876,
+          -0.1479131534036746,
+          -0.16620729793661404,
+          -0.1904219201405627,
+          -0.25622323316703666
+        ],
+        "speed_limit_residual": 0.0008348107017366324,
+        "body_rate_limit_residual": -1.784363493952613,
+        "tilt_limit_residual": -0.4840123890927877,
+        "thrust_lower_limit_residual": -5.0857324422492605,
+        "thrust_upper_limit_residual": -2.05490873437138,
+        "position_sample_min": [
+          -11.04,
+          -2.256409039724832,
+          1.0181694955554386
+        ],
+        "position_sample_max": [
+          -3.1731406418763326,
+          -1.9722691920798294,
+          1.8168593581236663
+        ],
+        "polynomial_extrema": "stationary roots in normalized piece time",
+        "flatness_samples_per_piece": 101
+      }
+    },
+    "dense": {
+      "random_seed": 0,
+      "source_start_index": 0,
+      "input_sha256": "87cce37148c2a27faf5f24a302bd6d326b5d1c8ef5220f159b0d5b75da3613dd",
+      "same_initial_x_bitwise": true,
+      "pieces": 7,
+      "variables": 225,
+      "initial_errors": {
+        "cost_abs_error": 6.079673767089844e-06,
+        "cost_relative_error": 5.706631591814561e-15,
+        "gradient_abs_error": 1.5020370483398438e-05,
+        "gradient_scaled_error": 1.8175767172316405e-11,
+        "gradient_l2_relative_error": 1.8828236618900374e-14
+      },
+      "python_final_x_cross_errors": {
+        "cost_abs_error": 0.0,
+        "cost_relative_error": 0.0,
+        "gradient_abs_error": 1.4327339314945675e-10,
+        "gradient_scaled_error": 1.1663277452668154e-10,
+        "gradient_l2_relative_error": 2.5461566668997143e-11
+      },
+      "cpp_final_x_cross_errors": {
+        "cost_abs_error": 5.684341886080802e-14,
+        "cost_relative_error": 1.207357205355783e-16,
+        "gradient_abs_error": 2.602718041089247e-11,
+        "gradient_scaled_error": 1.287830952989566e-11,
+        "gradient_l2_relative_error": 4.8180335868981504e-12
+      },
+      "cost_python": 470.78174690907036,
+      "cost_cpp": 470.80862737765705,
+      "final_cost_relative_difference": 5.709425661208314e-05,
+      "iterations_python": 150,
+      "iterations_cpp": 148,
+      "success_python": true,
+      "status_cpp": 1,
+      "python_times_s": [
+        0.7058986718766391,
+        0.6635385069530457,
+        0.6568892351351678
+      ],
+      "cpp_time_s": 0.017990246,
+      "diagnostics": {
+        "max_speed": 2.5797365156100986,
+        "max_acceleration": 2.714573250979741,
+        "max_body_rate": 1.03975393155108,
+        "max_tilt": 0.2628672476589405,
+        "min_thrust": 7.141011030118954,
+        "max_thrust": 8.243386393838989,
+        "max_corridor_residual_m": -0.12499999999999994,
+        "piece_corridor_residual_m": [
+          -0.148530140568492,
+          -0.14761543662661003,
+          -0.14235233723243024,
+          -0.14989507739541175,
+          -0.18963766259107173,
+          -0.18967656908933783,
+          -0.12499999999999994
+        ],
+        "speed_limit_residual": -0.42026348438990135,
+        "body_rate_limit_residual": -1.96024606844892,
+        "tilt_limit_residual": -0.5225327523410594,
+        "thrust_lower_limit_residual": -5.141011030118954,
+        "thrust_upper_limit_residual": -1.756613606161011,
+        "position_sample_min": [
+          -14.0,
+          -6.568674012244588,
+          0.11499999999999996
+        ],
+        "position_sample_max": [
+          -10.605540753771397,
+          -3.3555407537713964,
+          0.593548640545249
+        ],
+        "polynomial_extrema": "stationary roots in normalized piece time",
+        "flatness_samples_per_piece": 101
+      }
+    }
+  },
+  "replan_regression": {
+    "medium": {
+      "plan_number": 15,
+      "time": 7.5,
+      "stored_time": 7.5,
+      "input_sha256": "781fb46ad5a444421aae3709632737f36a128e322bdb65041a6277638cce3124",
+      "start": [
+        [
+          2.587898015975952,
+          2.707062244415283,
+          0.8517265319824219
+        ],
+        [
+          -2.4905433654785156,
+          -0.8226796388626099,
+          0.4524707794189453
+        ],
+        [
+          2.189688205718994,
+          0.7993513345718384,
+          2.2507429122924805
+        ]
+      ],
+      "clamped_start": [
+        [
+          2.587898015975952,
+          2.707062244415283,
+          0.8517265319824219
+        ],
+        [
+          -2.4905433654785156,
+          -0.8226796388626099,
+          0.4524707794189453
+        ],
+        [
+          2.189688205718994,
+          0.7993513345718384,
+          2.2507429122924805
+        ]
+      ],
+      "initial_times": [
+        0.1057090062973282,
+        0.09654098375208732,
+        0.1165232723618954,
+        0.16659387832907183,
+        0.17796015929657472,
+        0.21676501255519962,
+        0.17269734018874164
+      ],
+      "initial_cost": 81769284.61705516,
+      "initial_errors": {
+        "cost_abs_error": 4.76837158203125e-07,
+        "cost_relative_error": 5.8314948019450466e-15,
+        "gradient_abs_error": 8.717179298400879e-06,
+        "gradient_scaled_error": 2.389782283100432e-12,
+        "gradient_l2_relative_error": 8.341368667774638e-14
+      },
+      "python_cost": 466.2155805714645,
+      "cpp_cost": 1153276.6988877542,
+      "python_iterations": 504,
+      "cpp_iterations": 232,
+      "python_status": "relative cost convergence",
+      "cpp_status": 1,
+      "python_final_cross_errors": {
+        "cost_abs_error": 1.1368683772161603e-13,
+        "cost_relative_error": 2.4385036120471183e-16,
+        "gradient_abs_error": 1.0959748664163271e-09,
+        "gradient_scaled_error": 3.280407612216152e-10,
+        "gradient_l2_relative_error": 7.296103334643295e-11
+      },
+      "cpp_final_cross_errors": {
+        "cost_abs_error": 5.8199046179652214e-05,
+        "cost_relative_error": 5.046407877292646e-11,
+        "gradient_abs_error": 2157.042673110962,
+        "gradient_scaled_error": 2.5310544554147747e-07,
+        "gradient_l2_relative_error": 2.508181080085911e-07
+      },
+      "diagnostics": {
+        "max_speed": 3.0229013469630472,
+        "max_acceleration": 2.7684309509539653,
+        "max_body_rate": 1.051062317226729,
+        "max_tilt": 0.25726310914325307,
+        "min_thrust": 6.254936413186678,
+        "max_thrust": 9.09608227038158,
+        "max_corridor_residual_m": -0.14842591007250927,
+        "piece_corridor_residual_m": [
+          -0.32837453805245964,
+          -0.14842591007250927,
+          -0.14872000853476727,
+          -0.14898890507002482,
+          -0.30660776159141756,
+          -0.3378508986796165,
+          -0.5364954003614675
+        ],
+        "speed_limit_residual": 0.022901346963047242,
+        "body_rate_limit_residual": -1.948937682773271,
+        "tilt_limit_residual": -0.528136890856747,
+        "thrust_lower_limit_residual": -4.254936413186678,
+        "thrust_upper_limit_residual": -0.9039177296184207,
+        "position_sample_min": [
+          2.587898015975952,
+          -3.375,
+          1.7920438224806334
+        ],
+        "position_sample_max": [
+          11.947956177519364,
+          -2.4905433654785156,
+          2.8412799351063476
+        ],
+        "polynomial_extrema": "stationary roots in normalized piece time",
+        "flatness_samples_per_piece": 101
+      },
+      "old_duration": 1.4194410047061343,
+      "new_duration": 3.972680917416344,
+      "old_coefficient_max_difference": 1489.3536905300439
+    },
+    "dense": {
+      "plan_number": 12,
+      "time": 6.0,
+      "stored_time": 6.0,
+      "input_sha256": "aa76b993b0b562d14e50fa90b5b4534c86b82eee28675bd92b8b30fa43b63301",
+      "start": [
+        [
+          -10.40464973449707,
+          0.317126601934433,
+          0.4346102476119995
+        ],
+        [
+          -2.9878878593444824,
+          -0.2751128375530243,
+          -3.6789551377296448
+        ],
+        [
+          0.2119600772857666,
+          -0.04218681529164314,
+          -3.3171054907143116
+        ]
+      ],
+      "clamped_start": [
+        [
+          -10.40464973449707,
+          0.317126601934433,
+          0.4346102476119995
+        ],
+        [
+          -2.9878878593444824,
+          -0.2751128375530243,
+          -3.6789551377296448
+        ],
+        [
+          0.2119600772857666,
+          -0.04218681529164314,
+          -3.3171054907143116
+        ]
+      ],
+      "initial_times": [
+        0.03223989827076768,
+        0.03975528427120663,
+        0.04940240093288022,
+        0.09304291704670874,
+        0.1005721050780517,
+        0.09086762530602029,
+        0.0795717522817275
+      ],
+      "initial_cost": 4300005121.075467,
+      "initial_errors": {
+        "cost_abs_error": 5.7220458984375e-06,
+        "cost_relative_error": 1.330706763671569e-15,
+        "gradient_abs_error": 0.00045114755630493164,
+        "gradient_scaled_error": 1.1461566349033218e-11,
+        "gradient_l2_relative_error": 8.58713719984389e-14
+      },
+      "python_cost": 1249.1538583886415,
+      "cpp_cost": 1199.343337833315,
+      "python_iterations": 273,
+      "cpp_iterations": 361,
+      "python_status": "relative cost convergence",
+      "cpp_status": 1,
+      "python_final_cross_errors": {
+        "cost_abs_error": 2.1827872842550278e-11,
+        "cost_relative_error": 1.74741267426472e-14,
+        "gradient_abs_error": 1.365981461276533e-07,
+        "gradient_scaled_error": 1.1813682476713439e-08,
+        "gradient_l2_relative_error": 3.640864087992149e-10
+      },
+      "cpp_final_cross_errors": {
+        "cost_abs_error": 1.1823431123048067e-11,
+        "cost_relative_error": 9.858253887838156e-15,
+        "gradient_abs_error": 2.3415378791469266e-07,
+        "gradient_scaled_error": 8.949473952813836e-09,
+        "gradient_l2_relative_error": 4.808318332175188e-10
+      },
+      "diagnostics": {
+        "max_speed": 2.231399516814639,
+        "max_acceleration": 5.851120758470735,
+        "max_body_rate": 3.005203024280887,
+        "max_tilt": 0.5559283552371561,
+        "min_thrust": 5.619263629093096,
+        "max_thrust": 9.452144097698874,
+        "max_corridor_residual_m": -0.03114883063172158,
+        "piece_corridor_residual_m": [
+          -0.07891648403909385,
+          -0.03114883063172158,
+          -0.1662325548728042,
+          -0.13527079224376592,
+          -0.1509225292581321,
+          -0.3210862478728316,
+          -0.12500000000000008
+        ],
+        "speed_limit_residual": -0.7686004831853608,
+        "body_rate_limit_residual": 0.005203024280886925,
+        "tilt_limit_residual": -0.22947164476284387,
+        "thrust_lower_limit_residual": -3.619263629093096,
+        "thrust_upper_limit_residual": -0.5478559023011265,
+        "position_sample_min": [
+          -10.40464973449707,
+          -3.2758454222860434,
+          0.07559210427098365
+        ],
+        "position_sample_max": [
+          -6.338588117952171,
+          -1.838588117952172,
+          0.47214466237159175
+        ],
+        "polynomial_extrema": "stationary roots in normalized piece time",
+        "flatness_samples_per_piece": 101
+      },
+      "old_duration": 4.279757684339971,
+      "new_duration": 4.0472549006285155,
+      "old_coefficient_max_difference": 2125.7801394324274
+    }
+  },
+  "performance": {
+    "python_version": "3.12.14",
+    "case": "two overlapping box polytopes, 2 MINCO pieces, 16 trapezoid intervals",
+    "evaluations_per_trial": 100,
+    "trials": 5,
+    "before_seconds_per_cost_gradient": [
+      0.0025640061288140716,
+      0.002504486981779337,
+      0.0026766705606132745,
+      0.0024220845801755787,
+      0.0027635426702909173
+    ],
+    "after_seconds_per_cost_gradient": [
+      0.0019811597489751876,
+      0.001926083618309349,
+      0.001962983838748187,
+      0.0019628469203598797,
+      0.0018619962804950773
+    ],
+    "median_speedup": 1.306269022927153,
+    "optimization_python_s": 0.06795742199756205,
+    "optimization_cpp_s": 0.000540091,
+    "optimization_cost_python": 346.1426448664393,
+    "optimization_cost_cpp": 346.14264495058273,
+    "iterations": 26,
+    "changes": [
+      "Batch flatness forward/reverse algebra",
+      "Cache derivative factorial/exponent tables",
+      "Batch MINCO endpoint derivatives and quadrature derivative bases"
+    ]
+  },
+  "limitations": [
+    "Native L-BFGS retains source nonconvex local convergence and past=3 relative-cost stopping. A successful status does not prove feasibility of soft constraints.",
+    "At near-zero specific thrust or nearly inverted attitudes the original flatness map is ill-conditioned. The stored source final iterate of medium replan shows gradient scaled discrepancy 2.54e-7; see trajectory_singularity_diagnostics.json.",
+    "Qhull and source QuickHull can enumerate vertices in different orders. All objective oracles use identical full numerical coordinate matrices and variables; source-native vertex counts agree for both measured replan regressions.",
+    "SciPy LAPACK pivoted band LU solves the original MINCO constraint system and its adjoint; it differs in arithmetic order from the source no-pivot band elimination."
+  ]
+}

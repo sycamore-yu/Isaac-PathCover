@@ -1,0 +1,176 @@
+{
+  "dynamics": {
+    "rotor_positions": [
+      [
+        0.075,
+        -0.1,
+        0
+      ],
+      [
+        -0.075,
+        0.1,
+        0
+      ],
+      [
+        -0.075,
+        -0.1,
+        0
+      ],
+      [
+        0.075,
+        0.1,
+        0
+      ]
+    ],
+    "rotor_thrust_directions": [
+      [
+        0,
+        0,
+        1
+      ],
+      [
+        0,
+        0,
+        1
+      ],
+      [
+        0,
+        0,
+        1
+      ],
+      [
+        0,
+        0,
+        1
+      ]
+    ],
+    "rotor_torque_directions": [
+      [
+        0,
+        0,
+        -1
+      ],
+      [
+        0,
+        0,
+        -1
+      ],
+      [
+        0,
+        0,
+        1
+      ],
+      [
+        0,
+        0,
+        1
+      ]
+    ],
+    "rotor_thrust_coefficients": [
+      [
+        0,
+        0,
+        8.5
+      ],
+      [
+        0,
+        0,
+        8.5
+      ],
+      [
+        0,
+        0,
+        8.5
+      ],
+      [
+        0,
+        0,
+        8.5
+      ]
+    ],
+    "rotor_torque_constants": [
+      0.022,
+      0.022,
+      0.022,
+      0.022
+    ],
+    "rotor_time_constants_rising": [
+      0.033,
+      0.033,
+      0.033,
+      0.033
+    ],
+    "rotor_time_constants_falling": [
+      0.033,
+      0.033,
+      0.033,
+      0.033
+    ],
+    "mass": 0.752,
+    "gravity": [
+      0,
+      0,
+      -9.8066
+    ],
+    "J": [
+      [
+        0.0025,
+        0,
+        0
+      ],
+      [
+        0,
+        0.0021,
+        0
+      ],
+      [
+        0,
+        0,
+        0.0043
+      ]
+    ],
+    "J_inv": [
+      [
+        400,
+        0,
+        0
+      ],
+      [
+        0,
+        476.1904761904762,
+        0
+      ],
+      [
+        0,
+        0,
+        232.5581395348837
+      ]
+    ],
+    "hovering_throttle_relative": 0.4657240788783191,
+    "action_limit": {
+      "min": 0,
+      "max": 1
+    },
+    "body_rate_limit": [
+      10,
+      10,
+      4
+    ],
+    "body_rate_gain": [
+      8,
+      8,
+      8
+    ],
+    "parameter_source": "prisma-lab/CA-AC-MPC@14aa349bb1f509c529bf3662c7feb72db68f1cb7/acmpc_public-master/diff_mpc_drones/drone.py",
+    "model_assumptions": [
+      "u is normalized motor speed, not measured RPM; f=8.5*u^2 N.",
+      "The declared upstream motor_tau=0.033 s is applied to motor speed, equally for rise and fall.",
+      "Reset initializes motors at hover. No motor-speed slew-rate limit or aerodynamic drag is added.",
+      "body_rate_gain is a simulation-calibrated execution parameter in 1/s, not an upstream learned-policy parameter."
+    ]
+  },
+  "integration": {
+    "dt": 0.02
+  }
+}
+

@@ -1,0 +1,66 @@
+{
+  "source_repo": "/home/tong/tongworkspace/projects/aerial/Isaac-L2F",
+  "source_commit": "c9771ed45056363be735c6b8fa36bf93ae5014d1",
+  "scenarios": {
+    "medium": {
+      "source_file": "src/isaac_l2f/planning/corto/medium_obstacles.json",
+      "source_sha256": "e7cd31aa9b3e079bb2e86f75d88a332f07561f35b8b668883adb787233424d46",
+      "obstacle_count": 100,
+      "occupied_voxels": 59870,
+      "collision_boxes": 762,
+      "shape": [
+        300,
+        150,
+        30
+      ],
+      "resolution": 0.1,
+      "origin": [
+        -15.0,
+        -7.5,
+        -0.01
+      ],
+      "start": [
+        -11.04,
+        -2.11,
+        1.28
+      ],
+      "goal": [
+        12.68,
+        -3.47,
+        1.04
+      ],
+      "asset_sha256": "2c67742d407728b86109df7e1f2689c916ce5c8111ca2a55996871becaae7571",
+      "provenance": "original Medium"
+    },
+    "dense": {
+      "source_file": "src/isaac_l2f/planning/corto/table3_maps/dense_reconstructed.json",
+      "source_sha256": "aacf819961e8ec4efce1498c5eb856cce24d0a6abb4e8771be89feee26177c46",
+      "obstacle_count": 180,
+      "occupied_voxels": 103876,
+      "collision_boxes": 1372,
+      "shape": [
+        300,
+        150,
+        30
+      ],
+      "resolution": 0.1,
+      "origin": [
+        -15.0,
+        -7.5,
+        -0.01
+      ],
+      "start": [
+        -14.0,
+        -6.5,
+        0.49
+      ],
+      "goal": [
+        6.8,
+        5.2,
+        0.49
+      ],
+      "asset_sha256": "c86348f10cd39f82117cbb77cacad40e92bb1cf8872346878afb419e960109b4",
+      "provenance": "existing Dense reconstructed; not a claimed original published map"
+    }
+  }
+}

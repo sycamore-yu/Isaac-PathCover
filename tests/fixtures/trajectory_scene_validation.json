@@ -1,0 +1,155 @@
+{
+  "medium": {
+    "random_seed": 0,
+    "source_start_index": 1,
+    "input_sha256": "43b99b4dc76022feaae8f7ee9226964c65aec3524017ba97166e97da77942fe0",
+    "same_initial_x_bitwise": true,
+    "pieces": 6,
+    "variables": 241,
+    "initial_errors": {
+      "cost_abs_error": 1.6689300537109375e-05,
+      "cost_relative_error": 5.404877462708717e-14,
+      "gradient_abs_error": 0.0004825294017791748,
+      "gradient_scaled_error": 9.131326242563344e-11,
+      "gradient_l2_relative_error": 6.860132698332291e-13
+    },
+    "python_final_x_cross_errors": {
+      "cost_abs_error": 7.958078640513122e-13,
+      "cost_relative_error": 1.4840586130646254e-15,
+      "gradient_abs_error": 4.37326264091098e-09,
+      "gradient_scaled_error": 1.0624636155244217e-10,
+      "gradient_l2_relative_error": 4.1353645611569454e-11
+    },
+    "cpp_final_x_cross_errors": {
+      "cost_abs_error": 9.094947017729282e-13,
+      "cost_relative_error": 1.7004154372819482e-15,
+      "gradient_abs_error": 1.767034518707078e-09,
+      "gradient_scaled_error": 3.972203838919399e-11,
+      "gradient_l2_relative_error": 1.3442119098187125e-11
+    },
+    "cost_python": 536.237488900756,
+    "cost_cpp": 534.8661755427969,
+    "final_cost_relative_difference": 0.0025638438560215407,
+    "iterations_python": 111,
+    "iterations_cpp": 132,
+    "success_python": true,
+    "status_cpp": 1,
+    "python_times_s": [
+      0.4313914221711457,
+      0.4669552680570632,
+      0.47524290112778544
+    ],
+    "cpp_time_s": 0.014862478,
+    "diagnostics": {
+      "max_speed": 3.0008348107017366,
+      "max_acceleration": 2.9610859635957367,
+      "max_body_rate": 1.215636506047387,
+      "max_tilt": 0.3013876109072123,
+      "min_thrust": 7.0857324422492605,
+      "max_thrust": 7.94509126562862,
+      "max_corridor_residual_m": -0.12049404675219133,
+      "piece_corridor_residual_m": [
+        -0.12049404675219133,
+        -0.26021912166307876,
+        -0.1479131534036746,
+        -0.16620729793661404,
+        -0.1904219201405627,
+        -0.25622323316703666
+      ],
+      "speed_limit_residual": 0.0008348107017366324,
+      "body_rate_limit_residual": -1.784363493952613,
+      "tilt_limit_residual": -0.4840123890927877,
+      "thrust_lower_limit_residual": -5.0857324422492605,
+      "thrust_upper_limit_residual": -2.05490873437138,
+      "position_sample_min": [
+        -11.04,
+        -2.256409039724832,
+        1.0181694955554386
+      ],
+      "position_sample_max": [
+        -3.1731406418763326,
+        -1.9722691920798294,
+        1.8168593581236663
+      ],
+      "polynomial_extrema": "stationary roots in normalized piece time",
+      "flatness_samples_per_piece": 101
+    }
+  },
+  "dense": {
+    "random_seed": 0,
+    "source_start_index": 0,
+    "input_sha256": "87cce37148c2a27faf5f24a302bd6d326b5d1c8ef5220f159b0d5b75da3613dd",
+    "same_initial_x_bitwise": true,
+    "pieces": 7,
+    "variables": 225,
+    "initial_errors": {
+      "cost_abs_error": 6.079673767089844e-06,
+      "cost_relative_error": 5.706631591814561e-15,
+      "gradient_abs_error": 1.5020370483398438e-05,
+      "gradient_scaled_error": 1.8175767172316405e-11,
+      "gradient_l2_relative_error": 1.8828236618900374e-14
+    },
+    "python_final_x_cross_errors": {
+      "cost_abs_error": 0.0,
+      "cost_relative_error": 0.0,
+      "gradient_abs_error": 1.4327339314945675e-10,
+      "gradient_scaled_error": 1.1663277452668154e-10,
+      "gradient_l2_relative_error": 2.5461566668997143e-11
+    },
+    "cpp_final_x_cross_errors": {
+      "cost_abs_error": 5.684341886080802e-14,
+      "cost_relative_error": 1.207357205355783e-16,
+      "gradient_abs_error": 2.602718041089247e-11,
+      "gradient_scaled_error": 1.287830952989566e-11,
+      "gradient_l2_relative_error": 4.8180335868981504e-12
+    },
+    "cost_python": 470.78174690907036,
+    "cost_cpp": 470.80862737765705,
+    "final_cost_relative_difference": 5.709425661208314e-05,
+    "iterations_python": 150,
+    "iterations_cpp": 148,
+    "success_python": true,
+    "status_cpp": 1,
+    "python_times_s": [
+      0.7058986718766391,
+      0.6635385069530457,
+      0.6568892351351678
+    ],
+    "cpp_time_s": 0.017990246,
+    "diagnostics": {
+      "max_speed": 2.5797365156100986,
+      "max_acceleration": 2.714573250979741,
+      "max_body_rate": 1.03975393155108,
+      "max_tilt": 0.2628672476589405,
+      "min_thrust": 7.141011030118954,
+      "max_thrust": 8.243386393838989,
+      "max_corridor_residual_m": -0.12499999999999994,
+      "piece_corridor_residual_m": [
+        -0.148530140568492,
+        -0.14761543662661003,
+        -0.14235233723243024,
+        -0.14989507739541175,
+        -0.18963766259107173,
+        -0.18967656908933783,
+        -0.12499999999999994
+      ],
+      "speed_limit_residual": -0.42026348438990135,
+      "body_rate_limit_residual": -1.96024606844892,
+      "tilt_limit_residual": -0.5225327523410594,
+      "thrust_lower_limit_residual": -5.141011030118954,
+      "thrust_upper_limit_residual": -1.756613606161011,
+      "position_sample_min": [
+        -14.0,
+        -6.568674012244588,
+        0.11499999999999996
+      ],
+      "position_sample_max": [
+        -10.605540753771397,
+        -3.3555407537713964,
+        0.593548640545249
+      ],
+      "polynomial_extrema": "stationary roots in normalized piece time",
+      "flatness_samples_per_piece": 101
+    }
+  }
+}

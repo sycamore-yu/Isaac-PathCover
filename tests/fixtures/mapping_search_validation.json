@@ -1,0 +1,124 @@
+{
+  "source_commit": "8723a05d1993bf0199a453b47dc6ee167d493c23",
+  "compiler": "g++ (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+  "flags": "-O2 -std=c++17, Eigen 3, no OpenMP/CUDA/ROS",
+  "oracle_harness_sha256": "cc10e647efef36849c2b4713bd494e108b9bedbdf5c0dedc6b1c06f5d0976a4a",
+  "source_sha256": {
+    "src/mapping/nanovoxmap_ros/nanovoxmap/include/nanovoxmap/nanovoxmap.hpp": "1177e2fb5565c3f8f615045e3f033f044a3728d7b06cf5ca2117b3244a28df8a",
+    "src/mapping/occupancy_inflation/src/point_cloud_inflater.cpp": "aba26856637020024445450a8f2604b45499caa4e5cd0f4c51ab66a7c0c7df68",
+    "src/third_party/jps_lib/src/jps_planner/graph_search.cpp": "f1aeef01deb9832cd9c7c3333b938916f6eac1a67f4a0188c3788aa815a1c031",
+    "src/third_party/jps_lib/src/distance_map_planner/distance_map_planner.cpp": "8b7dad1a69c4318352e3c0c65695a1c20c6b993101b8c0937c75f12d96c24f5e",
+    "src/third_party/jps_lib/src/distance_map_planner/graph_search.cpp": "756874761ff6914a7bbd00f2c07343e5b8340fa5b3634fd1dd915de1e35b2ec2"
+  },
+  "fixture_sha256": "745792b68f1d61337730d8f7043f1ce9c61ba81b2207b7cca7fc1dc627eca5f7",
+  "map_full_state_fingerprints_matched": 8,
+  "jps_direction_tables_matched": 27,
+  "inflation_configurations_matched": 4,
+  "inflation_float32_max_abs_error": 0.0,
+  "dmp_potential_max_abs_error": 0,
+  "path_objective_absolute_tolerance": 1e-12,
+  "random_inputs": false,
+  "path_tie_policy": "Equal-cost paths may differ; compare objective and every voxel step. Both real scenes additionally retained bit-identical Python paths after optimization.",
+  "timing_case": "20x18x10 grid at .25m, source .25 JPS heuristic and 0 DMP heuristic; DMP potential preparation excluded from both sides",
+  "timing_repetitions": 10,
+  "cpp": {
+    "jps_s": {
+      "p50_ms": 1.6852955,
+      "p95_ms": 2.20916455,
+      "raw_s": [
+        0.00151615,
+        0.001874751,
+        0.001956495,
+        0.001530575,
+        0.001519661,
+        0.001540879,
+        0.002112848,
+        0.001789738,
+        0.001580853,
+        0.002287969
+      ]
+    },
+    "dmp_s": {
+      "p50_ms": 4.2602839999999995,
+      "p95_ms": 5.961052899999998,
+      "raw_s": [
+        0.004444288,
+        0.004250523,
+        0.006818554,
+        0.003988252,
+        0.00440517,
+        0.004169366,
+        0.004017007,
+        0.004270045,
+        0.003831211,
+        0.004912996
+      ]
+    }
+  },
+  "python": {
+    "jps_s": {
+      "p50_ms": 23.068086011335254,
+      "p95_ms": 33.7768983328715,
+      "raw_s": [
+        0.034648686880245805,
+        0.024947593919932842,
+        0.022004186874255538,
+        0.018940517911687493,
+        0.03271137899719179,
+        0.02413198514841497,
+        0.019921717001125216,
+        0.021785271121188998,
+        0.024649723200127482,
+        0.020136435981839895
+      ]
+    },
+    "dmp_s": {
+      "p50_ms": 64.00157290045172,
+      "p95_ms": 90.50955643178892,
+      "raw_s": [
+        0.1013030931353569,
+        0.05813062912784517,
+        0.06400568690150976,
+        0.06350529799237847,
+        0.07731745601631701,
+        0.06399745889939368,
+        0.05837565287947655,
+        0.0722617048304528,
+        0.06847219890914857,
+        0.058839194010943174
+      ]
+    }
+  },
+  "real_scene_reference_fixture": "search_scene_reference.json",
+  "real_scenes": {
+    "medium": {
+      "grid_shape": [
+        120,
+        60,
+        12
+      ],
+      "jps_objective_abs_error": 0.0,
+      "dmp_objective_abs_error": 2.2737367544323206e-13,
+      "potential_fnv64_match": true,
+      "jps_path_identical": true,
+      "dmp_path_identical": false
+    },
+    "dense": {
+      "grid_shape": [
+        120,
+        60,
+        12
+      ],
+      "jps_objective_abs_error": 0.0,
+      "dmp_objective_abs_error": 2.2737367544323206e-13,
+      "potential_fnv64_match": true,
+      "jps_path_identical": true,
+      "dmp_path_identical": false
+    }
+  },
+  "owned_tests": {
+    "command": "PYTHONPATH=src OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 .venv/bin/python -m pytest tests/test_mapping.py tests/test_search.py -q",
+    "passed": 18,
+    "seconds": 3.52
+  }
+}

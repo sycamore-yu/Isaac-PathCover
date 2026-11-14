@@ -1,0 +1,289 @@
+{
+  "python": "3.12.14",
+  "numpy": "2.5.1",
+  "source_commit": "8723a05d1993bf0199a453b47dc6ee167d493c23",
+  "trials": 5,
+  "scenarios": {
+    "medium": {
+      "input_points": 44554,
+      "hit_rays": 1496,
+      "measurements": {
+        "set_before": {
+          "p50_ms": 170.97423900850117,
+          "p95_ms": 193.63111411221325,
+          "raw_s": [
+            0.17097423900850117,
+            0.17488458310253918,
+            0.16120085283182561,
+            0.16236908291466534,
+            0.19831774686463177
+          ]
+        },
+        "set_after": {
+          "p50_ms": 36.259402986615896,
+          "p95_ms": 51.01812332868576,
+          "raw_s": [
+            0.04904756508767605,
+            0.05151076288893819,
+            0.032694543013349175,
+            0.036259402986615896,
+            0.03319497499614954
+          ]
+        },
+        "rays_before": {
+          "p50_ms": 564.0919350553304,
+          "p95_ms": 594.6132970042527,
+          "raw_s": [
+            0.5640919350553304,
+            0.5286329521331936,
+            0.5804646811448038,
+            0.5425615629646927,
+            0.5981504509691149
+          ]
+        },
+        "rays_after": {
+          "p50_ms": 153.19441887550056,
+          "p95_ms": 187.8233866766095,
+          "raw_s": [
+            0.17409566510468721,
+            0.1912553170695901,
+            0.1410811529494822,
+            0.13493827008642256,
+            0.15319441887550056
+          ]
+        },
+        "inflation_before": {
+          "p50_ms": 350.823984015733,
+          "p95_ms": 401.7665507271886,
+          "raw_s": [
+            0.4140095061156899,
+            0.350823984015733,
+            0.336820418946445,
+            0.35279472917318344,
+            0.34798610815778375
+          ]
+        },
+        "inflation_after": {
+          "p50_ms": 222.1797329839319,
+          "p95_ms": 253.40898251160982,
+          "raw_s": [
+            0.23848727205768228,
+            0.25713941012509167,
+            0.2221797329839319,
+            0.22214620397426188,
+            0.2074298309162259
+          ]
+        }
+      },
+      "log_odds_identical": true,
+      "inflated_cloud_identical": true,
+      "scan_input_sha256": {
+        "origin": "5b986367957feb077ab1a9ff03fa5a9b8eacdae177e420e24fd0e8150dd7f092",
+        "endpoints": "549c1351ecf62280c8e288e78660be392c1e22f51eb1647e3d2dfe45bfe3bd8a"
+      }
+    },
+    "dense": {
+      "input_points": 77299,
+      "hit_rays": 849,
+      "measurements": {
+        "set_before": {
+          "p50_ms": 351.5906180255115,
+          "p95_ms": 357.86059335805476,
+          "raw_s": [
+            0.3298103210981935,
+            0.3581961211748421,
+            0.349155664909631,
+            0.3565184820909053,
+            0.3515906180255115
+          ]
+        },
+        "set_after": {
+          "p50_ms": 65.01666898839176,
+          "p95_ms": 66.7885678820312,
+          "raw_s": [
+            0.06579048791900277,
+            0.06703808787278831,
+            0.05382163496688008,
+            0.06501666898839176,
+            0.060218453872948885
+          ]
+        },
+        "rays_before": {
+          "p50_ms": 173.92385192215443,
+          "p95_ms": 181.07644710689783,
+          "raw_s": [
+            0.18184713111259043,
+            0.17799371108412743,
+            0.1557289029005915,
+            0.17392385192215443,
+            0.15718653099611402
+          ]
+        },
+        "rays_after": {
+          "p50_ms": 54.475212935358286,
+          "p95_ms": 60.10305644012987,
+          "raw_s": [
+            0.054475212935358286,
+            0.06140226707793772,
+            0.04817363899201155,
+            0.05352098704315722,
+            0.05490621388889849
+          ]
+        },
+        "inflation_before": {
+          "p50_ms": 682.3785610031337,
+          "p95_ms": 698.1157744303346,
+          "raw_s": [
+            0.6454253229312599,
+            0.6831647921353579,
+            0.6823785610031337,
+            0.6659695720300078,
+            0.7018535200040787
+          ]
+        },
+        "inflation_after": {
+          "p50_ms": 309.1433921363205,
+          "p95_ms": 335.9626607503742,
+          "raw_s": [
+            0.30914339213632047,
+            0.28809999115765095,
+            0.31658322806470096,
+            0.3047224550973624,
+            0.3408075189217925
+          ]
+        }
+      },
+      "log_odds_identical": true,
+      "inflated_cloud_identical": true,
+      "scan_input_sha256": {
+        "origin": "30837bd866d68c390ebdfdad0d1d7e3893e36225dacfd6f11e2cc333f9f5b6a7",
+        "endpoints": "ad0a784ffe83976c88801dd2fe92819af6a301efb7186def071f92781bdf8a3a"
+      }
+    }
+  },
+  "search_before": {
+    "medium": {
+      "times": [
+        {
+          "jps_s": 0.9358564740978181,
+          "dmp_s": 0.7556849578395486
+        },
+        {
+          "jps_s": 1.0446373699232936,
+          "dmp_s": 0.7828009428922087
+        },
+        {
+          "jps_s": 0.883052822900936,
+          "dmp_s": 0.7517183490563184
+        }
+      ],
+      "expanded": {
+        "jps": 19052,
+        "dmp": 13385
+      },
+      "cost": 343.6862131200959
+    },
+    "dense": {
+      "times": [
+        {
+          "jps_s": 0.6031417900230736,
+          "dmp_s": 0.733512976905331
+        },
+        {
+          "jps_s": 0.5091023440472782,
+          "dmp_s": 0.7212807899340987
+        },
+        {
+          "jps_s": 0.5537735689431429,
+          "dmp_s": 0.7337624290958047
+        }
+      ],
+      "expanded": {
+        "jps": 13405,
+        "dmp": 7610
+      },
+      "cost": 579.3388813489305
+    }
+  },
+  "search_after": {
+    "medium": {
+      "times": [
+        {
+          "jps_s": 0.6449434771202505,
+          "dmp_s": 0.34736883197911084
+        },
+        {
+          "jps_s": 0.5082820269744843,
+          "dmp_s": 0.36739407991990447
+        },
+        {
+          "jps_s": 0.44084606715478003,
+          "dmp_s": 0.34115681587718427
+        }
+      ],
+      "potential_before_s": 0.4231572861317545,
+      "potential_after_s": 0.07753986306488514,
+      "potential_equal": true,
+      "region_equal": true,
+      "jps_path_equal": true,
+      "dmp_path_equal": true,
+      "cost_error": 0.0,
+      "expanded": {
+        "jps": 19052,
+        "dmp": 13385
+      }
+    },
+    "dense": {
+      "times": [
+        {
+          "jps_s": 0.3303063279017806,
+          "dmp_s": 0.19180011004209518
+        },
+        {
+          "jps_s": 0.32256063586100936,
+          "dmp_s": 0.19474819605238736
+        },
+        {
+          "jps_s": 0.30323835485614836,
+          "dmp_s": 0.20418993197381496
+        }
+      ],
+      "potential_before_s": 0.5493583490606397,
+      "potential_after_s": 0.06491151684895158,
+      "potential_equal": true,
+      "region_equal": true,
+      "jps_path_equal": true,
+      "dmp_path_equal": true,
+      "cost_error": 0.0,
+      "expanded": {
+        "jps": 13405,
+        "dmp": 7610
+      }
+    }
+  },
+  "changes": [
+    "Pool sparse 8x8x8 blocks and vectorize quantized log-odds scatter",
+    "Lexicographic sort and integer reductions within each monotone update phase",
+    "Coalesce occupancy revision at scan end",
+    "Inflate using exact source x-axis runs",
+    "Cache JPS obstacle masks and linearize jump-state indices",
+    "Compute integer DMP potentials by max-plus dilation and cache immutable maps",
+    "Build the exact cylindrical search tunnel using separable morphology"
+  ],
+  "scipy": "1.17.0",
+  "benchmark_order": "5 paired trials in one process, alternating before/after order; fresh map and inflater instances in each trial",
+  "thread_environment": {
+    "OPENBLAS_NUM_THREADS": "1",
+    "OMP_NUM_THREADS": "1"
+  },
+  "cpu": "Intel(R) Xeon(R) Silver 4210R CPU @ 2.40GHz",
+  "platform": "Linux-6.8.0-146-generic-x86_64-with-glibc2.39",
+  "paired_source_sha256": {
+    "nanovox_before": "9addfa05335bca0464a5d61ce1d4d619e392486fe89f1541b9b427a1143c6d71",
+    "nanovox_after": "298349b6276fc97e9446a7c9d4cc9c02227a4a47aba8659bea4e88e84aa9a271",
+    "inflation_before": "a5f67e240c0c422b9ddaa32e471e609fd4fe002a4cc2cc5912f0ad12230ae01e",
+    "inflation_after": "e63b6ec6b0972a43884b27e58d342dcc72486aa2ebd56627022d136a1d3f8be4"
+  },
+  "search_timing_note": "The search_before/search_after entries are exploratory sequential runs (3 each), not the five paired map/inflation trials. C++ comparison timing is separately recorded in search_scene_reference.json.",
+  "frozen_search_sha256": "328de85830943ff5eeca623a4ace10d0a6a28b32a7ba631c7d6c144c24e097d4"
+}

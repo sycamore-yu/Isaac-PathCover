@@ -1,0 +1,21 @@
+{
+  "pathcover": {
+    "url": "https://github.com/kunalnk123690/PathCover",
+    "commit": "8723a05d1993bf0199a453b47dc6ee167d493c23"
+  },
+  "isaac_l2f": {
+    "commit": "c9771ed45056363be735c6b8fa36bf93ae5014d1",
+    "files": {
+      "src/isaac_l2f/dynamics/model.py": "2a955999408691ae015481177639c2abb246e4b74ae469ed890c9f956ef84a26",
+      "src/isaac_l2f/dynamics/registry/acmpc_quad.json": "d40dfa9a0da5f24eef50358612ac5f6d621b21d82cbe26f69b475caea2aec946",
+      "src/isaac_l2f/tasks/obstacles/env.py": "db4ae7e02bf9fd34b2bb400a21a855dcc0bebb32de974b938fd47fb818cb6f21",
+      "src/isaac_l2f/tasks/obstacles/env_cfg.py": "eb3571ff409460309b9449edd7f6b36c331150134985063e28a3043aedeafa1b"
+    }
+  },
+  "isaaclab": {
+    "release": "3.0.0",
+    "source_commit": "e3f7d9ff1f5d7f8280de3ece9000b7117f66bcf4",
+    "core_distribution": "28.0.0",
+    "newton": "1.6.1"
+  }
+}

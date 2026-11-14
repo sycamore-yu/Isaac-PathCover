@@ -1,0 +1,10 @@
+{
+  "head_unchanged": true,
+  "worktree_status_unchanged": true,
+  "source_file_hashes_unchanged": {
+    "src/isaac_l2f/dynamics/model.py": true,
+    "src/isaac_l2f/dynamics/registry/acmpc_quad.json": true,
+    "src/isaac_l2f/tasks/obstacles/env.py": true,
+    "src/isaac_l2f/tasks/obstacles/env_cfg.py": true
+  }
+}

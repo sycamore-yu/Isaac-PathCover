@@ -1,0 +1,31 @@
+{
+  "python_version": "3.12.14",
+  "case": "two overlapping box polytopes, 2 MINCO pieces, 16 trapezoid intervals",
+  "evaluations_per_trial": 100,
+  "trials": 5,
+  "before_seconds_per_cost_gradient": [
+    0.0025640061288140716,
+    0.002504486981779337,
+    0.0026766705606132745,
+    0.0024220845801755787,
+    0.0027635426702909173
+  ],
+  "after_seconds_per_cost_gradient": [
+    0.0019811597489751876,
+    0.001926083618309349,
+    0.001962983838748187,
+    0.0019628469203598797,
+    0.0018619962804950773
+  ],
+  "median_speedup": 1.306269022927153,
+  "optimization_python_s": 0.06795742199756205,
+  "optimization_cpp_s": 0.000540091,
+  "optimization_cost_python": 346.1426448664393,
+  "optimization_cost_cpp": 346.14264495058273,
+  "iterations": 26,
+  "changes": [
+    "Batch flatness forward/reverse algebra",
+    "Cache derivative factorial/exponent tables",
+    "Batch MINCO endpoint derivatives and quadrature derivative bases"
+  ]
+}

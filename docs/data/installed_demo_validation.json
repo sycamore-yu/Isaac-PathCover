@@ -1,0 +1,348 @@
+{
+  "command": "OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 .venv/bin/python -m isaac_pathcover.demo --scene both --seeds 0 --duration 60 --output results/demo",
+  "installation": "python3 scripts/install_simulation.py --uv /home/tong/.local/bin/uv",
+  "pytest": {
+    "passed": 74,
+    "xfail": 1,
+    "seconds": 18.61
+  },
+  "wheel_planning_from_outside_repository": {
+    "success": true,
+    "log": [
+      "relative cost convergence {'map_snapshot_s': 0.024452207842841744, 'inflation_s': 1.6575485079083592, 'grid_s': 0.040849880781024694, 'jps_s': 0.5404675011523068, 'dmp_s': 0.4552897789981216, 'corridor_s': 0.21920020901598036, 'optimizer_setup_s': 0.08028259896673262, 'optimization_s': 0.5909720440395176, 'total': 3.611017371993512}",
+      "relative cost convergence {'map_snapshot_s': 0.047831170028075576, 'inflation_s': 1.2391841718927026, 'grid_s': 0.0587052961345762, 'jps_s': 0.3338186361361295, 'dmp_s': 0.29584623710252345, 'corridor_s': 0.1805110750719905, 'optimizer_setup_s': 0.10047376388683915, 'optimization_s': 0.7581352291163057, 'total': 3.015903607942164}"
+    ]
+  },
+  "scenes": {
+    "medium": {
+      "summary": {
+        "scene": "medium",
+        "seeds": [
+          0
+        ],
+        "episodes": 1,
+        "startup_s": 33.092539518140256,
+        "arrival_rate": 1.0,
+        "collision_rate": 0.0,
+        "collision_free_arrival_rate": 1.0,
+        "reports": [
+          {
+            "scene": "medium",
+            "scene_provenance": {
+              "source_file": "src/isaac_l2f/planning/corto/medium_obstacles.json",
+              "source_sha256": "e7cd31aa9b3e079bb2e86f75d88a332f07561f35b8b668883adb787233424d46",
+              "obstacle_count": 100,
+              "occupied_voxels": 59870,
+              "collision_boxes": 762,
+              "shape": [
+                300,
+                150,
+                30
+              ],
+              "resolution": 0.1,
+              "origin": [
+                -15.0,
+                -7.5,
+                -0.01
+              ],
+              "start": [
+                -11.04,
+                -2.11,
+                1.28
+              ],
+              "goal": [
+                12.68,
+                -3.47,
+                1.04
+              ],
+              "asset_sha256": "2c67742d407728b86109df7e1f2689c916ce5c8111ca2a55996871becaae7571",
+              "provenance": "original Medium"
+            },
+            "arrived": true,
+            "collision": false,
+            "collision_free_arrival": true,
+            "goal_error_m": 0.02305191687799246,
+            "duration_sim_s": 10.13,
+            "wall_time_s": 122.09257804998197,
+            "tracking_rmse_m": 0.01209638232363117,
+            "tracking_max_m": 0.04146362288465638,
+            "tracking_samples": 1013,
+            "valid_state_samples": 1013,
+            "invalid_state_samples": 0,
+            "max_speed_m_s": 3.0095988974188237,
+            "max_body_rates_rad_s": [
+              1.141942024230957,
+              1.6749688386917114,
+              2.594820499420166
+            ],
+            "max_body_rate_norm_rad_s": 2.9810652297268017,
+            "max_tilt_rad": 0.3529764721405863,
+            "contact_force_max_N": 0.0,
+            "collision_physics_samples": 0,
+            "collision_check_complete": true,
+            "collision_unchecked_physics_samples": 0,
+            "out_of_bounds": false,
+            "out_of_bounds_physics_samples": 0,
+            "height_range_m": [
+              0.9991350769996643,
+              2.8279943466186523
+            ],
+            "motor_state_min": 0.06668849289417267,
+            "motor_state_max": 0.7393471002578735,
+            "planning_attempts": 20,
+            "planning_successes": 18,
+            "planning_failures": 2,
+            "trajectory_handoffs": 15,
+            "trajectory_rejections": 3,
+            "planning_p50_s": 2.0259444430703297,
+            "planning_p95_s": 9.436488455021754,
+            "planning_max_s": 10.74912150297314,
+            "planning_deadline_misses_0_5s": 20,
+            "physics_hz": 400,
+            "tracking_hz": 100,
+            "replan_period_s": 0.5,
+            "time_contract": "synchronous planning between Newton steps; wall latency measured separately",
+            "finite": true,
+            "complete_cycle_p50_s": 2.5102964248508215,
+            "complete_cycle_p95_s": 9.784588948334568,
+            "complete_cycle_deadline_misses_0_5s": 20,
+            "max_requested_thrust_N": 8.513632706341596,
+            "max_allocated_thrust_N": 12.015658378601074,
+            "peak_wrench_allocation_difference": [
+              4.26288690988988,
+              0.10068138901541993,
+              0.07551105006824682,
+              0.09378354084733131
+            ],
+            "max_observed_acceleration_m_s2": 3.9532373762470563,
+            "lidar": {
+              "horizontal_rays": 440,
+              "vertical_rays": 16,
+              "min_range_m": 0.1,
+              "max_range_m": 100.0,
+              "body_translation_m": [
+                0.0,
+                0.0,
+                0.25
+              ],
+              "update_hz": 2
+            },
+            "seed": 0,
+            "map_updates": 19,
+            "mapping_initialization": {
+              "point_cloud_mapping_s": 0.06377652799710631
+            },
+            "runtime": {
+              "python": "3.12.14 (main, Sep  1 2026, 14:16:52) [Clang 22.1.3 ]",
+              "torch": "2.11.0+cu130",
+              "gpu": "NVIDIA GeForce RTX 4090",
+              "numpy": "2.5.1",
+              "newton": "1.6.1",
+              "isaaclab_release": "3.0.0",
+              "isaaclab_core_distribution": "28.0.0"
+            }
+          }
+        ]
+      },
+      "same_runtime_code_as_committed_worktree": true,
+      "trace_comparison_to_five_seed_run": {
+        "time": {
+          "same_shape": true,
+          "exactly_equal": true,
+          "max_abs_difference": 0.0
+        },
+        "states": {
+          "same_shape": true,
+          "exactly_equal": true,
+          "max_abs_difference": 0.0
+        },
+        "references": {
+          "same_shape": true,
+          "exactly_equal": true,
+          "max_abs_difference": 0.0
+        },
+        "motor_states": {
+          "same_shape": true,
+          "exactly_equal": true,
+          "max_abs_difference": 0.0
+        },
+        "physics_states": {
+          "same_shape": true,
+          "exactly_equal": true,
+          "max_abs_difference": 0.0
+        }
+      },
+      "artifacts": {
+        "seed000/flight.npz": "56d18e64dfc64d3956c1c17a39d6cf2a02b0dd9c1b62d5446ff2da91e8f805d1",
+        "seed000/flight.html": "2a1560574129ddcbb52de49c6a45fc6d044b1da15ff2001a733fd1edcc3187d2",
+        "seed000/result.json": "781d25a770e4a24f695bf6db2199ace99aa477b0b062e3ec38c6e2609b764de9",
+        "summary.json": "79f2b0ed0cae08027952bb0d92c6c1972809bbac1889d721de19bd1f469b7221"
+      }
+    },
+    "dense": {
+      "summary": {
+        "scene": "dense",
+        "seeds": [
+          0
+        ],
+        "episodes": 1,
+        "startup_s": 65.12006586510688,
+        "arrival_rate": 1.0,
+        "collision_rate": 0.0,
+        "collision_free_arrival_rate": 1.0,
+        "reports": [
+          {
+            "scene": "dense",
+            "scene_provenance": {
+              "source_file": "src/isaac_l2f/planning/corto/table3_maps/dense_reconstructed.json",
+              "source_sha256": "aacf819961e8ec4efce1498c5eb856cce24d0a6abb4e8771be89feee26177c46",
+              "obstacle_count": 180,
+              "occupied_voxels": 103876,
+              "collision_boxes": 1372,
+              "shape": [
+                300,
+                150,
+                30
+              ],
+              "resolution": 0.1,
+              "origin": [
+                -15.0,
+                -7.5,
+                -0.01
+              ],
+              "start": [
+                -14.0,
+                -6.5,
+                0.49
+              ],
+              "goal": [
+                6.8,
+                5.2,
+                0.49
+              ],
+              "asset_sha256": "c86348f10cd39f82117cbb77cacad40e92bb1cf8872346878afb419e960109b4",
+              "provenance": "existing Dense reconstructed; not a claimed original published map"
+            },
+            "arrived": true,
+            "collision": false,
+            "collision_free_arrival": true,
+            "goal_error_m": 0.025941454123078373,
+            "duration_sim_s": 12.69,
+            "wall_time_s": 133.51326907100156,
+            "tracking_rmse_m": 0.018938822750844447,
+            "tracking_max_m": 0.059182775765363065,
+            "tracking_samples": 1269,
+            "valid_state_samples": 1269,
+            "invalid_state_samples": 0,
+            "max_speed_m_s": 3.0250769378022415,
+            "max_body_rates_rad_s": [
+              3.8358044624328613,
+              2.7818450927734375,
+              3.340240955352783
+            ],
+            "max_body_rate_norm_rad_s": 5.217931960432058,
+            "max_tilt_rad": 0.6006307313315303,
+            "contact_force_max_N": 0.0,
+            "collision_physics_samples": 0,
+            "collision_check_complete": true,
+            "collision_unchecked_physics_samples": 0,
+            "out_of_bounds": false,
+            "out_of_bounds_physics_samples": 0,
+            "height_range_m": [
+              0.13716450333595276,
+              0.6810044050216675
+            ],
+            "motor_state_min": 0.029240483418107033,
+            "motor_state_max": 0.9006767868995667,
+            "planning_attempts": 25,
+            "planning_successes": 25,
+            "planning_failures": 0,
+            "trajectory_handoffs": 23,
+            "trajectory_rejections": 2,
+            "planning_p50_s": 1.9323071129620075,
+            "planning_p95_s": 3.0817343845963476,
+            "planning_max_s": 4.001152846030891,
+            "planning_deadline_misses_0_5s": 25,
+            "physics_hz": 400,
+            "tracking_hz": 100,
+            "replan_period_s": 0.5,
+            "time_contract": "synchronous planning between Newton steps; wall latency measured separately",
+            "finite": true,
+            "complete_cycle_p50_s": 2.3268111220095307,
+            "complete_cycle_p95_s": 3.313600758370012,
+            "complete_cycle_deadline_misses_0_5s": 25,
+            "max_requested_thrust_N": 10.396086254630646,
+            "max_allocated_thrust_N": 17.0,
+            "peak_wrench_allocation_difference": [
+              10.602599618783614,
+              0.2998268703338717,
+              0.18701121944951488,
+              0.36079451355049397
+            ],
+            "max_observed_acceleration_m_s2": 9.686498238521109,
+            "lidar": {
+              "horizontal_rays": 440,
+              "vertical_rays": 16,
+              "min_range_m": 0.1,
+              "max_range_m": 100.0,
+              "body_translation_m": [
+                0.0,
+                0.0,
+                0.25
+              ],
+              "update_hz": 2
+            },
+            "seed": 0,
+            "map_updates": 24,
+            "mapping_initialization": {
+              "point_cloud_mapping_s": 1.3110106228850782
+            },
+            "runtime": {
+              "python": "3.12.14 (main, Sep  1 2026, 14:16:52) [Clang 22.1.3 ]",
+              "torch": "2.11.0+cu130",
+              "gpu": "NVIDIA GeForce RTX 4090",
+              "numpy": "2.5.1",
+              "newton": "1.6.1",
+              "isaaclab_release": "3.0.0",
+              "isaaclab_core_distribution": "28.0.0"
+            }
+          }
+        ]
+      },
+      "same_runtime_code_as_committed_worktree": true,
+      "trace_comparison_to_five_seed_run": {
+        "time": {
+          "same_shape": true,
+          "exactly_equal": true,
+          "max_abs_difference": 0.0
+        },
+        "states": {
+          "same_shape": true,
+          "exactly_equal": true,
+          "max_abs_difference": 0.0
+        },
+        "references": {
+          "same_shape": true,
+          "exactly_equal": true,
+          "max_abs_difference": 0.0
+        },
+        "motor_states": {
+          "same_shape": true,
+          "exactly_equal": true,
+          "max_abs_difference": 0.0
+        },
+        "physics_states": {
+          "same_shape": true,
+          "exactly_equal": true,
+          "max_abs_difference": 0.0
+        }
+      },
+      "artifacts": {
+        "seed000/flight.npz": "42b37dc43cca61a01c2d65ad9ff49322224024f65161b0608449aad92d6c9c19",
+        "seed000/flight.html": "e929cfe86214e63fb72c047cb1d0a03037d15826b0bdab3e7313bdf3a1f10073",
+        "seed000/result.json": "d5c0d576e35fa1ba022ae8dcc70076198e65abf13ee01efb42078a46eaf6885f",
+        "summary.json": "c1599753f384b96018851bec7b587542a7cc4555b9980e3566e820dbbaa91560"
+      }
+    }
+  }
+}
