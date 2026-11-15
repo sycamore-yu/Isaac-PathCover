@@ -70,3 +70,33 @@ def test_map_fusion_invalidates_planning_data_only_for_changed_occupancy():
 def test_invalid_caller_state_is_not_hidden_as_planning_failure():
     with pytest.raises(ValueError, match="start_state"):
         Planner(SmallScene()).plan(np.zeros(3))
+
+
+def test_replan_can_use_previous_trajectory_without_reusing_old_polytopes():
+    scene = SmallScene()
+    planner = Planner(scene, seed=3)
+    previous = planner.plan(initial_state(scene))
+    assert previous.success
+    elapsed = min(0.1, previous.trajectory.duration / 4)
+    measured = np.column_stack([previous.trajectory.evaluate(elapsed, derivative=k)
+                                for k in range(3)])
+    result = planner.plan(measured, guide=previous.trajectory, guide_elapsed=elapsed)
+    assert result.success, result.status
+    assert result.optimization.initialization in ("cold", "guide")
+    np.testing.assert_allclose(result.trajectory.evaluate(0), measured[:, 0], atol=2e-9)
+
+
+def test_receding_search_reuses_only_the_free_suffix():
+    scene = SmallScene()
+    planner = Planner(scene, seed=3)
+    first = planner.plan(initial_state(scene))
+    assert first.success
+    state = initial_state(scene)
+    state[:, 0] = (first.search.path[0] + first.search.path[1]) / 2
+    second = planner.plan(state)
+    assert second.timings.get("search_reused") == 1.0
+    np.testing.assert_allclose(second.search.path[0], state[:, 0])
+    np.testing.assert_allclose(second.search.path[-1], scene.goal)
+    # A new goal must force a fresh search instead of using an obsolete tail.
+    different = planner.plan(state, goal=[2.0, 0.5, 1.0])
+    assert different.timings.get("search_reused") is None

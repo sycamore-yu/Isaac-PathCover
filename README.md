@@ -63,20 +63,20 @@ uv pip install '.[test]'
 | 模块 | 实现 |
 |---|---|
 | `mapping/nanovox.py` | 稀疏 8³ 体素块、整数对数几率、命中/未命中融合、占据及距离查询 |
-| `mapping/inflation.py` | 官方椭球膨胀和邻域外壳，使用无人机膨胀半径 |
-| `planning/search.py` | 3D JPS、距离势场、DMP 路径细化 |
+| `mapping/inflation.py` | 官方椭球膨胀和邻域外壳，增加支持删除占据体素的精确增量更新 |
+| `planning/search.py` | 3D JPS、距离势场、DMP 路径细化；规划流程优先复用当前地图中安全的旧路径段 |
 | `planning/risp.py` | 原 RISP 随机分割、切平面及点集更新 |
 | `planning/corridor.py` | 路径与多面体求交、连续重叠走廊、局部终点及起始区域选择 |
 | `trajectory/minco.py` | S3NU/S4NU 约束系统、分段多项式、能量与解析伴随梯度 |
 | `trajectory/flatness.py` | 含阻力的微分平坦性映射及解析反向传播 |
-| `trajectory/gcopter.py` | 原时空参数化、目标与惩罚、梯形积分、联合时间优化 |
+| `trajectory/gcopter.py` | 原时空参数化、目标与惩罚、梯形积分、联合时间优化；新增基于上一条轨迹的热启动 |
 | `trajectory/lbfgs.py` | 原 cautious L-BFGS 和 Lewis–Overton 线搜索 |
 | `control/` | 官方几何控制、轨迹交接、L2F 旋翼分配及电机状态 |
 | `simulation/` | Newton/MJWarp 刚体、精确障碍实体、机载激光雷达和结果统计 |
 
 优化器没有调用 `scipy.optimize.minimize`。SciPy 用于线性代数、线性规划和几何计算。正式执行不调用自定义原生扩展、ROS、Gazebo 或 MOSEK。
 
-默认配置保留官方目标权重、梯度、约束、时间参数化、初始化和停止流程。仅将物理参数匹配到 L2F 的 0.752 kg 无人机。随机分割使用持续的 NumPy 随机生成器；数值对照可注入保存的官方随机序列。
+默认冷启动保留官方目标权重、梯度、约束、时间参数化、初始化和停止流程。重规划增加基于上一条轨迹的热启动，但不修改目标函数与求解器。仅将物理参数匹配到 L2F 的 0.752 kg 无人机。随机分割使用持续的 NumPy 随机生成器；数值对照可注入保存的官方随机序列。
 
 GCOPTER 的“收敛”状态不保证软约束满足。Newton 交接增加了独立执行检查，超限候选保留原求解记录并被拒绝。检查复用原惩罚宽度 `μ=0.01` 作为明确的软残差容许带。姿态、角速度和推力采用采样检查。完整规则见 [执行与验收](docs/execution.md)。
 
@@ -106,10 +106,13 @@ OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 .venv/bin/python -m pytest -q
 - [轨迹数值对照](docs/numerical_validation.md)：MINCO、平坦性、目标、梯度、非凸收敛及性能。
 - [执行与验收规则](docs/execution.md)：传感器、时钟、失败处理、交接门限和指标定义。
 - [Newton 闭环结果](docs/newton_validation.md)：两图各 5 个固定种子的完整数据，以及原交接方式的对照。
+- [2026-11-15 工程优化](docs/engineering_optimizations.md)：原仓库增量/热启动机制、精确增量膨胀、旧路径复用和 GCOPTER 热启动的实现及种子 0 实测对照。
 
 数值测试保留正常与异常结果。近零比推力或倒置姿态会使原平坦性映射病态。两种语言的非凸优化也可能沿不同浮点路径停止。完整目标和梯度对照用于判断移植一致性；Newton 到达和碰撞率单独验证。
 
 ## 已完成的飞行验收与限制
+
+下述统计对应 2026-11-14 的五种子基线。2026-11-15 优化后各场景额外验证了种子 0，决策周期 P50 降至 medium 0.913 s、dense 1.216 s；两次均无碰撞到达，但仍未达到墙钟 2 Hz。完整对照见[工程优化报告](docs/engineering_optimizations.md)。
 
 2026-11-14，medium 和 dense 的种子 0–4 均无碰撞到达。两图的合并跟踪均方根误差分别为 1.34 cm 和 1.98 cm，最大误差为 5.31 cm 和 8.00 cm。它们是本次 10 次试验的观测结果。
 

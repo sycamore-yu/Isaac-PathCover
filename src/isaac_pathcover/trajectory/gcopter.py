@@ -41,6 +41,7 @@ class OptimizationResult:
     iterations: int
     evaluations: int
     elapsed_s: float
+    initialization: str = "cold"
 
 
 def forward_t(tau):
@@ -295,9 +296,51 @@ class GCopter:
         norm_cost, grad_xi = _backward_points(xi, self.point_polys, grad_p)
         return float(cost + norm_cost), np.r_[backward_grad_t(tau, grad_t), grad_xi]
 
-    def optimize(self):
+    def _trajectory_initialization(self, guide, elapsed):
+        """SUPER-style time-stamped guide, remapped to the *new* corridor.
+
+        Only the L-BFGS starting point changes. The original GCOPTER objective,
+        derivative and constraints remain identical. Never reuse old vertex
+        coordinates after the corridor changes.
+        """
+        if guide is None or self.piece_count < 2 or elapsed >= guide.duration:
+            return None
+        elapsed = max(0.0, float(elapsed))
+        if np.linalg.norm(guide.evaluate(elapsed) - self.start_state[:, 0]) > 0.5:
+            return None
+        samples = np.linspace(elapsed, guide.duration, max(80, 20 * self.piece_count))
+        positions = guide.evaluate(samples)
+        targets = _forward_points(self.initial_x[self.piece_count:], self.point_polys)
+        selected, stamps, previous = [], [], 0
+        for target in targets:
+            if previous >= len(samples) - 1:
+                return None
+            distances = np.linalg.norm(positions[previous + 1:] - target, axis=1)
+            index = previous + 1 + int(np.argmin(distances))
+            if distances[index - previous - 1] > 0.75:
+                return None
+            selected.append(positions[index])
+            stamps.append(samples[index] - elapsed)
+            previous = index
+        # Convex-hull parametrization projects the guide onto the NEW overlaps.
+        projected = _inverse_points(np.asarray(selected), self.point_polys)
+        cold_times = forward_t(self.initial_x[:self.piece_count])
+        terminal = max(guide.duration - elapsed, stamps[-1] + cold_times[-1])
+        times = np.diff(np.r_[0.0, stamps, terminal])
+        times = np.maximum(times, 0.05)
+        return np.r_[inverse_t(times), projected]
+
+    def optimize(self, *, guide=None, elapsed=0.0):
         started = perf_counter()
-        result = minimize(self.cost_gradient, self.initial_x,
+        initial, initialization = self.initial_x, "cold"
+        if guide is not None:
+            warm = self._trajectory_initialization(guide, elapsed)
+            if warm is not None:
+                cold_cost = self.cost_gradient(initial)[0]
+                warm_cost = self.cost_gradient(warm)[0]
+                if np.isfinite(warm_cost) and warm_cost < cold_cost:
+                    initial, initialization = warm, "guide"
+        result = minimize(self.cost_gradient, initial,
                           LBFGSParameters(mem_size=256, past=3, min_step=1e-32,
                                           g_epsilon=0, delta=self.config.relative_cost_tolerance,
                                           max_iterations=self.config.max_iterations))
@@ -310,4 +353,5 @@ class GCopter:
         self.last_result = result
         return OptimizationResult(trajectory, result.success, result.message, result.status,
                                   result.cost if result.success else float("inf"),
-                                  result.iterations, result.evaluations, perf_counter() - started)
+                                  result.iterations, result.evaluations, perf_counter() - started,
+                                  initialization)

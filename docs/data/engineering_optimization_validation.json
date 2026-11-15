@@ -1,0 +1,91 @@
+{
+  "date": "2026-11-15",
+  "scenes": {
+    "medium": {
+      "before": {
+        "seed": 0,
+        "planning_cycles": 20,
+        "complete_cycle_p50_s": 2.2793987540062517,
+        "complete_cycle_p95_s": 9.270738733408507,
+        "complete_cycle_max_s": 9.629448555177078,
+        "planner_p50_s": 1.8654476520605385,
+        "optimizer_p50_s": 0.6009225484449416,
+        "inflation_p50_s": 0.24544683145359159,
+        "goal_arrived": true,
+        "collision": false,
+        "tracking_rmse_m": 0.01209638232363117,
+        "cycles_within_0_5s": 0,
+        "reused_search": 0,
+        "selected_hot_initialization": 0,
+        "handoffs_accepted": 15,
+        "path": "results/validation_execution_20261114/medium/seed000/planning.json"
+      },
+      "after": {
+        "seed": 0,
+        "planning_cycles": 20,
+        "complete_cycle_p50_s": 0.9125667080515996,
+        "complete_cycle_p95_s": 3.1214689357206256,
+        "complete_cycle_max_s": 6.99580833199434,
+        "planner_p50_s": 0.5930831100558862,
+        "optimizer_p50_s": 0.286084528430365,
+        "inflation_p50_s": 0.11470954201649874,
+        "goal_arrived": true,
+        "collision": false,
+        "tracking_rmse_m": 0.011166336183975157,
+        "cycles_within_0_5s": 0,
+        "reused_search": 14,
+        "selected_hot_initialization": 9,
+        "handoffs_accepted": 19,
+        "path": "results/engineering_opt_20261115/medium/seed000/planning.json"
+      },
+      "p50_speedup": 2.4977886371429703
+    },
+    "dense": {
+      "before": {
+        "seed": 0,
+        "planning_cycles": 25,
+        "complete_cycle_p50_s": 2.5431000830139965,
+        "complete_cycle_p95_s": 4.0456244084052715,
+        "complete_cycle_max_s": 4.622072270140052,
+        "planner_p50_s": 2.0929119850043207,
+        "optimizer_p50_s": 0.73193105799146,
+        "inflation_p50_s": 0.38158670417033136,
+        "goal_arrived": true,
+        "collision": false,
+        "tracking_rmse_m": 0.018938822750844447,
+        "cycles_within_0_5s": 0,
+        "reused_search": 0,
+        "selected_hot_initialization": 0,
+        "handoffs_accepted": 23,
+        "path": "results/validation_execution_20261114/dense/seed000/planning.json"
+      },
+      "after": {
+        "seed": 0,
+        "planning_cycles": 22,
+        "complete_cycle_p50_s": 1.2164313319372013,
+        "complete_cycle_p95_s": 2.5318761369097045,
+        "complete_cycle_max_s": 2.751343505922705,
+        "planner_p50_s": 0.8816944890422747,
+        "optimizer_p50_s": 0.43682809185702354,
+        "inflation_p50_s": 0.17707110603805631,
+        "goal_arrived": true,
+        "collision": false,
+        "tracking_rmse_m": 0.012156503748216502,
+        "cycles_within_0_5s": 0,
+        "reused_search": 19,
+        "selected_hot_initialization": 7,
+        "handoffs_accepted": 20,
+        "path": "results/engineering_opt_20261115/dense/seed000/planning.json"
+      },
+      "p50_speedup": 2.090623626870937
+    }
+  },
+  "comparison": "not paired under isolated CPU load; both seed 0",
+  "source_hashes": {
+    "medium_before": "f8a3e95c7378a5e712e913fb88dd670927443d3495ed385e43f29152ca3d4446",
+    "medium_after": "0c8931ce4e9125834585a0c15425aae98a586620077bd063a0225dd6ffb84ce3",
+    "dense_before": "f8a3e95c7378a5e712e913fb88dd670927443d3495ed385e43f29152ca3d4446",
+    "dense_after": "0c8931ce4e9125834585a0c15425aae98a586620077bd063a0225dd6ffb84ce3"
+  },
+  "runtime": "Newton simulation time pauses during planning; all timings wall-clock seconds"
+}

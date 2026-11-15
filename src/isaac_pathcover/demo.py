@@ -79,7 +79,8 @@ def run_episode(env, scene, seed, duration, output, update_map=True):
                 map_updates.append({"t": now, "points": len(endpoints), "sensor_s": scan_elapsed,
                                     "sensor_origin": sensor_origin.tolist(), **update})
             measured = np.column_stack((state[:3], state[7:10], acceleration))
-            result = planner.plan(measured)
+            result = planner.plan(measured, guide=execution.trajectory,
+                                  guide_elapsed=now - execution.start_time)
             diagnostics = validation = None
             if result.success:
                 diagnostics = trajectory_diagnostics(result.trajectory, result.corridor.polytopes, planner.config)
@@ -92,6 +93,7 @@ def run_episode(env, scene, seed, duration, output, update_map=True):
             if result.optimization is not None:
                 record.update({"iterations": result.optimization.iterations,
                                "evaluations": result.optimization.evaluations,
+                               "initialization": result.optimization.initialization,
                                "cost": result.optimization.cost if np.isfinite(result.optimization.cost) else None})
             if result.success:
                 record["trajectory_diagnostics"] = finite_json(diagnostics)

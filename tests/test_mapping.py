@@ -99,3 +99,20 @@ def test_incremental_inflation_matches_union():
     actual = incremental.inflate(second)
     expected = OccupancyInflation().inflate(first + second)
     np.testing.assert_array_equal(actual, expected)
+
+
+def test_exact_incremental_inflation_matches_one_shot_with_removals():
+    inputs = [
+        [[0., 0., 1.], [.7, -.1, 1.], [2., 1., 1.]],
+        [[0., 0., 1.], [2., 1., 1.], [2.2, 1., 1.]],
+        [[2.2, 1., 1.], [-2., -.5, 1.]],
+        [],
+        [[-3., -.5, 1.]],
+    ]
+    updated = OccupancyInflation(exact_updates=True)
+    for cloud in inputs:
+        baseline = OccupancyInflation()
+        expected = baseline.inflate(cloud)
+        actual = updated.inflate(cloud)
+        np.testing.assert_array_equal(actual, expected)
+        np.testing.assert_array_equal(updated.points(solid=True), baseline.points(solid=True))

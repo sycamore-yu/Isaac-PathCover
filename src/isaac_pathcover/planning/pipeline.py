@@ -47,7 +47,10 @@ class Planner:
         self.map = NanoVoxMap()
         self.map.set_occupied(scene.point_cloud())
         self.initialization_timings = {"point_cloud_mapping_s": perf_counter() - started}
-        self.inflation = OccupancyInflation(radius_xy=inflation_radius_xy, radius_z=inflation_radius_z)
+        # The upstream cumulative-inflation mode cannot remove cleared cells.
+        # Track exact coverage counts so ray clearing remains correct.
+        self.inflation = OccupancyInflation(radius_xy=inflation_radius_xy,
+                                            radius_z=inflation_radius_z, exact_updates=True)
         self.config = config or TrajectoryConfig(physical_parameters=(0.752, 9.8066, 0.0, 0.0, 0.0, 0.001))
         self.max_horizon = max_horizon
         self.rng = np.random.default_rng(seed)
@@ -55,6 +58,37 @@ class Planner:
         self.inflated_points = np.empty((0, 3))
         self.grid = self.jps = self.dmp = None
         self.last_result = None
+        self.previous_path = None
+
+    @staticmethod
+    def _safe_suffix(previous_path, position, goal, grid):
+        """Reuse a map-valid remaining guide path, as in SUPER's front end."""
+        if previous_path is None or len(previous_path) < 2:
+            return None
+        if np.linalg.norm(previous_path[-1] - goal) > 1e-6:
+            return None
+        segments = np.diff(previous_path, axis=0)
+        lengths_sq = np.sum(segments * segments, axis=1)
+        fractions = np.clip(np.sum((position - previous_path[:-1]) * segments, axis=1)
+                            / np.maximum(lengths_sq, 1e-12), 0.0, 1.0)
+        closest = previous_path[:-1] + fractions[:, None] * segments
+        distances = np.linalg.norm(closest - position, axis=1)
+        segment = int(np.argmin(distances))
+        if distances[segment] > 0.5:
+            return None
+        suffix = np.vstack((position, closest[segment], previous_path[segment + 1:]))
+        delta = np.diff(suffix, axis=0)
+        # Validate the entire suffix against the CURRENT inflated search grid,
+        # including the new link from measured position to the old path.
+        samples = np.vstack([a + np.linspace(0., 1., max(2, int(np.ceil(np.linalg.norm(d) /
+                                      (grid.resolution / 4))) + 1))[:, None] * d
+                             for a, d in zip(suffix[:-1], delta)])
+        ids = grid.float_to_int(samples)
+        if not ((ids >= 0) & (ids < grid.shape)).all():
+            return None
+        if np.any(grid.values[tuple(ids.T)] != 0):
+            return None
+        return suffix[np.r_[True, np.linalg.norm(np.diff(suffix, axis=0), axis=1) > 1e-9]]
 
     def update_map(self, origin, endpoints):
         """Integrate one actual scan; defer dependent rebuilds until planning."""
@@ -82,7 +116,7 @@ class Planner:
         self._map_version = self.map.version
         return timings
 
-    def plan(self, start_state, goal=None):
+    def plan(self, start_state, goal=None, *, guide=None, guide_elapsed=0.0):
         """Plan from columns position/velocity/acceleration of a (3,3) array."""
         start_state = np.asarray(start_state, dtype=float)
         if start_state.shape != (3, 3) or not np.all(np.isfinite(start_state)):
@@ -108,15 +142,23 @@ class Planner:
                 search = SearchResult(position[None], position[None], position[None], 0.0,
                                       {"jps": 0, "dmp": 0}, {"jps_s": 0.0, "dmp_s": 0.0})
             else:
-                t = perf_counter()
-                jps_path = jps.plan(position, goal)
-                timings["jps_s"] = perf_counter() - t
-                t = perf_counter()
-                dmp_path = dmp.plan(position, goal, jps_path)
-                timings["dmp_s"] = perf_counter() - t
-                search = SearchResult(np.vstack((position, dmp_path, goal)), jps_path, dmp_path,
-                                      dmp.cost, {"jps": jps.expanded, "dmp": dmp.expanded},
-                                      {"jps_s": timings["jps_s"], "dmp_s": timings["dmp_s"]})
+                reused = self._safe_suffix(self.previous_path, position, goal, jps.grid)
+                if reused is not None:
+                    search = SearchResult(reused, reused, reused[1:-1],
+                                          float(np.linalg.norm(np.diff(reused, axis=0), axis=1).sum()),
+                                          {"jps": 0, "dmp": 0}, {"jps_s": 0.0, "dmp_s": 0.0})
+                    timings["search_reused"] = 1.0
+                else:
+                    t = perf_counter()
+                    jps_path = jps.plan(position, goal)
+                    timings["jps_s"] = perf_counter() - t
+                    t = perf_counter()
+                    dmp_path = dmp.plan(position, goal, jps_path)
+                    timings["dmp_s"] = perf_counter() - t
+                    search = SearchResult(np.vstack((position, dmp_path, goal)), jps_path, dmp_path,
+                                          dmp.cost, {"jps": jps.expanded, "dmp": dmp.expanded},
+                                          {"jps_s": timings["jps_s"], "dmp_s": timings["dmp_s"]})
+                self.previous_path = search.path.copy()
             stage = "corridor"
             t = perf_counter()
             corridor = path_cover(points, search.path, self.scene.bounds_halfspaces(),
@@ -135,7 +177,7 @@ class Planner:
             timings["optimizer_setup_s"] = perf_counter() - t
             stage = "optimization"
             t = perf_counter()
-            optimization = optimizer.optimize()
+            optimization = optimizer.optimize(guide=guide, elapsed=guide_elapsed)
             timings["optimization_s"] = perf_counter() - t
             trajectory, success = optimization.trajectory, optimization.success
             status = optimization.status
