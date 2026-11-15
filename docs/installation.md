@@ -25,6 +25,8 @@ python3 scripts/install_simulation.py --uv "$HOME/.local/bin/uv"
 
 默认 Python 环境为本仓库 `.venv`。源码依赖及环境均不进入 Git 提交。安装脚本不修改 Isaac-L2F，也不使用其环境中的包。
 
+NMPC 使用 `nvmath-python==1.0.0` 与 `nvidia-cudss-cu13==0.8.0.10`。这两个依赖已加入 `simulation` extra 和锁文件。控制求解器源码保存在本仓库。
+
 完成后运行两图演示：
 
 ```bash
@@ -141,7 +143,7 @@ e3f7d9ff1f5d7f8280de3ece9000b7117f66bcf4
 
 NumPy、SciPy、Numba、PyTorch 在基本依赖中声明。Numba 0.68.1 / llvmlite 0.50.0 在 CPU 上编译 Python 数值核；源码仍保留一套 SUPER 目标、梯度和 L-BFGS。首次编译和缓存加载发生在规划进程初始化，逐次规划时间单独记录。其余仿真依赖在 `simulation` extra 中声明。结果可视化另需 Plotly，测试另需 pytest。传递依赖记录在 [uv.lock](../uv.lock)。
 
-当前锁文件记录 68 个包。安装环境的 67 个 distribution 已通过 `uv pip check`。锁文件包含项目、测试、可视化及平台条件依赖。
+加入 NMPC 依赖后，锁文件记录 72 个包。安装环境的 70 个 distribution 已通过 `uv pip check`。锁文件包含项目、测试、可视化及平台条件依赖。
 
 PyTorch 使用单独的 `pytorch-cu130` 索引。该索引设置 `explicit=true`，只绑定 `torch`，其他包继续使用 PyPI/NVIDIA 索引。实测中，将 cu130 索引作为所有包的首选曾导致 CUDA 依赖反复下载重试；限定索引后完成了安装。
 

@@ -12,6 +12,22 @@
       "src/isaac_l2f/tasks/obstacles/env_cfg.py": "eb3571ff409460309b9449edd7f6b36c331150134985063e28a3043aedeafa1b"
     }
   },
+  "turbompc": {
+    "source_checkout": "/home/tong/tongworkspace/projects/aerial/Isaac-L2F",
+    "commit": "e36743e8076bfe12b3e11911e2f1f866d61ae158",
+    "copied_files": {
+      "src/isaac_l2f/control/solvers/model.py": "70234d5d5df5d5213218b1af19f2b85188356d364c3e71cf9bffa04c1687db67",
+      "src/isaac_l2f/control/solvers/admm.py": "e3a77c77d8e9047ae0a64c4f774d37f85d2d3a35fa5533eecf0c340ca0277b2e",
+      "src/isaac_l2f/control/solvers/admm_kernels.py": "e9dc883d9ede5df4218ef44580e5aba03b90bab9f7b788abb3ee1e0d6a4f4c00",
+      "src/isaac_l2f/control/solvers/cudss.py": "772d6c91ab94d50242f66cd0a9a6abb9978c2fff4230e5fcafa1b300d4d6c75b",
+      "src/isaac_l2f/control/solvers/qp.py": "3048aedc980558da9f1d41496d0ec0ab31de274b5075b59fe85c6ecb92eb9e1e"
+    },
+    "body_rate_source": {
+      "file": "src/isaac_l2f/control/ctbr.py",
+      "sha256": "7744a7ecaf107b6a28571cd9d1ef016a770e98275b7472263a22d50a8c0a3be9"
+    },
+    "adapted": "Copied 10-state thrust/body-rate model and Python SQP/ADMM/nvmath code; external CTBR thrust is converted from N to m/s^2, with body-rate control and motor response in the existing Newton plant. No symlinks or runtime imports from Isaac-L2F."
+  },
   "isaaclab": {
     "release": "3.0.0",
     "source_commit": "e3f7d9ff1f5d7f8280de3ece9000b7117f66bcf4",

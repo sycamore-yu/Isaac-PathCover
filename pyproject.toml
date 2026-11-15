@@ -30,6 +30,8 @@ simulation = [
     "mujoco-warp==3.12.0",
     "newton==1.6.1",
     "newton-usd-schemas==0.5.0",
+    "nvmath-python==1.0.0",
+    "nvidia-cudss-cu13==0.8.0.10",
     "packaging==26.0",
     "prettytable==3.18.0",
     "rich==14.3.4",

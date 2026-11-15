@@ -17,7 +17,6 @@ os.environ.setdefault("OMP_NUM_THREADS", "1")
 import numpy as np
 
 from isaac_pathcover.control.execution import ExecutionFSM, MachineState, TrajectoryExecution
-from isaac_pathcover.control.tracking import GeometricTracker
 from isaac_pathcover.planning.pipeline import Planner, PlannerConfig
 from isaac_pathcover.simulation.scene import Scene
 
@@ -94,10 +93,10 @@ def save_plan(path, result):
 class FlightTrace:
     """Record actual Newton state and the source position/yaw command on one clock."""
 
-    def __init__(self, env, scene, execution):
+    def __init__(self, env, scene, execution, controller):
         self.env, self.scene, self.execution = env, scene, execution
         self.dt = env.step_dt
-        self.tracker = GeometricTracker()
+        self.controller = controller
         self.previous_velocity = np.zeros(3)
         self.acceleration = np.zeros(3)
         self.jerk = np.zeros(3)
@@ -107,8 +106,12 @@ class FlightTrace:
         self.commands, self.allocated = [], []
         self.yaw_references, self.backup_flags, self.fsm_states = [], [], []
         self.command = execution.sample(0.)
+        self.command_trajectory = None
         self.command_time = 0.
         self.command_times = []
+        self.solve_times, self.solve_sim_times = [], []
+        self.rotor_thrusts, self.motor_commands = [], []
+        self.ctbr_commands = []
 
     @property
     def arrived(self):
@@ -116,7 +119,10 @@ class FlightTrace:
 
     def state(self, tick):
         state = self.env.physical_state()[0].detach().cpu().numpy().astype(float)
-        if tick:
+        if self.controller.name == "ideal":
+            self.acceleration = self.command.state[:, 2].copy()
+            self.jerk = self.command.state[:, 3].copy()
+        elif tick:
             acceleration = (state[7:10] - self.previous_velocity) / self.dt
             self.jerk = (acceleration - self.acceleration) / self.dt
             self.acceleration = acceleration
@@ -132,6 +138,7 @@ class FlightTrace:
             return None
         if fsm.state in (MachineState.FOLLOW_TRAJ, MachineState.EMER_STOP):
             self.command = self.execution.sample(now)
+            self.command_trajectory = self.execution.command
             self.command_time = now
             fsm.observe_command(self.command, state[:3], now)
             return self.command.on_backup
@@ -142,9 +149,11 @@ class FlightTrace:
 
         sample = self.command
         reference = sample.state
-        wrench, _ = self.tracker.command(state, reference[:, 0], reference[:, 1], reference[:, 2],
-                                         yaw=sample.yaw, yaw_rate=sample.yaw_rate)
-        self.env.step(torch.as_tensor(wrench[None], dtype=torch.float32, device=self.env.device))
+        solves_before = len(self.controller.solve_times)
+        wrench = self.controller.step(self.env, state, sample, self.command_trajectory, now)
+        new_times = self.controller.solve_times[solves_before:]
+        self.solve_times.extend(new_times)
+        self.solve_sim_times.extend([now] * len(new_times))
         after = self.env.physical_state()[0].detach().cpu().numpy().astype(float)
         self.times.append(now + self.dt)
         self.states.append(after)
@@ -155,6 +164,10 @@ class FlightTrace:
         self.fsm_states.append(int(fsm.state))
         self.contacts.append(float(self.env.contact_force()))
         self.motor_states.append(self.env.actuator.motor_state[0].detach().cpu().numpy().copy())
+        self.motor_commands.append(self.env.actuator.motor_command[0].detach().cpu().numpy().copy())
+        self.rotor_thrusts.append(self.env.actuator.allocated_thrust[0].detach().cpu().numpy().copy())
+        if self.controller.name == "nmpc":
+            self.ctbr_commands.append(self.controller.ctbr_command.copy())
         self.commands.append(wrench)
         self.allocated.append(self.env.actuator.allocated_wrench[0].detach().cpu().numpy().copy())
         self.substeps.extend(torch.stack(self.env.substep_states).detach().cpu().numpy())
@@ -178,7 +191,12 @@ def finish_episode(scene, seed, output, flight, plans, map_updates, wall,
                   requested_wrench=np.asarray(flight.commands), allocated_wrench=np.asarray(flight.allocated),
                   yaw_references=np.asarray(flight.yaw_references),
                   command_time=np.asarray(flight.command_times),
-                  on_backup=np.asarray(flight.backup_flags), fsm_state=np.asarray(flight.fsm_states))
+                  on_backup=np.asarray(flight.backup_flags), fsm_state=np.asarray(flight.fsm_states),
+                  motor_commands=np.asarray(flight.motor_commands),
+                  rotor_thrusts=np.asarray(flight.rotor_thrusts),
+                  ctbr_commands=np.asarray(flight.ctbr_commands),
+                  nmpc_solve_time_s=np.asarray(flight.solve_times),
+                  nmpc_solve_sim_time=np.asarray(flight.solve_sim_times))
     np.savez_compressed(output / "flight.npz", **arrays)
     np.savetxt(output / "speed.csv", np.column_stack((arrays["time"],
                np.linalg.norm(arrays["states"][:, 7:10], axis=1),
@@ -194,6 +212,16 @@ def finish_episode(scene, seed, output, flight, plans, map_updates, wall,
     (output / "timeline.json").write_text(json.dumps(finite_json(timeline), indent=2, allow_nan=False) + "\n")
     cycles = np.asarray([p["cycle_wall_s"] for p in plans])
     report.update({
+        "controller": flight.controller.name,
+        "controller_config": flight.controller.metadata(),
+        "nmpc_solves": len(flight.solve_times),
+        "nmpc_solve_p50_s": float(np.median(flight.solve_times)) if flight.solve_times else None,
+        "nmpc_solve_p95_s": float(np.quantile(flight.solve_times, .95)) if flight.solve_times else None,
+        "rotor_thrust_min_N": np.min(arrays["rotor_thrusts"]),
+        "rotor_thrust_max_N": np.max(arrays["rotor_thrusts"]),
+        "rotor_thrust_limits_N": [flight.env.actuator.lower.min().item(),
+                                  flight.env.actuator.upper.max().item()],
+        "tracking_hz": 1. / flight.dt,
         "seed": seed, "map_updates": len(map_updates), "mapping_initialization": planner_initialization,
         "resolved_goal_error_m": float(np.linalg.norm(arrays["states"][-1, :3] - fsm.goal)),
         "goal_resolution_shift_m": float(np.linalg.norm(fsm.goal - scene.goal)),
@@ -241,15 +269,21 @@ def finish_episode(scene, seed, output, flight, plans, map_updates, wall,
     return report
 
 
-def run_episode(env, scene, seed, duration, output):
+def run_episode(env, scene, seed, duration, output, controller_name):
     """Drive the source FSM while its planning callback runs in a CPU process."""
     from isaac_pathcover.control.async_planner import AsyncPlanningWorker
 
     output.mkdir(parents=True, exist_ok=True)
     env.reset()
+    if controller_name == "ideal":
+        from isaac_pathcover.control.ideal import IdealController
+        controller = IdealController(env)
+    else:
+        from isaac_pathcover.control.nmpc import NMPCController
+        controller = NMPCController(env)
     execution = TrajectoryExecution(scene.start)
     fsm = ExecutionFSM(scene.start, scene.goal)
-    flight = FlightTrace(env, scene, execution)
+    flight = FlightTrace(env, scene, execution, controller)
     plans, map_updates, artifacts = [], [], []
     inflight = None
     ready_at_sim_s = None
@@ -363,6 +397,8 @@ def run_episode(env, scene, seed, duration, output):
         initialization = worker.initialization_timings
         busy_at_end = worker.busy
         worker.close()
+        if controller_name == "nmpc":
+            controller.close()
 
     extra = {"planner_ready_sim_s": ready_at_sim_s, "planning_jobs_submitted": launched,
              "planning_jobs_returned": len(plans), "control_steps_while_worker_busy": busy_steps,
@@ -382,6 +418,7 @@ def main():
     parser.add_argument("--duration", type=float, default=90.,
                         help="Episode observation length in simulation seconds")
     parser.add_argument("--device", default="cuda:0")
+    parser.add_argument("--controller", choices=("ideal", "nmpc"), default="nmpc")
     parser.add_argument("--output", type=Path, default=Path("results/super_risp"))
     parser.add_argument("--plan-only", action="store_true")
     args = parser.parse_args()
@@ -390,7 +427,8 @@ def main():
         for name in ("medium", "dense"):
             command = [sys.executable, "-m", "isaac_pathcover.demo", "--scene", name,
                        "--seeds", *map(str, args.seeds), "--duration", str(args.duration),
-                       "--device", args.device, "--output", str(args.output / name)]
+                       "--device", args.device, "--controller", args.controller,
+                       "--output", str(args.output / name)]
             if args.plan_only:
                 command.append("--plan-only")
             subprocess.run(command, check=True)
@@ -432,10 +470,11 @@ def main():
             case = args.output / f"seed{seed:03d}"
             case.mkdir(parents=True, exist_ok=True)
             (case / "source_hashes.json").write_text(json.dumps(hashes, indent=2) + "\n")
-            reports.append(run_episode(env, scene, seed, args.duration, case))
+            reports.append(run_episode(env, scene, seed, args.duration, case, args.controller))
     finally:
         env.close()
-    aggregate = {"scene": args.scene, "seeds": args.seeds, "episodes": len(reports), "startup_s": startup,
+    aggregate = {"scene": args.scene, "controller": args.controller,
+                 "seeds": args.seeds, "episodes": len(reports), "startup_s": startup,
                  "arrival_rate": float(np.mean([r["arrived"] for r in reports])),
                  "collision_rate": float(np.mean([r["collision"] for r in reports])),
                  "collision_free_arrival_rate": float(np.mean([r["collision_free_arrival"] for r in reports])),

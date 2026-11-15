@@ -1,0 +1,711 @@
+{
+  "date": "2026-11-15",
+  "base_commit": "8dcdab4",
+  "results_root": "results/ideal_turbompc_20261115_1927",
+  "architecture": "SUPER CmdTraj -> 10D TurboMPC -> body-rate controller -> RotorActuator/motor -> Newton",
+  "controller_config": {
+    "name": "nmpc",
+    "control_hz": 50.0,
+    "prediction_dt_s": 0.02,
+    "horizon_steps": 16,
+    "horizon_s": 0.32,
+    "sqp_max_iter": 3,
+    "admm_max_iter": 500,
+    "admm_eps_abs": 1e-05,
+    "admm_eps_rel": 0.0001,
+    "state_dim": 10,
+    "control_dim": 4,
+    "state_order": "position, quaternion_wxyz, world_velocity",
+    "input": "collective_thrust_acceleration_mps2, body_rate_radps",
+    "solver_input": "total_thrust_N, body_rate_radps",
+    "mass_kg": 0.752,
+    "ctbr_lower": [
+      0.0,
+      -10.0,
+      -10.0,
+      -4.0
+    ],
+    "ctbr_upper": [
+      45.212765957446805,
+      10.0,
+      10.0,
+      4.0
+    ],
+    "source_commit": "e36743e8076bfe12b3e11911e2f1f866d61ae158",
+    "solver": "Isaac-L2F Python SQP/ADMM/nvmath-cuDSS"
+  },
+  "running_cost_weights_p_qwxyz_v_thrust_body_rate": [
+    80,
+    80,
+    100,
+    50,
+    50,
+    50,
+    30,
+    6,
+    6,
+    8,
+    0.015,
+    0.8,
+    0.8,
+    0.4
+  ],
+  "last_costed_state_weight_multiplier": 3,
+  "body_rate_gain_s_inverse": [
+    8,
+    8,
+    8
+  ],
+  "motor_time_constant_s": 0.033,
+  "runtime": {
+    "python": "3.12.14 (main, Sep  1 2026, 14:16:52) [Clang 22.1.3 ]",
+    "torch": "2.11.0+cu130",
+    "gpu": "NVIDIA GeForce RTX 4090",
+    "numpy": "2.5.1",
+    "scipy": "1.17.0",
+    "numba": "0.68.1",
+    "newton": "1.6.1",
+    "isaaclab_release": "3.0.0",
+    "isaaclab_core_distribution": "28.0.0",
+    "openblas_num_threads": "1",
+    "omp_num_threads": "1"
+  },
+  "metrics": {
+    "tracking": "post-step actual position minus the last published position applied over that step",
+    "planning_failures": "number of returned plans with success=false, including ON_BACKUP_WAIT_FOR_REST",
+    "solve": "synchronized wall time for every real solve, including initial waiting; constructor prewarm excluded",
+    "arrival": "within 0.1 m of SUPER-resolved goal and speed below 0.3 m/s for 0.5 s",
+    "comparison": "same planner, scenes, seeds and source timing rules; asynchronous wall-time scheduling can yield different replans"
+  },
+  "checks": {
+    "ideal": {
+      "controller": "ideal",
+      "direct_state_max_error": 0.0,
+      "free_pose_collision": false,
+      "occupied_pose_collision": true,
+      "physics_substeps": 4,
+      "passed": true
+    },
+    "nmpc10": {
+      "controller": "nmpc",
+      "duration_s": 5.0,
+      "initial_position_offset_m": [
+        0.1,
+        -0.1,
+        0.05
+      ],
+      "initial_roll_rad": 0.05,
+      "tracking_max_m": 0.1502151597745136,
+      "final_position_error_m": 0.007052427912511563,
+      "final_speed_m_s": 0.0032924364786595106,
+      "rotor_thrust_min_N": 1.4681446552276611,
+      "rotor_thrust_max_N": 1.9976893663406372,
+      "requested_rotor_thrust_min_N": 1.4681446552276611,
+      "requested_rotor_thrust_max_N": 1.9976894855499268,
+      "rotor_limits_satisfied": true,
+      "hover_stable": true,
+      "nmpc_solve_p50_s": 0.04010127705987543,
+      "nmpc_solve_p95_s": 0.06319324957439676,
+      "controller_config": {
+        "name": "nmpc",
+        "control_hz": 50.0,
+        "prediction_dt_s": 0.02,
+        "horizon_steps": 16,
+        "horizon_s": 0.32,
+        "sqp_max_iter": 3,
+        "admm_max_iter": 500,
+        "admm_eps_abs": 1e-05,
+        "admm_eps_rel": 0.0001,
+        "state_dim": 10,
+        "control_dim": 4,
+        "state_order": "position, quaternion_wxyz, world_velocity",
+        "input": "collective_thrust_acceleration_mps2, body_rate_radps",
+        "solver_input": "total_thrust_N, body_rate_radps",
+        "mass_kg": 0.752,
+        "ctbr_lower": [
+          0.0,
+          -10.0,
+          -10.0,
+          -4.0
+        ],
+        "ctbr_upper": [
+          45.212765957446805,
+          10.0,
+          10.0,
+          4.0
+        ],
+        "prewarm_seconds": 79.03301106509753,
+        "source_commit": "e36743e8076bfe12b3e11911e2f1f866d61ae158",
+        "solver": "Isaac-L2F Python SQP/ADMM/nvmath-cuDSS"
+      },
+      "passed": true
+    }
+  },
+  "interface_tests": {
+    "passed": 5,
+    "deselected": 1,
+    "log": "results/ideal_turbompc_20261115_1927/checks/interfaces.log"
+  },
+  "flights": [
+    {
+      "controller": "ideal",
+      "scene": "medium",
+      "seed": 2,
+      "arrived": true,
+      "collision": false,
+      "out_of_bounds": false,
+      "collision_free_arrival": true,
+      "tracking_max_m": 4.842352791017467e-07,
+      "tracking_rmse_m": 1.493457378487501e-07,
+      "planning_attempts": 76,
+      "planning_successes": 46,
+      "planning_failures": 30,
+      "nmpc_solves": 0,
+      "nmpc_solve_p50_s": null,
+      "nmpc_solve_p95_s": null,
+      "duration_sim_s": 16.540000000000003,
+      "wall_time_s": 32.342487262096256,
+      "resolved_goal_error_m": 2.1457672061409028e-07,
+      "rotor_thrust_min_N": 0.0,
+      "rotor_thrust_max_N": 0.0,
+      "rotor_thrust_limits_N": [
+        0.0,
+        8.5
+      ],
+      "planning_p50_s": 0.07516041840426624,
+      "planning_p95_s": 0.16433465731097385,
+      "finite": true,
+      "collision_check_complete": true,
+      "source_directory": "results/ideal_turbompc_20261115_1927/ideal/medium/seed002",
+      "source_hashes_file": "results/ideal_turbompc_20261115_1927/ideal/medium/seed002/source_hashes.json",
+      "first_motion_s": 11.16,
+      "motion_to_end_s": 5.380000000000003,
+      "planning_status_counts": {
+        "SUCCESS_WITH_BACKUP": 16,
+        "REPLAN_OVERTIME": 26,
+        "EXP_SIM_OVERTIME": 3,
+        "SUCCESS_NO_BACKUP": 30,
+        "EXP_OPT_FAILED": 1
+      },
+      "backup_entries": 4,
+      "intermediate_slow_total_s": 0,
+      "attribution": {
+        "first_actual_geometric_collision": null,
+        "first_reference_geometric_collision": null,
+        "first_contact": null,
+        "pre_first_collision_tracking_max_m": 4.842352791017467e-07,
+        "pre_first_collision_tracking_max_time_s": 15.73,
+        "collision_observation": "no_recorded_collision",
+        "control_saturation": null,
+        "solve": {
+          "count": 0,
+          "p50_ms": null,
+          "p95_ms": null,
+          "max_ms": null,
+          "over_20ms_count": 0,
+          "over_20ms_fraction": null
+        }
+      },
+      "actual_motor_thrust_min_N": 0.0,
+      "actual_motor_thrust_max_N": 0.0,
+      "actual_motor_thrust_outside_limit_samples": 0,
+      "boundary": {
+        "case": "ideal/medium",
+        "reference_out_of_bounds_samples": 0,
+        "reference_height_range_m": [
+          0.9258496769679532,
+          2.2307631337096674
+        ],
+        "first_actual_out_of_bounds_s": null,
+        "final_position_m": [
+          12.675000190734863,
+          -3.4749999046325684,
+          1.024999976158142
+        ],
+        "final_reference_m": [
+          12.674999999999999,
+          -3.4749999999999996,
+          1.025
+        ],
+        "actual_max_tilt_deg": 84.68595827673798
+      }
+    },
+    {
+      "controller": "ideal",
+      "scene": "dense",
+      "seed": 4,
+      "arrived": true,
+      "collision": false,
+      "out_of_bounds": false,
+      "collision_free_arrival": true,
+      "tracking_max_m": 4.938480775088803e-07,
+      "tracking_rmse_m": 1.7011406704720392e-07,
+      "planning_attempts": 317,
+      "planning_successes": 96,
+      "planning_failures": 221,
+      "nmpc_solves": 0,
+      "nmpc_solve_p50_s": null,
+      "nmpc_solve_p95_s": null,
+      "duration_sim_s": 30.580000000000002,
+      "wall_time_s": 74.00329562695697,
+      "resolved_goal_error_m": 2.1358100056921314e-07,
+      "rotor_thrust_min_N": 0.0,
+      "rotor_thrust_max_N": 0.0,
+      "rotor_thrust_limits_N": [
+        0.0,
+        8.5
+      ],
+      "planning_p50_s": 0.11370621807873249,
+      "planning_p95_s": 0.25799067318439484,
+      "finite": true,
+      "collision_check_complete": true,
+      "source_directory": "results/ideal_turbompc_20261115_1927/ideal/dense/seed004",
+      "source_hashes_file": "results/ideal_turbompc_20261115_1927/ideal/dense/seed004/source_hashes.json",
+      "first_motion_s": 10.38,
+      "motion_to_end_s": 20.200000000000003,
+      "planning_status_counts": {
+        "EXP_SIM_OVERTIME": 44,
+        "SUCCESS_WITH_BACKUP": 29,
+        "REPLAN_OVERTIME": 126,
+        "EXP_OPT_FAILED": 32,
+        "ON_BACKUP_WAIT_FOR_REST": 18,
+        "SUCCESS_NO_BACKUP": 65,
+        "SUCCESS_NO_BACKUP_RETAINED_COMMAND": 2,
+        "PATH_SEARCH_FAILED": 1
+      },
+      "backup_entries": 7,
+      "intermediate_slow_total_s": 2.309999999999997,
+      "attribution": {
+        "first_actual_geometric_collision": null,
+        "first_reference_geometric_collision": null,
+        "first_contact": null,
+        "pre_first_collision_tracking_max_m": 4.938480775088803e-07,
+        "pre_first_collision_tracking_max_time_s": 11.48,
+        "collision_observation": "no_recorded_collision",
+        "control_saturation": null,
+        "solve": {
+          "count": 0,
+          "p50_ms": null,
+          "p95_ms": null,
+          "max_ms": null,
+          "over_20ms_count": 0,
+          "over_20ms_fraction": null
+        }
+      },
+      "actual_motor_thrust_min_N": 0.0,
+      "actual_motor_thrust_max_N": 0.0,
+      "actual_motor_thrust_outside_limit_samples": 0,
+      "boundary": {
+        "case": "ideal/dense",
+        "reference_out_of_bounds_samples": 0,
+        "reference_height_range_m": [
+          0.4811743410250551,
+          2.7787284535520684
+        ],
+        "first_actual_out_of_bounds_s": null,
+        "final_position_m": [
+          6.824999809265137,
+          5.224999904632568,
+          0.675000011920929
+        ],
+        "final_reference_m": [
+          6.824999999999999,
+          5.2250000000000005,
+          0.6749999999999995
+        ],
+        "actual_max_tilt_deg": 81.87276421069849
+      }
+    },
+    {
+      "controller": "nmpc",
+      "scene": "medium",
+      "seed": 2,
+      "arrived": false,
+      "collision": true,
+      "out_of_bounds": true,
+      "collision_free_arrival": false,
+      "tracking_max_m": 2.980630727724402,
+      "tracking_rmse_m": 0.9960856677924852,
+      "planning_attempts": 82,
+      "planning_successes": 24,
+      "planning_failures": 58,
+      "nmpc_solves": 351,
+      "nmpc_solve_p50_s": 0.01957202097401023,
+      "nmpc_solve_p95_s": 0.06410309253260493,
+      "duration_sim_s": 7.01,
+      "wall_time_s": 35.66844207397662,
+      "resolved_goal_error_m": 11.284124570126595,
+      "rotor_thrust_min_N": 0.0,
+      "rotor_thrust_max_N": 8.5,
+      "rotor_thrust_limits_N": [
+        0.0,
+        8.5
+      ],
+      "planning_p50_s": 0.09353408950846642,
+      "planning_p95_s": 0.17118649352341894,
+      "finite": true,
+      "collision_check_complete": true,
+      "source_directory": "results/ideal_turbompc_20261115_1927/nmpc/medium/seed002",
+      "source_hashes_file": "results/ideal_turbompc_20261115_1927/nmpc/medium/seed002/source_hashes.json",
+      "first_motion_s": 4.59,
+      "motion_to_end_s": 2.42,
+      "planning_status_counts": {
+        "SUCCESS_WITH_BACKUP": 24,
+        "REPLAN_OVERTIME": 43,
+        "BACKUP_OPT_FAILED": 9,
+        "ON_BACKUP_WAIT_FOR_REST": 6
+      },
+      "backup_entries": 3,
+      "intermediate_slow_total_s": 0,
+      "attribution": {
+        "first_actual_geometric_collision": {
+          "time_s": 6.107500000000001,
+          "control_index": 610,
+          "command_sample_time_s": 6.1000000000000005,
+          "actual_pose_p_qwxyz": [
+            -2.5081543922424316,
+            -1.914756417274475,
+            0.4230642020702362,
+            0.6590866446495056,
+            -0.29615816473960876,
+            0.6187659502029419,
+            -0.3082594871520996
+          ],
+          "reference_pose_p_qwxyz": [
+            -1.9813001261976027,
+            -2.6076543760201334,
+            1.041257329100956,
+            0.9946822846442489,
+            0.09522822804206835,
+            -0.03808528780796131,
+            -0.009394043402605365
+          ],
+          "tracking_error_m": 1.0676355844535883,
+          "reference_collision": false,
+          "on_backup": false,
+          "fsm_state": 4,
+          "last_published_plan": {
+            "id": 46,
+            "operation": "replan_once",
+            "status": "SUCCESS_WITH_BACKUP",
+            "t": 5.8500000000000005,
+            "result_t": 5.89,
+            "activation_t": 5.89,
+            "worker_s": 0.0854111269582063,
+            "handoff": {
+              "accepted": true,
+              "start_time": 5.8500000000000005,
+              "installed_time": 5.89,
+              "backup_available": true,
+              "backup_start_tt": 0.405326779526834,
+              "reference_jump": [
+                4.965068306494546e-16,
+                9.155133597044475e-16,
+                1.2560739669470201e-15,
+                2.161031364628563e-14
+              ]
+            }
+          },
+          "last_returned_plan": {
+            "id": 52,
+            "operation": "replan_once",
+            "status": "REPLAN_OVERTIME",
+            "t": 6.05,
+            "result_t": 6.09,
+            "activation_t": null,
+            "worker_s": 0.1099568868521601,
+            "handoff": {
+              "accepted": false,
+              "retained_previous": true
+            }
+          }
+        },
+        "first_reference_geometric_collision": null,
+        "first_contact": {
+          "time_s": 6.11,
+          "control_index": 610,
+          "command_sample_time_s": 6.1000000000000005,
+          "actual_pose_p_qwxyz": [
+            -2.4920732975006104,
+            -1.9157936573028564,
+            0.4167192280292511,
+            0.6519555449485779,
+            -0.29863834381103516,
+            0.6301018595695496,
+            -0.29789403080940247
+          ],
+          "reference_pose_p_qwxyz": [
+            -1.9813001261976027,
+            -2.6076543760201334,
+            1.041257329100956,
+            0.9946822846442489,
+            0.09522822804206835,
+            -0.03808528780796131,
+            -0.009394043402605365
+          ],
+          "tracking_error_m": 1.0628303375032018,
+          "reference_collision": false,
+          "on_backup": false,
+          "fsm_state": 4,
+          "last_published_plan": {
+            "id": 46,
+            "operation": "replan_once",
+            "status": "SUCCESS_WITH_BACKUP",
+            "t": 5.8500000000000005,
+            "result_t": 5.89,
+            "activation_t": 5.89,
+            "worker_s": 0.0854111269582063,
+            "handoff": {
+              "accepted": true,
+              "start_time": 5.8500000000000005,
+              "installed_time": 5.89,
+              "backup_available": true,
+              "backup_start_tt": 0.405326779526834,
+              "reference_jump": [
+                4.965068306494546e-16,
+                9.155133597044475e-16,
+                1.2560739669470201e-15,
+                2.161031364628563e-14
+              ]
+            }
+          },
+          "last_returned_plan": {
+            "id": 52,
+            "operation": "replan_once",
+            "status": "REPLAN_OVERTIME",
+            "t": 6.05,
+            "result_t": 6.09,
+            "activation_t": null,
+            "worker_s": 0.1099568868521601,
+            "handoff": {
+              "accepted": false,
+              "retained_previous": true
+            }
+          }
+        },
+        "pre_first_collision_tracking_max_m": 1.4304141399926031,
+        "pre_first_collision_tracking_max_time_s": 5.28,
+        "collision_observation": "actual_collision_without_prior_reference_collision",
+        "control_saturation": {
+          "control_samples": 701,
+          "rotor_bound_tolerance_N": 1e-05,
+          "allocation_clipping_samples": 233,
+          "allocation_clipping_fraction": 0.33238231098430815,
+          "first_allocation_clipping_s": 4.51,
+          "allocated_at_bound_samples": 233,
+          "ctbr_at_bound_samples": 155,
+          "ctbr_at_bound_samples_per_channel": [
+            82,
+            58,
+            59,
+            80
+          ],
+          "ctbr_min": [
+            0.0,
+            -10.0,
+            -10.0,
+            -4.0
+          ],
+          "ctbr_max": [
+            45.212765957446805,
+            10.0,
+            10.0,
+            4.0
+          ],
+          "pre_first_collision_allocation_clipping_samples": 146,
+          "pre_first_collision_control_samples": 610
+        },
+        "solve": {
+          "count": 351,
+          "p50_ms": 19.57202097401023,
+          "p95_ms": 64.10309253260493,
+          "max_ms": 3680.918450001627,
+          "over_20ms_count": 174,
+          "over_20ms_fraction": 0.49572649572649574
+        }
+      },
+      "actual_motor_thrust_min_N": 1.2896155263540427e-13,
+      "actual_motor_thrust_max_N": 8.497268419412762,
+      "actual_motor_thrust_outside_limit_samples": 0,
+      "boundary": {
+        "case": "nmpc/medium",
+        "reference_out_of_bounds_samples": 0,
+        "reference_height_range_m": [
+          1.0371845524696612,
+          1.4975726511335792
+        ],
+        "first_actual_out_of_bounds_s": 6.52,
+        "final_position_m": [
+          1.6109360456466675,
+          -2.639519214630127,
+          -1.0292463302612305
+        ],
+        "final_reference_m": [
+          2.3496356006718275,
+          -3.1966134634342662,
+          1.448614373312301
+        ],
+        "actual_max_tilt_deg": 115.22552639883378
+      },
+      "motion_solve_timing": {
+        "case": "nmpc/medium",
+        "max_solve_sim_time_s": 0.0,
+        "max_solve_ms": 3680.918450001627,
+        "motion_to_end_count": 121,
+        "motion_to_end_p50_ms": 36.223720060661435,
+        "motion_to_end_p95_ms": 74.29402298294008,
+        "motion_to_end_over_20ms_fraction": 1.0
+      }
+    },
+    {
+      "controller": "nmpc",
+      "scene": "dense",
+      "seed": 4,
+      "arrived": false,
+      "collision": false,
+      "out_of_bounds": true,
+      "collision_free_arrival": false,
+      "tracking_max_m": 1.806127974445334,
+      "tracking_rmse_m": 0.48060719942307795,
+      "planning_attempts": 41,
+      "planning_successes": 1,
+      "planning_failures": 40,
+      "nmpc_solves": 307,
+      "nmpc_solve_p50_s": 0.012980741914361715,
+      "nmpc_solve_p95_s": 0.042054913099855165,
+      "duration_sim_s": 6.14,
+      "wall_time_s": 29.82703512487933,
+      "resolved_goal_error_m": 21.398685073777894,
+      "rotor_thrust_min_N": 0.0,
+      "rotor_thrust_max_N": 8.5,
+      "rotor_thrust_limits_N": [
+        0.0,
+        8.5
+      ],
+      "planning_p50_s": 0.11423455318436027,
+      "planning_p95_s": 0.2300892909988761,
+      "finite": true,
+      "collision_check_complete": true,
+      "source_directory": "results/ideal_turbompc_20261115_1927/nmpc/dense/seed004",
+      "source_hashes_file": "results/ideal_turbompc_20261115_1927/nmpc/dense/seed004/source_hashes.json",
+      "first_motion_s": 5.14,
+      "motion_to_end_s": 1.0,
+      "planning_status_counts": {
+        "SUCCESS_WITH_BACKUP": 1,
+        "REPLAN_OVERTIME": 26,
+        "BACKUP_OPT_FAILED": 2,
+        "BACKUP_CORRIDOR_FAILED": 5,
+        "ON_BACKUP_WAIT_FOR_REST": 7
+      },
+      "backup_entries": 1,
+      "intermediate_slow_total_s": 0,
+      "attribution": {
+        "first_actual_geometric_collision": null,
+        "first_reference_geometric_collision": null,
+        "first_contact": null,
+        "pre_first_collision_tracking_max_m": 1.806127974445334,
+        "pre_first_collision_tracking_max_time_s": 6.14,
+        "collision_observation": "no_recorded_collision",
+        "control_saturation": {
+          "control_samples": 614,
+          "rotor_bound_tolerance_N": 1e-05,
+          "allocation_clipping_samples": 91,
+          "allocation_clipping_fraction": 0.1482084690553746,
+          "first_allocation_clipping_s": 5.01,
+          "allocated_at_bound_samples": 91,
+          "ctbr_at_bound_samples": 66,
+          "ctbr_at_bound_samples_per_channel": [
+            26,
+            12,
+            10,
+            38
+          ],
+          "ctbr_min": [
+            0.0,
+            -10.0,
+            -10.0,
+            -4.0
+          ],
+          "ctbr_max": [
+            45.21274419488031,
+            10.0,
+            10.0,
+            3.216817188303599
+          ],
+          "pre_first_collision_allocation_clipping_samples": 91,
+          "pre_first_collision_control_samples": 614
+        },
+        "solve": {
+          "count": 307,
+          "p50_ms": 12.980741914361715,
+          "p95_ms": 42.05491309985516,
+          "max_ms": 3690.237880917266,
+          "over_20ms_count": 109,
+          "over_20ms_fraction": 0.3550488599348534
+        }
+      },
+      "actual_motor_thrust_min_N": 1.4746515234205113e-11,
+      "actual_motor_thrust_max_N": 8.478603910292067,
+      "actual_motor_thrust_outside_limit_samples": 0,
+      "boundary": {
+        "case": "nmpc/dense",
+        "reference_out_of_bounds_samples": 0,
+        "reference_height_range_m": [
+          0.47795367909889036,
+          0.7454866707560623
+        ],
+        "first_actual_out_of_bounds_s": 5.6499999999999995,
+        "final_position_m": [
+          -11.253363609313965,
+          -6.098495006561279,
+          -1.0146605968475342
+        ],
+        "final_reference_m": [
+          -11.290034327414276,
+          -5.352769363506464,
+          0.6299204391000701
+        ],
+        "actual_max_tilt_deg": 123.13032658011194
+      },
+      "motion_solve_timing": {
+        "case": "nmpc/dense",
+        "max_solve_sim_time_s": 0.0,
+        "max_solve_ms": 3690.237880917266,
+        "motion_to_end_count": 50,
+        "motion_to_end_p50_ms": 36.12995659932494,
+        "motion_to_end_p95_ms": 67.13437077123672,
+        "motion_to_end_over_20ms_fraction": 1.0
+      }
+    }
+  ],
+  "rerun": {
+    "files": [
+      "results/ideal_turbompc_20261115_1927/rerun/ideal/dense_seed004.rrd",
+      "results/ideal_turbompc_20261115_1927/rerun/ideal/medium_seed002.rrd",
+      "results/ideal_turbompc_20261115_1927/rerun/nmpc/dense_seed004.rrd",
+      "results/ideal_turbompc_20261115_1927/rerun/nmpc/medium_seed002.rrd"
+    ],
+    "verified": true,
+    "viewer_url": "http://100.92.244.71:9116?url=rerun%2Bhttp%3A%2F%2F100%2E92%2E244%2E71%3A9897%2Fproxy",
+    "download_url": "http://100.92.244.71:9117/"
+  },
+  "diagnostics_files": [
+    "results/ideal_turbompc_20261115_1927/attribution.json",
+    "results/ideal_turbompc_20261115_1927/controller_diagnostics.json",
+    "results/ideal_turbompc_20261115_1927/boundary_diagnostics.json",
+    "results/ideal_turbompc_20261115_1927/solve_timing_diagnostics.json"
+  ],
+  "retained_intermediate_records": {
+    "superseded_17D_hover": "results/ideal_turbompc_20261115_1927/checks/nmpc",
+    "dense_preflight_numba_error": "results/ideal_turbompc_20261115_1927/ideal_dense.log"
+  },
+  "numerical_cache_fix": "Disable only disk caching of dispatcher-valued lbfgs._line_search and _minimize. Numerical algorithms, parameters, FSM and timing predicates are unchanged.",
+  "source_consistency": {
+    "ideal/medium": [
+      "trajectory/lbfgs.py: disk-cache decorators only"
+    ],
+    "ideal/dense": [],
+    "nmpc/medium": [],
+    "nmpc/dense": []
+  }
+}

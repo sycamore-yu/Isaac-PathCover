@@ -53,7 +53,8 @@ def _dot(a,b):
     return value
 
 
-@njit(cache=True,fastmath=False,error_model="numpy")
+# Dispatcher-valued arguments cannot be reused safely from Numba's disk cache.
+@njit(cache=False,fastmath=False,error_model="numpy")
 def _line_search(fun,args,xp,gp,finit,direction,step,max_linesearch,min_step,max_step,f_dec,s_curv,machine_prec):
     if not step>0.:
         return xp,finit,gp,step,-1006,0
@@ -79,7 +80,7 @@ def _line_search(fun,args,xp,gp,finit,direction,step,max_linesearch,min_step,max
     return xp,finit,gp,step,-1009,max_linesearch
 
 
-@njit(cache=True,fastmath=False,error_model="numpy")
+@njit(cache=False,fastmath=False,error_model="numpy")
 def _minimize(fun,initial,args,mem_size,g_epsilon,past,delta,max_iterations,max_linesearch,
               min_step,max_step,f_dec,s_curv,cautious_factor,machine_prec):
     x=initial.copy();f,g=fun(x,args);calls=1

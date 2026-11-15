@@ -1,5 +1,9 @@
 # Fixed-command Newton tracking replay
 
+Historical record from commit `8dcdab4`. The geometric tracker and its replay
+scripts were replaced by the Ideal/TurboMPC controllers. Use that commit to
+reproduce the commands below; all recorded results remain in `results/`.
+
 This offline experiment tests the medium-flight failure recorded on 2026-11-15.
 It keeps the recorded 100 Hz position, velocity, acceleration and yaw commands
 unchanged. Both runs use `GeometricTracker`, its existing gains, `RotorActuator`,

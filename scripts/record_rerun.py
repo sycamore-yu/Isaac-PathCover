@@ -1,4 +1,4 @@
-"""Convert a recorded Newton SUPER + RISP flight to an interactive Rerun .rrd.
+"""Convert a recorded SUPER + RISP flight to an interactive Rerun .rrd.
 
 Requires ``rerun-sdk`` and NumPy. Runs offline from saved flight arrays;
 does not start Isaac Lab, Newton or another physical simulation.
@@ -40,6 +40,11 @@ def record(scene_name: str, seed: int, source: Path, output: Path, fps: float) -
         contacts = flight["contact_force"]
         backup = flight["on_backup"]
         fsm_states = flight["fsm_state"]
+        if "nmpc_solve_time_s" in flight:
+            solve_times = flight["nmpc_solve_time_s"]
+            solve_sim_times = flight["nmpc_solve_sim_time"]
+        else:
+            solve_times = solve_sim_times = np.empty(0)
 
     scene_file = ROOT / "src/isaac_pathcover/simulation/scenes" / f"{scene_name}.npz"
     with np.load(scene_file) as scene:
@@ -53,6 +58,7 @@ def record(scene_name: str, seed: int, source: Path, output: Path, fps: float) -
     centers = (boxes_min + boxes_max) * 0.5
     half_sizes = (boxes_max - boxes_min) * 0.5
     report = json.loads((case / "result.json").read_text())
+    controller = report.get("controller", "historical geometric")
     plan_records = json.loads((case / "planning.json").read_text())
     accepted = [(float(p["activation_t"]), i) for i, p in enumerate(plan_records)
                 if p["handoff"]["accepted"]]
@@ -61,11 +67,13 @@ def record(scene_name: str, seed: int, source: Path, output: Path, fps: float) -
     blueprint = rrb.Blueprint(
         rrb.Vertical(
             rrb.Horizontal(
-                rrb.Spatial3DView(origin="world", name="Newton flight: 3D"),
+                rrb.Spatial3DView(origin="world", name=f"{controller} flight: 3D"),
                 rrb.Vertical(
                     rrb.TimeSeriesView(origin="plots/speed", name="Speed (m/s)"),
                     rrb.TimeSeriesView(origin="plots/error", name="Position error (m)"),
                     rrb.TimeSeriesView(origin="plots/planning", name="Planning time (s)"),
+                    *([rrb.TimeSeriesView(origin="plots/nmpc", name="NMPC solve time (ms)")]
+                      if len(solve_times) else []),
                     rrb.TimeSeriesView(origin="plots/execution", name="Backup and FSM"),
                     rrb.TimeSeriesView(origin="plots/contact", name="Contact force (N)"),
                 ),
@@ -77,7 +85,8 @@ def record(scene_name: str, seed: int, source: Path, output: Path, fps: float) -
         collapse_panels=False,
     )
     output.parent.mkdir(parents=True, exist_ok=True)
-    with rr.RecordingStream("SUPER-RISP-Newton", recording_id=f"super-risp-{scene_name}-seed{seed:03d}") as rec:
+    recording_id = f"super-risp-{controller.replace(' ', '-')}-{scene_name}-seed{seed:03d}"
+    with rr.RecordingStream(f"SUPER-RISP-{controller}", recording_id=recording_id) as rec:
         rec.save(output, default_blueprint=blueprint)
         rec.log("world", rr.ViewCoordinates.RIGHT_HAND_Z_UP, static=True)
         rec.log("world/obstacles", rr.Boxes3D(
@@ -105,8 +114,13 @@ def record(scene_name: str, seed: int, source: Path, output: Path, fps: float) -
             [-arm, -arm, 0.0], [arm, arm, 0.0], [-arm, arm, 0.0], [arm, -arm, 0.0],
         ], colors=[[31, 89, 179]], radii=0.055), static=True)
         rec.log("events/run", rr.TextLog(
-            f"{scene_name} seed={seed}; arrived={report['arrived']}; "
+            f"{scene_name} seed={seed}; controller={controller}; arrived={report['arrived']}; "
             f"collision={report['collision']}; out_of_bounds={report['out_of_bounds']}"), static=True)
+        rec.log("events/controller", rr.TextLog(json.dumps({
+            "controller": controller, "configuration": report.get("controller_config"),
+            "nmpc_solve_p50_s": report.get("nmpc_solve_p50_s"),
+            "nmpc_solve_p95_s": report.get("nmpc_solve_p95_s"),
+        })), static=True)
 
         for plan in plan_records:
             rec.set_time("sim_time", duration=plan["result_t"])
@@ -119,6 +133,9 @@ def record(scene_name: str, seed: int, source: Path, output: Path, fps: float) -
             rec.set_time("sim_time", duration=transition["time"])
             rec.log("events/fsm", rr.TextLog(
                 f"{transition['from']} -> {transition['to']} ({transition['callback']})"))
+        for now, elapsed in zip(solve_sim_times, solve_times):
+            rec.set_time("sim_time", duration=float(now))
+            rec.log("plots/nmpc/solve", rr.Scalars(float(elapsed) * 1000.))
 
         # Preserve the full control-rate curves and short backup transitions.
         # Only the 3D animation below is sampled at the requested display rate.
@@ -164,6 +181,9 @@ def record(scene_name: str, seed: int, source: Path, output: Path, fps: float) -
 
     return {
         "scene": scene_name, "seed": seed, "output": str(output),
+        "controller": controller, "controller_config": report.get("controller_config"),
+        "nmpc_solve_p50_s": report.get("nmpc_solve_p50_s"),
+        "nmpc_solve_p95_s": report.get("nmpc_solve_p95_s"),
         "bytes": output.stat().st_size, "frames": len(frames),
         "duration_sim_s": float(times[-1]), "obstacle_boxes": len(centers),
         "active_plans": len(accepted), "arrived": report["arrived"],

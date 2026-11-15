@@ -2,7 +2,6 @@ import numpy as np
 import torch
 
 from isaac_pathcover.control.actuator import RotorActuator
-from isaac_pathcover.control.tracking import GeometricTracker
 from isaac_pathcover.dynamics import load_params, rotor_thrust_mean, motor_step_closed_form
 from isaac_pathcover.simulation.scene import Scene
 
@@ -28,14 +27,6 @@ def test_motor_impulse_matches_quadrature():
     expected = torch.trapezoid(8.5 * speed.square(), x=time[:, 0, 0], dim=0) / dt
     torch.testing.assert_close(rotor_thrust_mean(params, state, target, dt), expected, atol=2e-9, rtol=1e-9)
     torch.testing.assert_close(motor_step_closed_form(params, state, target, dt), speed[-1])
-
-
-def test_source_tracker_hover():
-    state = np.r_[[1., 2., 1.5], [1., 0., 0., 0.], np.zeros(6)]
-    wrench, rotation = GeometricTracker().command(state, state[:3], np.zeros(3), np.zeros(3),
-                                                yaw=0., yaw_rate=0.)
-    np.testing.assert_allclose(wrench, [.752 * 9.8066, 0., 0., 0.], atol=1e-13)
-    np.testing.assert_allclose(rotation, np.eye(3))
 
 
 def test_exact_existing_scenario_assets_and_lidar():

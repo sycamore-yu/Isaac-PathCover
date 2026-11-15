@@ -2,7 +2,9 @@
 
 在现有 Isaac Lab / Newton 四旋翼上运行原生 Python SUPER。地图、搜索、轨迹优化和执行状态机来自 SUPER `2ad3419`。CIRI 的几何生成替换为 PathCover/RISP `8723a05d`。
 
-当前验收仍有未解决项。medium seed2 已无碰撞到达。dense seed4 已到达，但途中发生碰撞。显式备用热启动的部分完整数值解也与 C++ 存在明显差异。全部 9 次运行、严格数值对照和剩余问题见 [验收记录](docs/super_validation.md)。
+执行层提供 Ideal 和 TurboMPC 两种模式。两种模式共享 SUPER + RISP 规划、CmdTraj、状态机与传感器。旧几何控制器的 9 次飞行保留在 [历史验收记录](docs/super_validation.md)。
+
+本次 [Ideal / 10D TurboMPC 对照](docs/controller_comparison.md) 已完成：两个 Ideal 场景均无碰撞到达。10D TurboMPC 通过扰动悬停，但 Medium 碰撞、Dense 下坠越界。记录将直接失败指向控制跟踪与分配饱和。规划参数、时间判断和状态机保持原样。
 
 ## 运行
 
@@ -10,10 +12,10 @@
 
 ```bash
 OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 .venv/bin/python -m isaac_pathcover.demo \
-  --scene both --seeds 0 1 2 --duration 90 --output results/super_risp_validation_20261115
+  --controller nmpc --scene medium --seeds 2 --duration 90 --output results/turbompc/medium
 ```
 
-`--duration` 是试验观察时长，以仿真秒计。到达终点后结束。仅检查规划器：
+`--controller ideal` 直接执行 SUPER 参考状态。`--controller nmpc` 使用 TurboMPC 控制 Newton 刚体，默认选择 NMPC。`--duration` 是仿真观察时长。到达终点后结束。仅检查规划器：
 
 ```bash
 OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 .venv/bin/python -m isaac_pathcover.demo \
@@ -41,14 +43,17 @@ OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 .venv/bin/python -m isaac_pathcover.dem
 | `planning/pipeline.py` | PlanFromRest、ReplanOnce、带时间戳的轨迹引导、旧路径复用、主轨迹与备用轨迹生成 |
 | `control/execution.py` | ExpTraj、BackupTraj、CmdTraj、旧前缀拼接、备用轨迹切换、SUPER 状态机 |
 | `control/async_planner.py` | 独立规划进程、共享仿真时钟和最新测量状态 |
-| `control/tracking.py` | 保留的几何控制器；接收 SUPER 位置与偏航指令 |
+| `control/ideal.py` | SUPER perfect_drone_sim 的位置、速度与平坦性姿态赋值 |
+| `control/nmpc.py` | 未来参考采样、10 维状态跟踪、滚动求解并输出推力加速度和机体系角速度 |
+| `control/solvers/` | 从 Isaac-L2F 复制的 Python SQP、ADMM 与 nvmath/cuDSS 求解组件 |
+| `control/rate.py` | 角速度内环，将期望机体系角速度转换为力矩 |
 | `simulation/` | 保留的 Newton 刚体、旋翼分配、电机滞后、场景与传感器 |
 
 规划使用 Python、NumPy、SciPy 和 Numba。数值核由 Numba 在 CPU 编译并缓存，保留一套 Python 算法源码。运行时不调用 ROS、C++ 对照程序或自定义 C++/CUDA 扩展。现有 Newton 仿真使用 Isaac Lab、PyTorch、Warp 和 Newton 官方依赖。旧 NanoVox、JPS/DMP、GCOPTER 规划器与同步演示入口已经移除。
 
 ## 原始时间与执行语义
 
-默认规划参数来自 SUPER 的 `super_planner/config/static_dense.yaml`。物理频率为 400 Hz，控制频率为 100 Hz。ROS 2 的 15 Hz 重规划参数在源码中转换为 66 ms 墙钟定时器。Python 保留该调度周期，正在执行的规划请求不会排成积压队列。
+默认规划参数来自 SUPER 的 `super_planner/config/static_dense.yaml`。物理频率为 400 Hz，环境步进为 100 Hz。NMPC 每 20 ms 仿真时间求解一次。ROS 2 的 15 Hz 重规划参数在源码中转换为 66 ms 墙钟定时器。正在执行的规划请求不会排成积压队列。
 
 规划进程读取持续推进的 Newton 仿真时钟。新命令保持 SUPER 自身的起始时间，收到命令时不重置轨迹时间。ReplanOnce 拼接旧轨迹前缀，BackupTraj 进入同一个 CmdTraj。
 
@@ -68,14 +73,14 @@ SUPER 源码保留以下时间判断：
 
 | 文件 | 内容 |
 |---|---|
-| `flight.npz` | 实际状态、400 Hz 物理状态、PVAJ 参考、偏航参考、电机、接触力、备用轨迹标记和状态机状态 |
+| `flight.npz` | 实际状态、400 Hz 物理状态、PVAJ 参考、电机、旋翼推力、接触力、备用标志、状态机和 NMPC 求解耗时 |
 | `speed.csv` | 仿真时间、实际速度、参考速度、备用轨迹标记与状态机 |
 | `planning.json` | 每次请求、求解时刻、模块耗时、优化状态、原时间判断、轨迹提交与参考跳变量 |
 | `mapping.json` | 扫描与地图融合记录 |
 | `fsm.json` | 原状态机切换的时间、前后状态和回调来源 |
 | `timeline.json` | 中途低速区间、并发规划记录、备用轨迹区间、模块 P50/P95 |
 | `plans/NNNN/` | 主轨迹、偏航、备用轨迹、实际命令、搜索路径与走廊 |
-| `result.json` | 到达、碰撞、跟踪误差、耗时、软件版本和硬件 |
+| `result.json` | 控制器配置、到达、碰撞、跟踪误差、规划失败数、NMPC P50/P95、软件版本和硬件 |
 | `source_hashes.json` | 该次运行使用的 Python 源文件 SHA256 |
 | `flight.html` | 原始障碍、初始走廊和实际飞行路径 |
 
@@ -85,20 +90,28 @@ SUPER 源码保留以下时间判断：
 
 ```bash
 /home/tong/.local/share/pipx/venvs/rerun-sdk/bin/python scripts/record_rerun.py \
-  --scene both --source results/super_risp_validation_20261115 \
-  --output results/rerun_super_risp_20261115
-/home/tong/.local/bin/rerun results/rerun_super_risp_20261115/*.rrd
+  --scene both --source results/ideal_turbompc_20261115_1927/ideal \
+  --output results/ideal_turbompc_20261115_1927/rerun/ideal
+/home/tong/.local/share/pipx/venvs/rerun-sdk/bin/python scripts/record_rerun.py \
+  --scene both --source results/ideal_turbompc_20261115_1927/nmpc \
+  --output results/ideal_turbompc_20261115_1927/rerun/nmpc
+/home/tong/.local/bin/rerun results/ideal_turbompc_20261115_1927/rerun/*/*.rrd
 ```
 
-回放包含真实无人机姿态、主轨迹、备用轨迹、实际与参考速度、规划耗时、状态机和接触力。
+回放包含无人机姿态、主轨迹、备用轨迹、实际与参考速度、规划耗时、NMPC 求解耗时、状态机和接触力。录制名称包含控制器，旧记录标为历史几何控制器。
+
+[打开本次 4 条回放](http://100.92.244.71:9116?url=rerun%2Bhttp%3A%2F%2F100%2E92%2E244%2E71%3A9897%2Fproxy) · [下载录制与统计](http://100.92.244.71:9117/)。生成方法与历史入口见 [Rerun 说明](docs/rerun_recording.md)。
 
 ## 验证与来源
 
 ```bash
-OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 .venv/bin/python -m pytest -q -ra
+OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 .venv/bin/python scripts/check_controllers.py \
+  --controller ideal --output results/controller_checks/ideal
+OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 .venv/bin/python scripts/check_controllers.py \
+  --controller nmpc --output results/controller_checks/nmpc
 ```
 
-固定输入与原 C++ 输出保存在 `tests/fixtures/`。离线对照入口位于 `tests/reference/super_mapping/`、`super_trajectory/`、`super_execution/`。C++ 仅生成数值证据，运行包不依赖这些程序。
+Ideal 检查直接执行与几何碰撞。NMPC 检查受扰动悬停与旋翼推力限制。闭环对照使用 Medium seed2 和 Dense seed4，两种控制器各飞行一次。固定规划数值夹具仍保存在 `tests/fixtures/`，本次不扩展离线 C++ 热启动对照。
 
 SUPER 参数中与现有场景范围、Newton 执行接口有关的适配在模块文档中说明。来源提交和文件哈希见 [docs/sources.json](docs/sources.json)。历史实验位于 [docs/history](docs/history)，原始实验数据保留在 `results/`。
 
@@ -106,4 +119,4 @@ SUPER 参数中与现有场景范围、Newton 执行接口有关的适配在模�
 
 ## 许可
 
-SUPER 移植代码按 LGPL-3.0-or-later 分发。MINCO/L-BFGS 相关代码保留其 MIT 许可。PathCover 和 Newton 接口保留原来源许可。完整条款及声明位于 [licenses](licenses)。
+SUPER 移植代码按 LGPL-3.0-or-later 分发。MINCO/L-BFGS 和 TurboMPC 相关代码保留其 MIT 许可。PathCover 和 Newton 接口保留原来源许可。完整条款及声明位于 [licenses](licenses)。

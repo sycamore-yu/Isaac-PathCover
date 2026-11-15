@@ -22,7 +22,7 @@ def command(offset):
 
 def test_async_result_in_generate_does_not_publish_until_follow():
     execution = TrajectoryExecution(np.zeros(3))
-    flight = FlightTrace(SimpleNamespace(step_dt=.01), None, execution)
+    flight = FlightTrace(SimpleNamespace(step_dt=.01), None, execution, SimpleNamespace(name="ideal"))
     fsm = ExecutionFSM(np.zeros(3), [20., 0., 0.])
     state = np.r_[np.zeros(3), [1., 0., 0., 0.], np.zeros(6)]
     execution.install(command(0.))

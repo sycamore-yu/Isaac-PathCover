@@ -14,6 +14,7 @@ from isaaclab.utils import configclass
 from isaaclab_newton.physics import MJWarpSolverCfg, NewtonCfg
 
 from isaac_pathcover.control.actuator import RotorActuator
+from isaac_pathcover.control.rate import BodyRateController
 from isaac_pathcover.dynamics import load_params
 
 
@@ -82,10 +83,13 @@ def make_env_cfg(scene, device="cuda:0", seed=0):
 
 class FlightEnv(DirectRLEnv):
     def __init__(self, cfg, render_mode=None, **kwargs):
+        self._ideal_state = None
+        self._ctbr_command = None
         super().__init__(cfg, render_mode, **kwargs)
         self.robot = self.scene["robot"]
         self.params = load_params(device=self.device, num_envs=self.num_envs)
         self.actuator = RotorActuator(self.params)
+        self.rate_controller = BodyRateController(self.params, self.actuator.upper.sum(dim=-1))
         self.robot.set_masses_index(masses=self.params.mass[:, None].contiguous())
         self.robot.set_inertias_index(inertias=torch.linalg.inv(self.params.J_inv).reshape(self.num_envs, 1, 9))
         self.sim.physics_manager.set_decimation(1)
@@ -101,13 +105,50 @@ class FlightEnv(DirectRLEnv):
                           data.root_link_quat_w.torch[:, [3, 0, 1, 2]],
                           data.root_com_lin_vel_w.torch, data.root_com_ang_vel_b.torch), dim=-1)
 
+    def step_ideal(self, state):
+        """Keep Newton's step schedule and replace its motion by the command state."""
+        if self._ideal_state is None:
+            self.actuator.motor_state.zero_()
+            self.actuator.motor_command.zero_()
+            self.actuator.requested_wrench.zero_()
+            self.actuator.allocated_wrench.zero_()
+            self.actuator.allocated_thrust.zero_()
+        self._ideal_state = torch.as_tensor(state, dtype=self.command.dtype, device=self.device).reshape(-1, 13)
+        result = self.step(torch.zeros_like(self.command))
+        self._write_ideal_state()
+        result[0]["policy"] = self.physical_state()
+        return result
+
+    def _write_ideal_state(self):
+        pose = self._ideal_state[:, [0, 1, 2, 4, 5, 6, 3]].clone()
+        pose[:, :3] += self.scene.env_origins
+        self.robot.write_root_com_pose_to_sim_index(root_pose=pose)
+        self.robot.write_root_com_velocity_to_sim_index(root_velocity=self._ideal_state[:, 7:13].contiguous())
+
+    def step_ctbr(self, command):
+        """Hold thrust acceleration/body-rate targets; refresh feedback at 400 Hz."""
+        self._ctbr_command = torch.as_tensor(command, dtype=self.command.dtype, device=self.device).reshape(-1, 4)
+        result = self.step(torch.zeros_like(self.command))
+        self._ctbr_command = None
+        return result
+
     def _pre_physics_step(self, actions):
-        self.command.copy_(actions)
-        self.actuator.command(self.command)
+        if self._ctbr_command is None:
+            self.command.copy_(actions)
+            if self._ideal_state is None:
+                self.actuator.command(self.command)
         self.substep_states = []
 
     def _apply_action(self):
-        force, torque = self.actuator.step(self.physics_dt)
+        if self._ideal_state is None:
+            if self._ctbr_command is not None:
+                self.command.copy_(self.rate_controller.wrench(
+                    self._ctbr_command, self.robot.data.root_com_ang_vel_b.torch))
+                self.actuator.command(self.command)
+            force, torque = self.actuator.step(self.physics_dt)
+        else:
+            self._write_ideal_state()
+            force = torque = torch.zeros_like(self.command[:, :3])
         self.robot.permanent_wrench_composer.set_forces_and_torques_index(
             forces=force[:, None, :], torques=torque[:, None, :], body_ids=[0], is_global=False,
         )
@@ -126,9 +167,13 @@ class FlightEnv(DirectRLEnv):
         return done, done.clone()
 
     def contact_force(self):
+        if self._ideal_state is not None:
+            return self.command.new_zeros(())
         return self.scene["contact"].data.net_forces_w_history.torch.norm(dim=-1).amax()
 
     def _reset_idx(self, env_ids):
+        self._ideal_state = None
+        self._ctbr_command = None
         super()._reset_idx(env_ids)
         ids = torch.as_tensor(env_ids, dtype=torch.long, device=self.device)
         self.actuator.reset(ids)

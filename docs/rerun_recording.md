@@ -1,15 +1,39 @@
 # SUPER + RISP 的 Rerun 录制
 
-录制直接读取 Newton 飞行数据，不重新运行物理仿真。
+录制直接读取 Ideal 或 NMPC 飞行数据，不重新运行仿真。
 每条录制使用同一批 `flight.npz`、`planning.json`、`fsm.json` 和轨迹多项式。
 
-当前包含 medium seeds 0–2、dense seeds 0–5，共 9 条录制。
+## Ideal 与 10D TurboMPC 对照
+
+本次输出目录为 `results/ideal_turbompc_20261115_1927/rerun/`。
+`ideal/` 和 `nmpc/` 分别保存 Medium seed2 与 Dense seed4。
+录制名称包含控制器。NMPC 另有实际求解耗时曲线，单位为 ms。
+
+4 条录制均通过 `rrd verify`。结果和归因见 [对照报告](controller_comparison.md)。
+
+- [本次 Rerun 回放](http://100.92.244.71:9116?url=rerun%2Bhttp%3A%2F%2F100%2E92%2E244%2E71%3A9897%2Fproxy)
+- [本次录制与统计下载](http://100.92.244.71:9117/)
+
+```bash
+/home/tong/.local/share/pipx/venvs/rerun-sdk/bin/python scripts/record_rerun.py \
+  --scene both --source results/ideal_turbompc_20261115_1927/ideal \
+  --output results/ideal_turbompc_20261115_1927/rerun/ideal --fps 12
+/home/tong/.local/share/pipx/venvs/rerun-sdk/bin/python scripts/record_rerun.py \
+  --scene both --source results/ideal_turbompc_20261115_1927/nmpc \
+  --output results/ideal_turbompc_20261115_1927/rerun/nmpc --fps 12
+/home/tong/.local/bin/rerun rrd verify results/ideal_turbompc_20261115_1927/rerun/*/*.rrd
+/home/tong/.local/bin/rerun results/ideal_turbompc_20261115_1927/rerun/*/*.rrd
+```
+
+## 历史录制
+
+原有 medium seeds 0–2、dense seeds 0–5，共 9 条录制保持原样。
 到达、碰撞和越界状态分别保留。9 个文件均通过 `rrd verify`。
 
 - [工作机 Rerun 回放](http://100.92.244.71:9114?url=rerun%2Bhttp%3A%2F%2F100%2E92%2E244%2E71%3A9896%2Fproxy)
 - [录制文件与汇总](http://100.92.244.71:9115/)
 
-## 生成与检查
+### 历史数据的生成与检查
 
 本机的独立 SDK 环境使用 Rerun 0.38.1。
 
@@ -37,6 +61,7 @@ SDK 与 Isaac Lab 环境独立。
 | 黄色轨迹 | 同次提交的备用轨迹 |
 | 速度与误差 | 实际速度、实际使用的参考速度、位置误差 |
 | 规划 | 各次完整规划耗时、含传感器更新的工作进程耗时 |
+| NMPC | 每次滚动求解的实际墙钟耗时，独立于规划耗时 |
 | 执行 | 备用标志、FSM 状态和接触力 |
 | 事件日志 | 规划状态、备用生成状态、FSM 切换与来源回调 |
 
@@ -52,4 +77,4 @@ SDK 与 Isaac Lab 环境独立。
 
 `summary.json` 保存每条录制的源结果、帧数、字节数和轨迹提交数量。
 `.rrd` 和原始飞行数据保存在 `results/`。
-当前运行结果见 [SUPER 验收报告](super_validation.md)。
+历史运行结果见 [SUPER 验收报告](super_validation.md)。
