@@ -90,6 +90,7 @@ Exp 最大位置差为 `7.43e-8 m`，Backup 为 `2.75e-3 m`。
 这些终点没有达到原严格梯度匹配容差，测试和报告保留该限制。
 显式热启动重载未进入当前飞行主流程；其支持范围仍需要记录此差异。
 逐项数值、源码哈希和条件诊断见 [数值证据汇总](data/super_validation_numerics.json)。
+进一步的固定初值、L-BFGS 迭代与 C++ 编译对照见 [热启动数值复核](super_numeric_matching_audit.md)。
 
 ## 2. Newton 完整运行与停顿诊断
 

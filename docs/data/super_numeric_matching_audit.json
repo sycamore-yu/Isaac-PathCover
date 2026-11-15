@@ -1,0 +1,231 @@
+{
+  "experiment_date": "2026-11-15",
+  "source_commit": "2ad3419c127a617c6d7df6925e81a14175a9c096",
+  "comparison": "SUPER original source C++ -O2, source C++ -O0, native Python/Numba CPU (same fixed inputs); no C++ runtime dependency",
+  "cases": [
+    {
+      "case": "exp_hot_type1",
+      "stage": 0,
+      "cpp_cost": 14670901.099136105,
+      "python_cost_evaluated_by_cpp": 14670901.102413557,
+      "cpp_iterations": 12,
+      "python_iterations": 12,
+      "cpp_evaluations": 81,
+      "python_evaluations": 81,
+      "trajectory_position_max_difference_m": 6.117528859829914e-09,
+      "trajectory_velocity_max_difference_m_s": 1.662279225342281e-08,
+      "trajectory_duration_difference_s": 3.72032626927421e-10,
+      "cost_relative_difference": 2.2339893050278446e-10,
+      "fixed_initial_cost_scaled_error": 2.191325250950196e-16,
+      "fixed_initial_gradient_scaled_error": 5.6110820936026616e-14,
+      "final_point_gradient_scaled_error_max": 3.5819717849954375e-08,
+      "cpp_o0_exactly_matches_cpp_o2": true,
+      "same_termination_status": true
+    },
+    {
+      "case": "exp_hot_type2",
+      "stage": 0,
+      "cpp_cost": 14670128.08770935,
+      "python_cost_evaluated_by_cpp": 14669880.597652508,
+      "cpp_iterations": 136,
+      "python_iterations": 114,
+      "cpp_evaluations": 342,
+      "python_evaluations": 331,
+      "trajectory_position_max_difference_m": 0.007839694603941306,
+      "trajectory_velocity_max_difference_m_s": 0.021257854441965117,
+      "trajectory_duration_difference_s": 8.492133015458592e-06,
+      "cost_relative_difference": 1.6870339405193904e-05,
+      "fixed_initial_cost_scaled_error": 2.191325250950705e-16,
+      "fixed_initial_gradient_scaled_error": 5.0655150950141755e-14,
+      "final_point_gradient_scaled_error_max": 1.703515047076965e-08,
+      "cpp_o0_exactly_matches_cpp_o2": true,
+      "same_termination_status": true
+    },
+    {
+      "case": "backup_hot_uniform0",
+      "stage": 0,
+      "cpp_cost": 79.34078023644778,
+      "python_cost_evaluated_by_cpp": 79.3927500670238,
+      "cpp_iterations": 139,
+      "python_iterations": 123,
+      "cpp_evaluations": 411,
+      "python_evaluations": 377,
+      "trajectory_position_max_difference_m": 0.00502278792171373,
+      "trajectory_velocity_max_difference_m_s": 0.017083450992796432,
+      "trajectory_duration_difference_s": 0.0005156932211817233,
+      "cost_relative_difference": 0.0006468673869021103,
+      "fixed_initial_cost_scaled_error": 0.0,
+      "fixed_initial_gradient_scaled_error": 3.167605430933152e-20,
+      "final_point_gradient_scaled_error_max": 4.379284376081564e-07,
+      "cpp_o0_exactly_matches_cpp_o2": true,
+      "same_termination_status": true
+    },
+    {
+      "case": "backup_hot_uniform1",
+      "stage": 0,
+      "cpp_cost": 68.43315219994375,
+      "python_cost_evaluated_by_cpp": 65.55481810621494,
+      "cpp_iterations": 138,
+      "python_iterations": 461,
+      "cpp_evaluations": 571,
+      "python_evaluations": 1126,
+      "trajectory_position_max_difference_m": 0.6766780187169686,
+      "trajectory_velocity_max_difference_m_s": 2.595791694217753,
+      "trajectory_duration_difference_s": 0.004558762284082696,
+      "cost_relative_difference": 0.041454751837333326,
+      "fixed_initial_cost_scaled_error": 1.902240393955589e-15,
+      "fixed_initial_gradient_scaled_error": 1.0619330377318531e-13,
+      "final_point_gradient_scaled_error_max": 2.0468157941177323e-08,
+      "cpp_o0_exactly_matches_cpp_o2": true,
+      "same_termination_status": true
+    },
+    {
+      "case": "backup_hot_uniform1",
+      "stage": 1,
+      "cpp_cost": 30.36556761894719,
+      "python_cost_evaluated_by_cpp": 31.75491915894552,
+      "cpp_iterations": 1335,
+      "python_iterations": 2054,
+      "cpp_evaluations": 3078,
+      "python_evaluations": 4114,
+      "trajectory_position_max_difference_m": 0.030961249586539324,
+      "trajectory_velocity_max_difference_m_s": 0.2880620625649887,
+      "trajectory_duration_difference_s": 0.005700923066663477,
+      "cost_relative_difference": 0.044295437495271914,
+      "fixed_initial_cost_scaled_error": 1.2278501150413867e-14,
+      "fixed_initial_gradient_scaled_error": 8.145502813320412e-14,
+      "final_point_gradient_scaled_error_max": 0.0002494527397027627,
+      "cpp_o0_exactly_matches_cpp_o2": true,
+      "same_termination_status": true
+    }
+  ],
+  "cpp_compiler_optimization_crosscheck": {
+    "builds": [
+      "g++ -O2 -DNDEBUG -std=c++17",
+      "g++ -O0 -DNDEBUG -std=c++17"
+    ],
+    "case_count": 5,
+    "same_final_cost_x_coefficients_and_durations": true
+  },
+  "iterative_trace": {
+    "case": "backup_hot_uniform1_stage0",
+    "source": "original C++ -O2 and baseline Python before numeric experiments",
+    "samples": [
+      {
+        "iteration": 0,
+        "maximum_decision_variable_difference": 1.0297318553398327e-13,
+        "cpp_cost": 22059078365.335365,
+        "python_cost": 22059078365.335625,
+        "cpp_line_search_step": null,
+        "python_line_search_step": null
+      },
+      {
+        "iteration": 1,
+        "maximum_decision_variable_difference": 1.081912337497215e-13,
+        "cpp_cost": 11772205598.592844,
+        "python_cost": 11772205598.589651,
+        "cpp_line_search_step": 1.1419414580412395e-12,
+        "python_line_search_step": 1.1419414580411048e-12
+      },
+      {
+        "iteration": 2,
+        "maximum_decision_variable_difference": 1.1901590823981678e-13,
+        "cpp_cost": 6487513.751704737,
+        "python_cost": 6487513.7517047515,
+        "cpp_line_search_step": 1.0,
+        "python_line_search_step": 1.0
+      },
+      {
+        "iteration": 3,
+        "maximum_decision_variable_difference": 1.1757261830780408e-13,
+        "cpp_cost": 6468837.717839107,
+        "python_cost": 6468837.718085213,
+        "cpp_line_search_step": 73280.0,
+        "python_line_search_step": 73280.0
+      },
+      {
+        "iteration": 5,
+        "maximum_decision_variable_difference": 1.1507461650239748e-13,
+        "cpp_cost": 5955053.101116446,
+        "python_cost": 5955053.101194369,
+        "cpp_line_search_step": 1281.0,
+        "python_line_search_step": 1281.0
+      },
+      {
+        "iteration": 10,
+        "maximum_decision_variable_difference": 1.0974554598419672e-13,
+        "cpp_cost": 5551696.034588363,
+        "python_cost": 5551696.034588739,
+        "cpp_line_search_step": 0.015625,
+        "python_line_search_step": 0.015625
+      },
+      {
+        "iteration": 15,
+        "maximum_decision_variable_difference": 2.85818256215431e-09,
+        "cpp_cost": 5534383.254327423,
+        "python_cost": 5534383.26809235,
+        "cpp_line_search_step": 2.0,
+        "python_line_search_step": 2.0
+      },
+      {
+        "iteration": 20,
+        "maximum_decision_variable_difference": 3.5579684955211466e-08,
+        "cpp_cost": 5478960.213423424,
+        "python_cost": 5478960.346083724,
+        "cpp_line_search_step": 1.0,
+        "python_line_search_step": 1.0
+      },
+      {
+        "iteration": 25,
+        "maximum_decision_variable_difference": 1.223726090876509e-07,
+        "cpp_cost": 5403399.415683017,
+        "python_cost": 5403399.011877854,
+        "cpp_line_search_step": 0.25,
+        "python_line_search_step": 0.25
+      },
+      {
+        "iteration": 30,
+        "maximum_decision_variable_difference": 1.4468111495247182e-06,
+        "cpp_cost": 5292638.429474106,
+        "python_cost": 5292631.501855342,
+        "cpp_line_search_step": 1.0,
+        "python_line_search_step": 1.0
+      },
+      {
+        "iteration": 35,
+        "maximum_decision_variable_difference": 0.00012489643714010124,
+        "cpp_cost": 5154601.271715877,
+        "python_cost": 5154143.07121431,
+        "cpp_line_search_step": 1.0,
+        "python_line_search_step": 1.0
+      },
+      {
+        "iteration": 40,
+        "maximum_decision_variable_difference": 0.0308229843694858,
+        "cpp_cost": 5051721.505121922,
+        "python_cost": 4841430.737424566,
+        "cpp_line_search_step": 0.25,
+        "python_line_search_step": 1.0
+      },
+      {
+        "iteration": 45,
+        "maximum_decision_variable_difference": 1.3239906612453398,
+        "cpp_cost": 4172415.4895189432,
+        "python_cost": 225.56666856532829,
+        "cpp_line_search_step": 0.25,
+        "python_line_search_step": 1.0
+      }
+    ]
+  },
+  "precision_diagnostic": {
+    "case": "backup_hot_uniform1",
+    "stage": 1,
+    "condition_number_2": 5435228931.342048,
+    "max_cpp_python_gradient_scaled_error": 0.0002494527397027627,
+    "gradient_index": 5,
+    "cpp_gradient_at_index": 1.0623589167004772,
+    "python_gradient_at_index": 1.0628733777824986,
+    "longdouble_gradient_at_index": 1.062281556581242
+  },
+  "experiment_note": "Changing time-power regrouping and reduction order reduced the first uniform Backup trajectory difference to 0.1355 m but increased the second from 0.0310 to 0.3182 m; the experiment was reverted. Neither convergence criteria nor source objective were changed."
+}
