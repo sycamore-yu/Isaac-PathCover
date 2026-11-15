@@ -1,0 +1,197 @@
+{
+  "date": "2026-11-15",
+  "source": "results/async_validation_20261115",
+  "settings": {
+    "replan_period_sim_s": 0.5,
+    "regular_wall_budget_s": 1.5,
+    "initial_wall_budget_s": 4.0,
+    "minimum_forward_prediction_sim_s": 0.8,
+    "horizon_policy": "max(minimum_horizon,1.2*budget*max(1,measured_sim_per_wall)+0.1)"
+  },
+  "scenes": {
+    "medium": {
+      "seeds": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "episodes": 5,
+      "collision_free_arrivals": 5,
+      "collisions": 0,
+      "out_of_bounds": 0,
+      "sim_duration_total_s": 91.80000000000001,
+      "flight_loop_wall_total_s": 111.70390463899821,
+      "real_time_factor": 0.8218154978259433,
+      "planning_jobs_completed": 52,
+      "regular_jobs_completed": 46,
+      "planning_jobs_submitted": 52,
+      "budget_exceeded_regular_jobs": 18,
+      "accepted_handoffs": 25,
+      "stale_or_mismatch_rejections": 0,
+      "skipped_nominal_planning_slots": 129,
+      "completed_cycle_wall_p50_s": 1.3762489834334701,
+      "completed_cycle_wall_p95_s": 2.3300714678480285,
+      "regular_cycle_wall_p50_s": 1.3233711080392823,
+      "regular_cycle_wall_p95_s": 1.5144795523956418,
+      "complete_cycles_within_0_5_s": 4,
+      "physics_steps_while_planning": 5385,
+      "sim_seconds_advanced_during_planning": 53.85,
+      "pooled_tracking_rmse_m": 0.013572636405520297,
+      "max_physical_speed_m_s": 3.008813350696827,
+      "max_physical_body_rate_rad_s": 4.040011321858089,
+      "per_seed": [
+        {
+          "seed": 0,
+          "collision_free_arrival": true,
+          "sim_duration_s": 16.130000000000003,
+          "flight_wall_s": 20.66912650107406,
+          "planning_jobs": 9,
+          "accepted_handoffs": 5,
+          "budget_exceeded": 3,
+          "physics_steps_while_busy": 992,
+          "tracking_rmse_m": 0.013826731797430738
+        },
+        {
+          "seed": 1,
+          "collision_free_arrival": true,
+          "sim_duration_s": 20.660000000000004,
+          "flight_wall_s": 24.893379142973572,
+          "planning_jobs": 13,
+          "accepted_handoffs": 5,
+          "budget_exceeded": 3,
+          "physics_steps_while_busy": 1292,
+          "tracking_rmse_m": 0.010167661778439441
+        },
+        {
+          "seed": 2,
+          "collision_free_arrival": true,
+          "sim_duration_s": 18.910000000000004,
+          "flight_wall_s": 22.714616087963805,
+          "planning_jobs": 10,
+          "accepted_handoffs": 5,
+          "budget_exceeded": 5,
+          "physics_steps_while_busy": 1052,
+          "tracking_rmse_m": 0.013580511976463892
+        },
+        {
+          "seed": 3,
+          "collision_free_arrival": true,
+          "sim_duration_s": 16.270000000000003,
+          "flight_wall_s": 19.91233885800466,
+          "planning_jobs": 9,
+          "accepted_handoffs": 5,
+          "budget_exceeded": 2,
+          "physics_steps_while_busy": 867,
+          "tracking_rmse_m": 0.01512114787326386
+        },
+        {
+          "seed": 4,
+          "collision_free_arrival": true,
+          "sim_duration_s": 19.830000000000002,
+          "flight_wall_s": 23.514444048982114,
+          "planning_jobs": 11,
+          "accepted_handoffs": 5,
+          "budget_exceeded": 5,
+          "physics_steps_while_busy": 1182,
+          "tracking_rmse_m": 0.015037027384500565
+        }
+      ],
+      "source_hash_changes_since_run": [
+        "demo.py"
+      ]
+    },
+    "dense": {
+      "seeds": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "episodes": 5,
+      "collision_free_arrivals": 5,
+      "collisions": 0,
+      "out_of_bounds": 0,
+      "sim_duration_total_s": 88.71000000000001,
+      "flight_loop_wall_total_s": 106.93111431063153,
+      "real_time_factor": 0.829599509664701,
+      "planning_jobs_completed": 45,
+      "regular_jobs_completed": 40,
+      "planning_jobs_submitted": 45,
+      "budget_exceeded_regular_jobs": 5,
+      "accepted_handoffs": 34,
+      "stale_or_mismatch_rejections": 0,
+      "skipped_nominal_planning_slots": 129,
+      "completed_cycle_wall_p50_s": 1.2078702731523663,
+      "completed_cycle_wall_p95_s": 2.5014204109087586,
+      "regular_cycle_wall_p50_s": 1.1879920305218548,
+      "regular_cycle_wall_p95_s": 1.508058902155608,
+      "complete_cycles_within_0_5_s": 0,
+      "physics_steps_while_planning": 4717,
+      "sim_seconds_advanced_during_planning": 47.17,
+      "pooled_tracking_rmse_m": 0.01498647309310474,
+      "max_physical_speed_m_s": 3.0237880012016842,
+      "max_physical_body_rate_rad_s": 2.9579280787324724,
+      "per_seed": [
+        {
+          "seed": 0,
+          "collision_free_arrival": true,
+          "sim_duration_s": 22.35,
+          "flight_wall_s": 29.591892606811598,
+          "planning_jobs": 13,
+          "accepted_handoffs": 6,
+          "budget_exceeded": 5,
+          "physics_steps_while_busy": 1406,
+          "tracking_rmse_m": 0.015968332379903787
+        },
+        {
+          "seed": 1,
+          "collision_free_arrival": true,
+          "sim_duration_s": 17.89,
+          "flight_wall_s": 20.56158117693849,
+          "planning_jobs": 9,
+          "accepted_handoffs": 7,
+          "budget_exceeded": 0,
+          "physics_steps_while_busy": 937,
+          "tracking_rmse_m": 0.01478860845603876
+        },
+        {
+          "seed": 2,
+          "collision_free_arrival": true,
+          "sim_duration_s": 16.19,
+          "flight_wall_s": 18.73194803390652,
+          "planning_jobs": 8,
+          "accepted_handoffs": 7,
+          "budget_exceeded": 0,
+          "physics_steps_while_busy": 819,
+          "tracking_rmse_m": 0.013767467149668896
+        },
+        {
+          "seed": 3,
+          "collision_free_arrival": true,
+          "sim_duration_s": 15.99,
+          "flight_wall_s": 18.737508699065074,
+          "planning_jobs": 7,
+          "accepted_handoffs": 7,
+          "budget_exceeded": 0,
+          "physics_steps_while_busy": 771,
+          "tracking_rmse_m": 0.015302170444613551
+        },
+        {
+          "seed": 4,
+          "collision_free_arrival": true,
+          "sim_duration_s": 16.290000000000003,
+          "flight_wall_s": 19.308183793909848,
+          "planning_jobs": 8,
+          "accepted_handoffs": 7,
+          "budget_exceeded": 0,
+          "physics_steps_while_busy": 784,
+          "tracking_rmse_m": 0.014656561390072998
+        }
+      ],
+      "source_hash_changes_since_run": []
+    }
+  }
+}

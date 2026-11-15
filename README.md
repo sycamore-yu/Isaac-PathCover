@@ -14,6 +14,8 @@ OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 .venv/bin/python -m isaac_pathcover.dem
 
 `--duration` 是每次试验的最大仿真时长。满足到达条件后提前结束。批量验收使用固定种子：
 
+默认运行模式为**异步规划**：独立 CPU 进程承担地图更新和 GCOPTER 求解，Newton 在规划期间持续推进。首次规划预算 4.0 s，后续预算 1.5 s。上一条轨迹继续执行，新的规划必须在预测交接时刻前完成。旧版暂停仿真时间的同步对照可以使用 `--synchronous`。实现与预算指标见[异步重规划](docs/async_replanning.md)。
+
 ```bash
 OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 .venv/bin/python -m isaac_pathcover.demo --scene both --seeds 0 1 2 3 4 --duration 60 --output results/validation
 ```
@@ -91,7 +93,7 @@ medium 使用已有的 100 障碍场景。dense 使用已有的 180 障碍重建
 
 演示从已知静态场景的表面点云初始化地图。飞行中继续融合机载扫描。物理频率为 400 Hz，控制频率为 100 Hz，扫描和重新规划频率为 2 Hz。
 
-重新规划在物理步之间同步执行，求解时暂停仿真时间。报告单独给出墙钟耗时与 0.5 s 周期超时次数。因此，仿真中的 2 Hz 请求频率不能代替实时性能指标。
+默认异步模式不在求解时暂停 Newton；以前的同步模式仍可通过 `--synchronous` 复现。2 Hz 是仿真时间中的请求上限，繁忙时跳过请求，不等于已实现 2 Hz 墙钟实时规划。实际规划频率、墙钟延迟和仿真推进量均保存在报告中。
 
 ## 验证与复现
 
@@ -107,10 +109,13 @@ OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 .venv/bin/python -m pytest -q
 - [执行与验收规则](docs/execution.md)：传感器、时钟、失败处理、交接门限和指标定义。
 - [Newton 闭环结果](docs/newton_validation.md)：两图各 5 个固定种子的完整数据，以及原交接方式的对照。
 - [2026-11-15 工程优化](docs/engineering_optimizations.md)：原仓库增量/热启动机制、精确增量膨胀、旧路径复用和 GCOPTER 热启动的实现及种子 0 实测对照。
+- [异步重规划验收](docs/async_replanning.md)：SUPER 延迟预测、求解时间预算、轨迹交接和 Newton 连续仿真的新实测。
 
 数值测试保留正常与异常结果。近零比推力或倒置姿态会使原平坦性映射病态。两种语言的非凸优化也可能沿不同浮点路径停止。完整目标和梯度对照用于判断移植一致性；Newton 到达和碰撞率单独验证。
 
 ## 已完成的飞行验收与限制
+
+2026-11-15 新增连续时钟异步验收：medium/dense 在种子 0–4 下均 **5/5 无碰撞到达**。规划期间物理控制步累计 10,102 次；常规求解预算为 1.5 s，仍有 23 次常规规划超时。完整墙钟规划周期中位数分别为 1.376/1.208 s，尚未满足严格 2 Hz 实时指标。详细指标见[异步重规划验收](docs/async_replanning.md)。
 
 下述统计对应 2026-11-14 的五种子基线。2026-11-15 优化后各场景额外验证了种子 0，决策周期 P50 降至 medium 0.913 s、dense 1.216 s；两次均无碰撞到达，但仍未达到墙钟 2 Hz。完整对照见[工程优化报告](docs/engineering_optimizations.md)。
 

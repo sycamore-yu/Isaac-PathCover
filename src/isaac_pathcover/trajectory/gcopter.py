@@ -330,7 +330,7 @@ class GCopter:
         times = np.maximum(times, 0.05)
         return np.r_[inverse_t(times), projected]
 
-    def optimize(self, *, guide=None, elapsed=0.0):
+    def optimize(self, *, guide=None, elapsed=0.0, deadline=None):
         started = perf_counter()
         initial, initialization = self.initial_x, "cold"
         if guide is not None:
@@ -343,7 +343,7 @@ class GCopter:
         result = minimize(self.cost_gradient, initial,
                           LBFGSParameters(mem_size=256, past=3, min_step=1e-32,
                                           g_epsilon=0, delta=self.config.relative_cost_tolerance,
-                                          max_iterations=self.config.max_iterations))
+                                          max_iterations=self.config.max_iterations), deadline=deadline)
         trajectory = None
         if result.success:
             times = forward_t(result.x[:self.piece_count])

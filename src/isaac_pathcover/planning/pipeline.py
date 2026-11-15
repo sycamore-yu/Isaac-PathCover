@@ -33,6 +33,10 @@ class PlanResult:
     map_version: int
 
 
+class PlanningDeadline(RuntimeError):
+    """Cooperative wall-clock deadline, preserving the previous valid plan."""
+
+
 class Planner:
     """One planning worker with persistent map and random state.
 
@@ -116,7 +120,7 @@ class Planner:
         self._map_version = self.map.version
         return timings
 
-    def plan(self, start_state, goal=None, *, guide=None, guide_elapsed=0.0):
+    def plan(self, start_state, goal=None, *, guide=None, guide_elapsed=0.0, deadline=None):
         """Plan from columns position/velocity/acceleration of a (3,3) array."""
         start_state = np.asarray(start_state, dtype=float)
         if start_state.shape != (3, 3) or not np.all(np.isfinite(start_state)):
@@ -125,11 +129,20 @@ class Planner:
         if goal.shape != (3,) or not np.all(np.isfinite(goal)):
             raise ValueError("goal must have three finite coordinates")
         started = perf_counter()
+        if deadline is not None and started >= deadline:
+            return PlanResult(None, None, None, None,
+                              {"total": perf_counter() - started}, False,
+                              "map: PlanningDeadline: wall-clock budget exceeded", self.map.version)
         timings = self._refresh_map()
         search = corridor = optimization = None
         status, success, trajectory = "", False, None
         stage = "search"
         try:
+            def check_deadline():
+                if deadline is not None and perf_counter() >= deadline:
+                    raise PlanningDeadline("wall-clock budget exceeded")
+
+            check_deadline()
             position = start_state[:, 0]
             # convertAndFilter removes self-hits in XY even at FilterRadius=0.
             keep = np.any(self.inflated_points[:, :2] != position[:2], axis=1)
@@ -152,9 +165,11 @@ class Planner:
                     t = perf_counter()
                     jps_path = jps.plan(position, goal)
                     timings["jps_s"] = perf_counter() - t
+                    check_deadline()
                     t = perf_counter()
                     dmp_path = dmp.plan(position, goal, jps_path)
                     timings["dmp_s"] = perf_counter() - t
+                    check_deadline()
                     search = SearchResult(np.vstack((position, dmp_path, goal)), jps_path, dmp_path,
                                           dmp.cost, {"jps": jps.expanded, "dmp": dmp.expanded},
                                           {"jps_s": timings["jps_s"], "dmp_s": timings["dmp_s"]})
@@ -168,6 +183,7 @@ class Planner:
                 corridor = Corridor(corridor.polytopes[start_index:], corridor.seeds[start_index:],
                                     corridor.remaining_counts[start_index:], start_index)
             timings["corridor_s"] = perf_counter() - t
+            check_deadline()
             # The published terminal seed is the local goal after horizon truncation.
             end_state = np.zeros((3, 3))
             end_state[:, 0] = corridor.goal
@@ -175,13 +191,15 @@ class Planner:
             t = perf_counter()
             optimizer = GCopter(corridor.polytopes, start_state, end_state, self.config)
             timings["optimizer_setup_s"] = perf_counter() - t
+            check_deadline()
             stage = "optimization"
             t = perf_counter()
-            optimization = optimizer.optimize(guide=guide, elapsed=guide_elapsed)
+            optimization = optimizer.optimize(guide=guide, elapsed=guide_elapsed, deadline=deadline)
             timings["optimization_s"] = perf_counter() - t
+            check_deadline()
             trajectory, success = optimization.trajectory, optimization.success
             status = optimization.status
-        except (SearchFailure, GeometryError, QhullError, np.linalg.LinAlgError) as error:
+        except (SearchFailure, GeometryError, QhullError, np.linalg.LinAlgError, PlanningDeadline) as error:
             status = f"{stage}: {type(error).__name__}: {error}"
         timings["total"] = perf_counter() - started
         result = PlanResult(trajectory, corridor, search, optimization, timings,

@@ -4,6 +4,7 @@ Source: PathCover 8723a05d, trajectory_server/include/gcopter/lbfgs.hpp.
 Copyright (c) 2021 Zhepei Wang. Distributed under the upstream MIT license.
 """
 from dataclasses import dataclass
+from time import perf_counter
 import numpy as np
 
 
@@ -40,6 +41,7 @@ class LBFGSResult:
     def message(self):
         return {
             0: "gradient convergence", 1: "relative cost convergence",
+            -1013: "wall-clock budget exceeded",
             -1012: "nonfinite objective", -1011: "minimum line-search step",
             -1010: "maximum line-search step", -1009: "line-search limit",
             -1008: "iteration limit", -1007: "line-search interval too small",
@@ -47,7 +49,7 @@ class LBFGSResult:
         }.get(self.status, str(self.status))
 
 
-def _line_search(fun, xp, gp, finit, direction, step, p):
+def _line_search(fun, xp, gp, finit, direction, step, p, deadline=None):
     if not step > 0:
         return xp, finit, gp, step, -1006, 0
     dginit = float(gp @ direction)
@@ -56,6 +58,8 @@ def _line_search(fun, xp, gp, finit, direction, step, p):
     mu, nu = 0.0, p.max_step
     bracketed, touched = False, False
     for count in range(1, p.max_linesearch + 1):
+        if deadline is not None and perf_counter() >= deadline:
+            return xp, finit, gp, step, -1013, count - 1
         x = xp + step * direction
         f, g = fun(x)
         if not np.isfinite(f):
@@ -79,7 +83,7 @@ def _line_search(fun, xp, gp, finit, direction, step, p):
             touched, step = True, p.max_step
 
 
-def minimize(fun, initial, parameters=None):
+def minimize(fun, initial, parameters=None, *, deadline=None):
     """Minimize an objective returning (cost, analytic gradient)."""
     p = parameters or LBFGSParameters()
     x = np.asarray(initial, dtype=np.float64).copy()
@@ -87,9 +91,13 @@ def minimize(fun, initial, parameters=None):
         raise ValueError("L-BFGS requires a nonempty vector")
     if p.mem_size <= 0 or p.max_linesearch <= 0 or p.max_iterations < 0:
         raise ValueError("invalid L-BFGS iteration/memory parameters")
+    if deadline is not None and perf_counter() >= deadline:
+        return LBFGSResult(x, float("inf"), np.zeros_like(x), -1013, 0, 0)
     f, g = fun(x)
     g = np.asarray(g, dtype=np.float64)
     calls = 1
+    if deadline is not None and perf_counter() >= deadline:
+        return LBFGSResult(x, f, g, -1013, 0, calls)
     if not np.isfinite(f):
         return LBFGSResult(x, f, g, -1012, 0, calls)
     if np.max(np.abs(g)) / max(1.0, np.max(np.abs(x))) < p.g_epsilon or not np.any(g):
@@ -106,7 +114,7 @@ def minimize(fun, initial, parameters=None):
     while True:
         xp, gp, fp = x, g, f
         x, f, g, step, status, count = _line_search(
-            fun, xp, gp, fp, direction, step, p)
+            fun, xp, gp, fp, direction, step, p, deadline)
         calls += count
         if status < 0:
             return LBFGSResult(xp, fp, gp, status, k, calls)
