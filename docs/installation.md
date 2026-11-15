@@ -63,7 +63,7 @@ uv venv --python 3.12 .runtime/planning-venv
 uv pip install --python .runtime/planning-venv/bin/python '.[test]'
 
 .runtime/planning-venv/bin/python -m pytest \
-  tests/test_mapping.py tests/test_search.py -q
+  tests/test_super_mapping.py tests/test_super_execution.py -q
 
 .runtime/planning-venv/bin/python -m isaac_pathcover.demo \
   --scene both --seeds 0 --plan-only --output results/planning
@@ -139,15 +139,17 @@ e3f7d9ff1f5d7f8280de3ece9000b7117f66bcf4
 | usd-exchange | 3.0.1 |
 | warp-lang | 1.17.0 |
 
-NumPy、SciPy、PyTorch 已在基本依赖中声明。其余观测到的包在 `simulation` extra 中声明。结果可视化另需 Plotly，测试另需 pytest。CUDA 库等传递依赖由包管理器解析，并记录在 [uv.lock](../uv.lock)。
+NumPy、SciPy、Numba、PyTorch 在基本依赖中声明。Numba 0.68.1 / llvmlite 0.50.0 在 CPU 上编译 Python 数值核；源码仍保留一套 SUPER 目标、梯度和 L-BFGS。首次编译和缓存加载发生在规划进程初始化，逐次规划时间单独记录。其余仿真依赖在 `simulation` extra 中声明。结果可视化另需 Plotly，测试另需 pytest。传递依赖记录在 [uv.lock](../uv.lock)。
 
-锁文件共记录 66 个包，包含项目、测试、可视化及平台条件依赖。其中不包含 RSL-RL、TensorBoard、Transformers 或其他所检查的训练框架。具体平台实际安装数量可能少于锁文件数量。
+当前锁文件记录 68 个包。安装环境的 67 个 distribution 已通过 `uv pip check`。锁文件包含项目、测试、可视化及平台条件依赖。
 
 PyTorch 使用单独的 `pytorch-cu130` 索引。该索引设置 `explicit=true`，只绑定 `torch`，其他包继续使用 PyPI/NVIDIA 索引。实测中，将 cu130 索引作为所有包的首选曾导致 CUDA 依赖反复下载重试；限定索引后完成了安装。
 
 这份依赖集合针对本仓库的无界面飞行、规划及结果导出。它不覆盖 Isaac Lab 的全部任务、训练和渲染功能。
 
-## 6. 独立环境验证
+## 6. 2026-11-14 安装验证记录
+
+本节保留 SUPER 重构前的环境安装证据。当前算法验收使用 README 所列的 SUPER 测试和实验。
 
 验证环境位于本仓库 `.runtime/dependency_probe/.venv`。第三方包独立安装，未向 `sys.path` 添加 Isaac-L2F 或既有 Isaac Lab 环境的 `site-packages`。
 
@@ -167,7 +169,7 @@ PyTorch 使用单独的 `pytorch-cu130` 索引。该索引设置 `explicit=true`
 
 随后，主 `.venv` 已移除临时共享依赖路径，并用正式安装脚本安装 65 个 distribution。`uv pip check` 通过。该环境没有 RSL-RL、TensorBoard、Transformers、`isaaclab-rl` 或 `isaaclab-tasks`。
 
-主环境的最终回归结果为 `74 passed, 1 xfailed in 18.61s`。预期失败是已记录的近奇异梯度对照，见[轨迹数值报告](numerical_validation.md)。
+当时的回归结果为 `74 passed, 1 xfailed in 18.61s`。该记录对应已被替换的 GCOPTER 流水线，见[历史数值报告](history/numerical_validation.md)。
 
 同一环境实际执行了上面的双图演示命令。medium 和 dense 的种子 0 均无碰撞到达。两图的时间、状态、参考、电机状态和 400 Hz 物理记录，与此前五种子试验中的同一种子逐元素完全一致。该安装验收单独记录，不重复计入五种子成功率。[命令、原始结果和数组对照](data/installed_demo_validation.json)
 
@@ -175,8 +177,8 @@ PyTorch 使用单独的 `pytorch-cu130` 索引。该索引设置 `explicit=true`
 
 项目 wheel 只打包 `src/isaac_pathcover` 下的 Python 代码、动力学参数、两图几何资产及许可证。官方 Isaac Lab 源码通过安装脚本获取，不嵌入 wheel。
 
-最终 wheel 的 28 个 Python 文件与工作区源码逐字节一致。文件大小为 92,119 B，包含两图资产，未包含测试驱动、字节码或自定义原生库。该 wheel 已装入独立 probe 环境，并从仓库之外完成 medium、dense 的 `--plan-only`。导入路径确认为 probe 的 `site-packages`。[打包核对记录](data/package_validation.json)
+2026-11-14 的旧 wheel 核对记录保存在 [data/package_validation.json](data/package_validation.json)。该文件仅记录当时的安装结果。
 
 源代码归档还包含安装脚本、锁文件、测试夹具、离线对照驱动和验证文档。
 
-`tests/reference/mapping/` 的 C++ 驱动只用于主动执行的离线官方对照。它们不进入运行包，也不由正常 pytest 自动编译或调用。正式运行不需要 ROS、Gazebo 或 MOSEK。PathCover 算法不调用自定义 C++/CUDA 扩展或 ctypes/pybind11 绑定；仿真和标准数值库沿用各自的官方原生实现。
+`tests/reference/super_mapping/`、`super_trajectory/`、`super_execution/` 的 C++ 驱动仅用于离线源码对照。它们不进入运行包，常规 pytest 读取已保存的输入输出。正式运行使用 Python、标准数值库和现有 Newton 官方依赖。

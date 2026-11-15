@@ -1,0 +1,32 @@
+{
+  "source": {
+    "commit": "2ad3419c127a617c6d7df6925e81a14175a9c096",
+    "fsm_methods_sha256": "808ea4be429e9491f1efa7b986a63beeb04d1279f0aa364329170fb7d3f074f0",
+    "command_method_sha256": "4311fa3941cbf4b7adf200e5b2fc8de240497cbda207ac791244ec46e984d5a6"
+  },
+  "tests": "13 passed",
+  "fsm_steps": 22,
+  "fsm_snapshot_interleaving_cases": 2,
+  "command_cases": 9,
+  "prefix_cases": 5,
+  "allocator_cases": 36,
+  "max_abs_error": {
+    "command_pvaj": 7.105427357601002e-15,
+    "yaw": 0.0,
+    "prefix_pvaj": 2.2737367544323206e-13,
+    "guide_allocator": 0.0,
+    "sampling_time": 0.0
+  },
+  "runtime": {
+    "python": "3.12.14",
+    "numpy": "2.5.1",
+    "scipy": "1.17.0",
+    "machine": "x86_64",
+    "processor": "x86_64",
+    "cpus": 40,
+    "g++": "13.3.0",
+    "OPENBLAS_NUM_THREADS": "1",
+    "OMP_NUM_THREADS": "1"
+  },
+  "sampling_cases": 3
+}

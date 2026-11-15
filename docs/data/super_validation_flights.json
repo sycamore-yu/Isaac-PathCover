@@ -1,0 +1,5337 @@
+{
+  "generated_utc": "2026-11-15T09:30:46.199910+00:00",
+  "input_root": "/home/tong/tongworkspace/projects/aerial/Isaac-PathCover/results/super_risp_validation_20261115",
+  "selection": {
+    "scenes": [
+      "dense",
+      "medium"
+    ],
+    "seeds_by_scene": {
+      "dense": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "medium": [
+        0,
+        1,
+        2
+      ]
+    },
+    "all_runs_retained": true,
+    "success_filter": false
+  },
+  "definitions": {
+    "arrival_collision_bounds": "Copied independently from each original result.json; no combined pass rule is added.",
+    "speed": "Euclidean norm of states[:,7:10] and references[:,:,1] at the recorded control timestamps.",
+    "motion_start": "First recorded actual speed above the existing 0.5 m/s diagnostic threshold.",
+    "elapsed_from_first_motion": "Run end minus first-motion timestamp; includes subsequent pauses and settling.",
+    "time_above_motion_threshold": "Recorded step durations whose actual speed exceeds 0.5 m/s.",
+    "pause": "Existing timeline.json definition: after motion starts, actual speed below 0.2 m/s for at least 0.2 s, more than 1 m from the resolved goal.",
+    "backup_intervals": "Intervals of the recorded published on_backup flag. The flag can remain true after command duration when no new command is published; it does not imply an active moving backup segment.",
+    "planner_total": "timings.total_s for all returned requests, including failures and requests without a new trajectory.",
+    "cycle_including_sensor_and_delivery": "cycle_wall_s from submission to receipt; includes sensor and map update when requested, worker execution, IPC and result polling.",
+    "worker_including_sensor": "worker_s includes requested sensor and map work, but excludes parent submission and delivery overhead.",
+    "requests_with_exp_optimization": "All requests containing timings.exp_opt_s, regardless of success; statistics use each selected request's complete total_s / cycle_wall_s.",
+    "module_statistics": "Only requests containing the named module contribute; each statistic records its sample count.",
+    "quantiles": "NumPy linear sample quantiles; nonfinite values are counted explicitly and excluded from finite quantiles.",
+    "plots": "Planning values are plotted at their recorded result_t; each seed's speed and planning panels share simulation time. No solver deadline line is added.",
+    "raw_file_manifest": "Hashes cover the seven original files used for outcomes, intervals, metrics, curves and per-run source provenance; per-plan geometry files are not duplicated in this summary.",
+    "source_hashes": "Each run's own source_hashes.json is retained; scene-level historical snapshots are not used."
+  },
+  "counts_by_scene": {
+    "dense": {
+      "runs": 6,
+      "arrived": 1,
+      "collision": 4,
+      "out_of_bounds": 4
+    },
+    "medium": {
+      "runs": 3,
+      "arrived": 2,
+      "collision": 1,
+      "out_of_bounds": 2
+    }
+  },
+  "aggregation_environment": {
+    "python": "3.12.3",
+    "numpy": "1.26.4",
+    "matplotlib": "3.6.3"
+  },
+  "aggregation_script": {
+    "path": "/home/tong/tongworkspace/projects/aerial/Isaac-PathCover/scripts/summarize_super_validation.py",
+    "repository_relative_path": "scripts/summarize_super_validation.py",
+    "bytes": 20023,
+    "sha256": "164b4949b625f16fd1c416370f1a20698918cc9b58561d0ccfc3a5f0d3f0f92d"
+  },
+  "figures": [
+    {
+      "path": "/home/tong/tongworkspace/projects/aerial/Isaac-PathCover/docs/data/super_validation_dense_speed.svg",
+      "repository_relative_path": "docs/data/super_validation_dense_speed.svg",
+      "bytes": 645810,
+      "sha256": "e91b675ed9790b13c1a2c0e5738605cd925c0d34037831a377341fb632261614"
+    },
+    {
+      "path": "/home/tong/tongworkspace/projects/aerial/Isaac-PathCover/docs/data/super_validation_dense_speed.png",
+      "repository_relative_path": "docs/data/super_validation_dense_speed.png",
+      "bytes": 564898,
+      "sha256": "4d15bfa1e9b0cd6cb86254e462435bb7db353bb2dcb520a3c59ce1eedfa8c1bf"
+    },
+    {
+      "path": "/home/tong/tongworkspace/projects/aerial/Isaac-PathCover/docs/data/super_validation_dense_speed_seeds003_005.svg",
+      "repository_relative_path": "docs/data/super_validation_dense_speed_seeds003_005.svg",
+      "bytes": 319164,
+      "sha256": "647fc392a9bdada54c56a0e398e7c1fc4b3dd47ec606222fec5fcfad78bb6d9e"
+    },
+    {
+      "path": "/home/tong/tongworkspace/projects/aerial/Isaac-PathCover/docs/data/super_validation_dense_speed_seeds003_005.png",
+      "repository_relative_path": "docs/data/super_validation_dense_speed_seeds003_005.png",
+      "bytes": 537922,
+      "sha256": "9a80f5a5a915c999ea5a2ea2fcfe35448b6e908af5f32d6f3abb151dd7aece8c"
+    },
+    {
+      "path": "/home/tong/tongworkspace/projects/aerial/Isaac-PathCover/docs/data/super_validation_medium_speed.svg",
+      "repository_relative_path": "docs/data/super_validation_medium_speed.svg",
+      "bytes": 304169,
+      "sha256": "8c9c992fba90fed524804ca39cd5eea93cf5286568d5e34f1eea33b6f5788e46"
+    },
+    {
+      "path": "/home/tong/tongworkspace/projects/aerial/Isaac-PathCover/docs/data/super_validation_medium_speed.png",
+      "repository_relative_path": "docs/data/super_validation_medium_speed.png",
+      "bytes": 403870,
+      "sha256": "d408edbf078143202aaee7dd4cd0ef3b41f46fdc13fcf7f0c07ab12c55885403"
+    }
+  ],
+  "runs": [
+    {
+      "scene": "dense",
+      "seed": 0,
+      "run_directory": "/home/tong/tongworkspace/projects/aerial/Isaac-PathCover/results/super_risp_validation_20261115/dense/seed000",
+      "outcome": {
+        "arrived": false,
+        "collision": true,
+        "out_of_bounds": true,
+        "collision_free_arrival": false,
+        "goal_error_m": 5.666733041582252,
+        "resolved_goal_error_m": 5.675101420456818,
+        "goal_resolution_shift_m": 0.18834808201837377,
+        "arrival_rule": "within 0.1 m of the source-resolved goal and below 0.3 m/s for 0.5 s",
+        "finite": true,
+        "collision_check_complete": true,
+        "collision_physics_samples": 12,
+        "collision_unchecked_physics_samples": 0,
+        "out_of_bounds_physics_samples": 62,
+        "contact_force_max_N": 386.18853759765625
+      },
+      "motion": {
+        "duration_sim_s": 18.720000000000002,
+        "wall_time_s": 38.574061680119485,
+        "planner_ready_sim_s": 11.32,
+        "first_motion_s": 11.7,
+        "elapsed_from_first_motion_s": 7.020000000000003,
+        "time_above_motion_threshold_s": 6.970000000000002,
+        "diagnostic_definition": {
+          "slow_speed_m_s": 0.2,
+          "minimum_interval_s": 0.2,
+          "minimum_goal_distance_m": 1.0,
+          "motion_onset_speed_m_s": 0.5
+        },
+        "control_samples": 1872,
+        "valid_state_samples": 1872,
+        "invalid_state_samples": 0,
+        "physics_max_speed_m_s": 10.03032117749815
+      },
+      "speed": {
+        "all_control_samples": {
+          "actual": {
+            "count": 1872,
+            "nonfinite_count": 0,
+            "p50_m_s": 3.487502908683382e-07,
+            "p95_m_s": 7.55287543114094,
+            "max_m_s": 10.030248648373137
+          },
+          "reference": {
+            "count": 1872,
+            "nonfinite_count": 0,
+            "p50_m_s": 0.0,
+            "p95_m_s": 6.978103258901055,
+            "max_m_s": 8.002855494877908
+          }
+        },
+        "from_first_motion_through_end": {
+          "actual": {
+            "count": 703,
+            "nonfinite_count": 0,
+            "p50_m_s": 3.63181232047776,
+            "p95_m_s": 8.889074147260928,
+            "max_m_s": 10.030248648373137
+          },
+          "reference": {
+            "count": 703,
+            "nonfinite_count": 0,
+            "p50_m_s": 2.8631519982191387,
+            "p95_m_s": 7.797937035197576,
+            "max_m_s": 8.002855494877908
+          }
+        }
+      },
+      "planning": {
+        "attempts": 127,
+        "reported_successes": 23,
+        "reported_failures": 104,
+        "commands_committed": 23,
+        "cold_start_commits": 3,
+        "replan_commits": 20,
+        "requests_without_commit": 104,
+        "status_counts": {
+          "EXP_SIM_OVERTIME": 8,
+          "SUCCESS_WITH_BACKUP": 22,
+          "REPLAN_OVERTIME": 56,
+          "EXP_OPT_FAILED": 4,
+          "BACKUP_CORRIDOR_FAILED": 7,
+          "ON_BACKUP_WAIT_FOR_REST": 4,
+          "CORRIDOR_FAILED": 25,
+          "SUCCESS_NO_BACKUP": 1
+        },
+        "all_requests": {
+          "count": 127,
+          "planner_total": {
+            "count": 127,
+            "nonfinite_count": 0,
+            "p50_s": 0.09586087288334966,
+            "p95_s": 0.18600446134805668,
+            "max_s": 0.27874003699980676
+          },
+          "cycle_including_sensor_and_delivery": {
+            "count": 127,
+            "nonfinite_count": 0,
+            "p50_s": 0.10968530899845064,
+            "p95_s": 0.2069727309513836,
+            "max_s": 0.33760406100191176
+          },
+          "worker_including_sensor": {
+            "count": 127,
+            "nonfinite_count": 0,
+            "p50_s": 0.09759780298918486,
+            "p95_s": 0.19130097124725579,
+            "max_s": 0.3104637560900301
+          }
+        },
+        "requests_with_exp_optimization": {
+          "count": 98,
+          "planner_total": {
+            "count": 98,
+            "nonfinite_count": 0,
+            "p50_s": 0.10616686742287129,
+            "p95_s": 0.19868526717182236,
+            "max_s": 0.27874003699980676
+          },
+          "cycle_including_sensor_and_delivery": {
+            "count": 98,
+            "nonfinite_count": 0,
+            "p50_s": 0.12047654006164521,
+            "p95_s": 0.21905941455624994,
+            "max_s": 0.33760406100191176
+          },
+          "worker_including_sensor": {
+            "count": 98,
+            "nonfinite_count": 0,
+            "p50_s": 0.10782809695228934,
+            "p95_s": 0.19930178408976632,
+            "max_s": 0.3104637560900301
+          }
+        },
+        "modules": {
+          "backup_frontend_s": {
+            "count": 72,
+            "nonfinite_count": 0,
+            "p50_s": 0.007007617969065905,
+            "p95_s": 0.01183280508266762,
+            "max_s": 0.019403622951358557
+          },
+          "backup_opt_s": {
+            "count": 71,
+            "nonfinite_count": 0,
+            "p50_s": 0.013896424090489745,
+            "p95_s": 0.04109335143584758,
+            "max_s": 0.12113055097870529
+          },
+          "backup_yaw_s": {
+            "count": 68,
+            "nonfinite_count": 0,
+            "p50_s": 0.00034688692539930344,
+            "p95_s": 0.0006715328083373606,
+            "max_s": 0.0008627788629382849
+          },
+          "corridor_s": {
+            "count": 98,
+            "nonfinite_count": 0,
+            "p50_s": 0.031207689084112644,
+            "p95_s": 0.05772149707190691,
+            "max_s": 0.09192391601391137
+          },
+          "exp_frontend_s": {
+            "count": 98,
+            "nonfinite_count": 0,
+            "p50_s": 0.04344302695244551,
+            "p95_s": 0.1214997733477503,
+            "max_s": 0.20139705715700984
+          },
+          "exp_opt_s": {
+            "count": 98,
+            "nonfinite_count": 0,
+            "p50_s": 0.02616225345991552,
+            "p95_s": 0.09345847327494991,
+            "max_s": 0.1897407320793718
+          },
+          "exp_yaw_s": {
+            "count": 86,
+            "nonfinite_count": 0,
+            "p50_s": 0.0003671519225463271,
+            "p95_s": 0.0007963528041727841,
+            "max_s": 0.0010430279653519392
+          },
+          "generate_backup_s": {
+            "count": 83,
+            "nonfinite_count": 0,
+            "p50_s": 0.019405681872740388,
+            "p95_s": 0.04878008509986102,
+            "max_s": 0.1335421649273485
+          },
+          "generate_exp_s": {
+            "count": 98,
+            "nonfinite_count": 0,
+            "p50_s": 0.07922817894723266,
+            "p95_s": 0.16618871681857852,
+            "max_s": 0.22377947089262307
+          },
+          "search_s": {
+            "count": 123,
+            "nonfinite_count": 0,
+            "p50_s": 0.007434600032866001,
+            "p95_s": 0.07964478924404819,
+            "max_s": 0.10842927009798586
+          },
+          "total_s": {
+            "count": 127,
+            "nonfinite_count": 0,
+            "p50_s": 0.09586087288334966,
+            "p95_s": 0.18600446134805668,
+            "max_s": 0.27874003699980676
+          }
+        },
+        "initialization_s": {
+          "point_cloud_mapping_s": 2.428280944004655,
+          "raycast_initialization_s": 0.3041632811073214,
+          "search_initialization_s": 0.11496293707750738,
+          "numeric_initialization_s": 20.5580185810104,
+          "lidar_initialization_s": 0.015876292949542403
+        },
+        "job_running_at_episode_end": true,
+        "submitted_jobs": 128,
+        "returned_jobs": 127
+      },
+      "sensor": {
+        "updates": 14,
+        "lidar": {
+          "horizontal_rays": 440,
+          "vertical_rays": 16,
+          "min_range_m": 0.1,
+          "max_range_m": 100.0,
+          "body_translation_m": [
+            0.0,
+            0.0,
+            0.25
+          ],
+          "requested_update_hz": 2.0,
+          "observed_update_hz": 0.7478632478632478
+        },
+        "sensor": {
+          "count": 14,
+          "nonfinite_count": 0,
+          "p50_s": 0.006298694526776671,
+          "p95_s": 0.009911968663800508,
+          "max_s": 0.01042104815132916
+        },
+        "map_fusion": {
+          "count": 14,
+          "nonfinite_count": 0,
+          "p50_s": 0.017326820991002023,
+          "p95_s": 0.03253659034380689,
+          "max_s": 0.03278132318519056
+        },
+        "sensor_plus_map_fusion": {
+          "count": 14,
+          "nonfinite_count": 0,
+          "p50_s": 0.023005214519798756,
+          "p95_s": 0.04019667262909934,
+          "max_s": 0.04241917212493718
+        }
+      },
+      "backup": {
+        "generation_status_counts": {
+          "NO_NEED": 41,
+          "SUCCESS": 68,
+          "FAILED": 14,
+          "OPT_FAILED": 3,
+          "FINISH": 1
+        },
+        "generated_success_count": 68,
+        "committed_with_backup": 22,
+        "published_flag_entries": 7,
+        "published_flag_intervals": [
+          {
+            "start_s": 12.01,
+            "end_s": 12.46,
+            "duration_s": 0.45000000000000107,
+            "start_position_m": [
+              -13.091294288635254,
+              -6.489870071411133,
+              0.8250429630279541
+            ],
+            "end_position_m": [
+              -11.12635326385498,
+              -5.381968975067139,
+              0.5562816262245178
+            ]
+          },
+          {
+            "start_s": 13.11,
+            "end_s": 13.66,
+            "duration_s": 0.5500000000000007,
+            "start_position_m": [
+              -11.007819175720215,
+              -4.563483238220215,
+              0.5176698565483093
+            ],
+            "end_position_m": [
+              -9.68976879119873,
+              -2.1171576976776123,
+              0.7317661046981812
+            ]
+          },
+          {
+            "start_s": 14.09,
+            "end_s": 14.28,
+            "duration_s": 0.1899999999999995,
+            "start_position_m": [
+              -9.309240341186523,
+              -2.9071595668792725,
+              0.3334828317165375
+            ],
+            "end_position_m": [
+              -8.866937637329102,
+              -3.1207518577575684,
+              0.24772541224956512
+            ]
+          },
+          {
+            "start_s": 14.86,
+            "end_s": 15.57,
+            "duration_s": 0.7100000000000009,
+            "start_position_m": [
+              -9.309225082397461,
+              -2.2368083000183105,
+              0.09652090072631836
+            ],
+            "end_position_m": [
+              -8.177083969116211,
+              -2.3355765342712402,
+              0.5205075740814209
+            ]
+          },
+          {
+            "start_s": 16.53,
+            "end_s": 16.740000000000002,
+            "duration_s": 0.21000000000000085,
+            "start_position_m": [
+              -3.702836275100708,
+              0.04477950558066368,
+              0.6072533130645752
+            ],
+            "end_position_m": [
+              -2.4450066089630127,
+              0.6223278641700745,
+              0.9596484303474426
+            ]
+          },
+          {
+            "start_s": 17.520000000000003,
+            "end_s": 18.400000000000002,
+            "duration_s": 0.879999999999999,
+            "start_position_m": [
+              0.08014168590307236,
+              2.133481740951538,
+              0.381695955991745
+            ],
+            "end_position_m": [
+              2.882211446762085,
+              6.455311298370361,
+              1.3157988786697388
+            ]
+          },
+          {
+            "start_s": 18.650000000000006,
+            "end_s": 18.720000000000002,
+            "duration_s": 0.06999999999999673,
+            "start_position_m": [
+              2.3459558486938477,
+              8.12551498413086,
+              0.7385651469230652
+            ],
+            "end_position_m": [
+              2.211535930633545,
+              8.525321006774902,
+              0.5000523924827576
+            ]
+          }
+        ]
+      },
+      "pauses": {
+        "count": 0,
+        "total_duration_s": 0,
+        "intervals": []
+      },
+      "handoff": {
+        "max_reference_jump_pvaj": [
+          1.3703454455516697,
+          0.3289512000655056,
+          7.527007709904024,
+          97.7840809851541
+        ],
+        "max_replan_reference_jump_pvaj": [
+          5.3302268750589315e-15,
+          1.602148379482783e-15,
+          7.95651227888113e-15,
+          1.1212175250861022e-13
+        ]
+      },
+      "execution": {
+        "final_fsm_state": "FOLLOW_TRAJ",
+        "control_steps_while_worker_busy": 724,
+        "physics_steps_while_worker_busy": 2896,
+        "physics_progress_while_planning_sim_s": 7.24,
+        "max_progress_during_one_solve_sim_s": 0.16999999999999993,
+        "time_contract": "independent CPU planner and continuously advancing Newton simulation; source trajectory timestamps and source commit rules",
+        "reference_contract": "last published command applied over the recorded Newton step; command_time stores its simulation timestamp",
+        "fsm_command_wall_period_s": 0.01,
+        "replan_wall_period_s": 0.066
+      },
+      "scene_provenance": {
+        "source_file": "src/isaac_l2f/planning/corto/table3_maps/dense_reconstructed.json",
+        "source_sha256": "aacf819961e8ec4efce1498c5eb856cce24d0a6abb4e8771be89feee26177c46",
+        "obstacle_count": 180,
+        "occupied_voxels": 103876,
+        "collision_boxes": 1372,
+        "shape": [
+          300,
+          150,
+          30
+        ],
+        "resolution": 0.1,
+        "origin": [
+          -15.0,
+          -7.5,
+          -0.01
+        ],
+        "start": [
+          -14.0,
+          -6.5,
+          0.49
+        ],
+        "goal": [
+          6.8,
+          5.2,
+          0.49
+        ],
+        "asset_sha256": "c86348f10cd39f82117cbb77cacad40e92bb1cf8872346878afb419e960109b4",
+        "provenance": "existing Dense reconstructed; not a claimed original published map"
+      },
+      "resolved_goal_m": [
+        6.825,
+        5.2250000000000005,
+        0.675
+      ],
+      "runtime": {
+        "python": "3.12.14 (main, Sep  1 2026, 14:16:52) [Clang 22.1.3 ]",
+        "torch": "2.11.0+cu130",
+        "gpu": "NVIDIA GeForce RTX 4090",
+        "numpy": "2.5.1",
+        "scipy": "1.17.0",
+        "numba": "0.68.1",
+        "newton": "1.6.1",
+        "isaaclab_release": "3.0.0",
+        "isaaclab_core_distribution": "28.0.0",
+        "openblas_num_threads": "1",
+        "omp_num_threads": "1"
+      },
+      "source_sha256": {
+        "__init__.py": "ada36069cfd84be5937076f33394a6c90879bf5597d964d98f169eb9c86ee2e6",
+        "control/__init__.py": "76b72ef98def510a99ef6816554798c00e91a9cd036ce18f0824034d1502e6f6",
+        "control/actuator.py": "65fd27b91ab4f47369a5dd8196fe7345d15ce930c386119222f2701704e619f1",
+        "control/async_planner.py": "ecfce6c9be11b9450499dfa644a4136e9f54111fd086eaddd5ba841433be9a82",
+        "control/execution.py": "d185c1e2b897e1e1c28d05cf62a952acbe6fdc227b0a590c65b8dbaa3940b993",
+        "control/tracking.py": "903090d2c5c7152e58e992a0e04d6d0fd3b15cb07cec7835b236e5cd1328a18c",
+        "demo.py": "85a5860eaa0346379b430b081a050773d64338142b20ddd82e3253236abf3ade",
+        "dynamics/__init__.py": "216145d2c07b15a9ac1acde0a390c733e5b42f773746a58f4c4c4e3ea6e0b569",
+        "dynamics/motor.py": "dc906310f1f14f57d66463d5df180e3086203c69463439ddf803ba3b0464b98e",
+        "dynamics/params.py": "c14e43be614bae41f58cf19932a6fa71768c9479880f72efd6607f721989d2c5",
+        "mapping/__init__.py": "5bc8a24dafa1347973f883d349fca9016da0438c13b1ae9305ff7e7e02438c2b",
+        "mapping/esdf.py": "1b2b058c5ab4e3c4ebb487dbbf098864766c175b85c4b703c49b9c3676d529c2",
+        "mapping/raycast.py": "d6a58cd1519f969fd2fec3740a9ef2958dc6daba01c20086b3dca88f67cc889b",
+        "mapping/rog_map.py": "a2d967ceb5582584dc70eacc1b3b7f45110f8c53356ab780ad38a10c69951556",
+        "planning/corridor.py": "1cd8b23a3e898fe6c6ea1663785eea66886c0d03a8f1d3c8f73aba184a6c6392",
+        "planning/geometry.py": "6e6972deda79eaf8b1b8d880c61ce15fe2f35bdcd78240b022282ec733d57ad2",
+        "planning/pipeline.py": "e001725eb388b18bacfee736f1f3df9790ff1e877dc2a3e9dc0c93b725a62cde",
+        "planning/risp.py": "01d6302391f2bbf2388ac88cba829235b4f9211e762fa7abe24d94a798349756",
+        "planning/search.py": "73fc0cdf423b10fb1fc0f019a8224ca146a2efede8bbb988613c023f14d28949",
+        "planning/search_kernel.py": "f3d1d274a6227af1de47e7ca63bd30f72476c60ddf4b15e7171f90cbb6d19371",
+        "simulation/__init__.py": "a6be1760411cffc53f2bcf2190ee9d3b0dc0d30586c11e237fda39d8db67a5fd",
+        "simulation/environment.py": "69dbfb77fc38fd046275fecdad469a86c721b87a8c7d794bdba3d5da29038dd5",
+        "simulation/lidar.py": "e098423a0e3cd16325e12dfa1f1f301f49b5005957a710e3ed5f9f68887286fb",
+        "simulation/metrics.py": "29923f3446bc5f269fb8e0b24065463c5cf3ea59c4bc2a0b513d761058ba496a",
+        "simulation/scene.py": "582495cdb12d363d5fd02811bb75161594dde072f20fb96ff1096e51e6fa7b55",
+        "simulation/visualization.py": "e248944aeacb2b184b0b0185bf6cd38b3912824c911231c804280056d8250057",
+        "trajectory/__init__.py": "9b081d28a24f9e9416410573411356253474d12f60deb8148e9bfddbc9fd58de",
+        "trajectory/lbfgs.py": "f6d5e64268e065f660512e1da4bee5348b03a3102d4be26a659a7f660e04214e",
+        "trajectory/minco.py": "91df875aa73facf212f1dfbdeeb21ef9db2b511b43e0361480546d68c1566c92",
+        "trajectory/numerics.py": "3f8128e6612799de47cc77f1d9130ff0ec3973fc14b82b882f63d1fd055aeeba",
+        "trajectory/super_opt.py": "b6984c985685cde3ee1b4c75f082e8f1ff9794c19c264ad9249528ad8a9f5970"
+      },
+      "raw_files": {
+        "result.json": {
+          "path": "/home/tong/tongworkspace/projects/aerial/Isaac-PathCover/results/super_risp_validation_20261115/dense/seed000/result.json",
+          "repository_relative_path": "results/super_risp_validation_20261115/dense/seed000/result.json",
+          "bytes": 10473,
+          "sha256": "acafa9d00ce8d8be4e9141904d0b9d7ec7e6dbdfabb9c776c1c1f0679822f6cb"
+        },
+        "flight.npz": {
+          "path": "/home/tong/tongworkspace/projects/aerial/Isaac-PathCover/results/super_risp_validation_20261115/dense/seed000/flight.npz",
+          "repository_relative_path": "results/super_risp_validation_20261115/dense/seed000/flight.npz",
+          "bytes": 306599,
+          "sha256": "485caf8df3b0a831f0170bd2d4f33de8b764c82c5becc1ad61c2a08e1bc52921"
+        },
+        "planning.json": {
+          "path": "/home/tong/tongworkspace/projects/aerial/Isaac-PathCover/results/super_risp_validation_20261115/dense/seed000/planning.json",
+          "repository_relative_path": "results/super_risp_validation_20261115/dense/seed000/planning.json",
+          "bytes": 243606,
+          "sha256": "40debf5073ff407505ddb886ab9cd67b12991914c877f231930eba994b157028"
+        },
+        "mapping.json": {
+          "path": "/home/tong/tongworkspace/projects/aerial/Isaac-PathCover/results/super_risp_validation_20261115/dense/seed000/mapping.json",
+          "repository_relative_path": "results/super_risp_validation_20261115/dense/seed000/mapping.json",
+          "bytes": 7441,
+          "sha256": "2b9bd22c382fe375a2757d0609c6d3bce79fdcd0191c2f4a89ad6e509f7e3515"
+        },
+        "timeline.json": {
+          "path": "/home/tong/tongworkspace/projects/aerial/Isaac-PathCover/results/super_risp_validation_20261115/dense/seed000/timeline.json",
+          "repository_relative_path": "results/super_risp_validation_20261115/dense/seed000/timeline.json",
+          "bytes": 5600,
+          "sha256": "2cb0b130468660d5fbd1063a4909e630927809bfef391f150f0d194cff00bdcc"
+        },
+        "fsm.json": {
+          "path": "/home/tong/tongworkspace/projects/aerial/Isaac-PathCover/results/super_risp_validation_20261115/dense/seed000/fsm.json",
+          "repository_relative_path": "results/super_risp_validation_20261115/dense/seed000/fsm.json",
+          "bytes": 825,
+          "sha256": "02a019a2c27f7d99431aa075d505beaf6671402e43c9bc4b962e0a455a180788"
+        },
+        "source_hashes.json": {
+          "path": "/home/tong/tongworkspace/projects/aerial/Isaac-PathCover/results/super_risp_validation_20261115/dense/seed000/source_hashes.json",
+          "repository_relative_path": "results/super_risp_validation_20261115/dense/seed000/source_hashes.json",
+          "bytes": 2898,
+          "sha256": "60a0b59d791db34cb84f95c7db70be6dcec2fa5d02bc917349c29054b12d8635"
+        }
+      }
+    },
+    {
+      "scene": "dense",
+      "seed": 1,
+      "run_directory": "/home/tong/tongworkspace/projects/aerial/Isaac-PathCover/results/super_risp_validation_20261115/dense/seed001",
+      "outcome": {
+        "arrived": false,
+        "collision": true,
+        "out_of_bounds": false,
+        "collision_free_arrival": false,
+        "goal_error_m": 3.0947906888933474,
+        "resolved_goal_error_m": 3.1075807192451923,
+        "goal_resolution_shift_m": 0.18834808201837377,
+        "arrival_rule": "within 0.1 m of the source-resolved goal and below 0.3 m/s for 0.5 s",
+        "finite": true,
+        "collision_check_complete": true,
+        "collision_physics_samples": 25644,
+        "collision_unchecked_physics_samples": 0,
+        "out_of_bounds_physics_samples": 0,
+        "contact_force_max_N": 221.50546264648438
+      },
+      "motion": {
+        "duration_sim_s": 90.0,
+        "wall_time_s": 189.00735875801183,
+        "planner_ready_sim_s": 10.8,
+        "first_motion_s": 11.04,
+        "elapsed_from_first_motion_s": 78.96000000000001,
+        "time_above_motion_threshold_s": 14.830000000000005,
+        "diagnostic_definition": {
+          "slow_speed_m_s": 0.2,
+          "minimum_interval_s": 0.2,
+          "minimum_goal_distance_m": 1.0,
+          "motion_onset_speed_m_s": 0.5
+        },
+        "control_samples": 9000,
+        "valid_state_samples": 9000,
+        "invalid_state_samples": 0,
+        "physics_max_speed_m_s": 8.147151101319603
+      },
+      "speed": {
+        "all_control_samples": {
+          "actual": {
+            "count": 9000,
+            "nonfinite_count": 0,
+            "p50_m_s": 0.012797271204717874,
+            "p95_m_s": 5.064158024305738,
+            "max_m_s": 8.147151101319603
+          },
+          "reference": {
+            "count": 9000,
+            "nonfinite_count": 0,
+            "p50_m_s": 8.164786047272452e-15,
+            "p95_m_s": 4.467961232741886,
+            "max_m_s": 7.989883574424874
+          }
+        },
+        "from_first_motion_through_end": {
+          "actual": {
+            "count": 7897,
+            "nonfinite_count": 0,
+            "p50_m_s": 0.013680097830374357,
+            "p95_m_s": 5.4383971954218095,
+            "max_m_s": 8.147151101319603
+          },
+          "reference": {
+            "count": 7897,
+            "nonfinite_count": 0,
+            "p50_m_s": 8.164786047272452e-15,
+            "p95_m_s": 4.765000280076254,
+            "max_m_s": 7.989883574424874
+          }
+        }
+      },
+      "planning": {
+        "attempts": 842,
+        "reported_successes": 45,
+        "reported_failures": 797,
+        "commands_committed": 43,
+        "cold_start_commits": 8,
+        "replan_commits": 35,
+        "requests_without_commit": 799,
+        "status_counts": {
+          "SUCCESS_WITH_BACKUP": 41,
+          "REPLAN_OVERTIME": 90,
+          "EXP_OPT_FAILED": 28,
+          "EXP_SIM_OVERTIME": 205,
+          "ON_BACKUP_WAIT_FOR_REST": 16,
+          "SUCCESS_NO_BACKUP": 2,
+          "SUCCESS_NO_BACKUP_RETAINED_COMMAND": 2,
+          "BACKUP_CORRIDOR_FAILED": 458
+        },
+        "all_requests": {
+          "count": 842,
+          "planner_total": {
+            "count": 842,
+            "nonfinite_count": 0,
+            "p50_s": 0.1906612360617146,
+            "p95_s": 0.2644288198905997,
+            "max_s": 0.3490175409242511
+          },
+          "cycle_including_sensor_and_delivery": {
+            "count": 842,
+            "nonfinite_count": 0,
+            "p50_s": 0.2043910160427913,
+            "p95_s": 0.2821590339066459,
+            "max_s": 0.3588254919741303
+          },
+          "worker_including_sensor": {
+            "count": 842,
+            "nonfinite_count": 0,
+            "p50_s": 0.19189468899276108,
+            "p95_s": 0.26616853441810223,
+            "max_s": 0.34915913199074566
+          }
+        },
+        "requests_with_exp_optimization": {
+          "count": 824,
+          "planner_total": {
+            "count": 824,
+            "nonfinite_count": 0,
+            "p50_s": 0.19181859691161662,
+            "p95_s": 0.2647041194490157,
+            "max_s": 0.3490175409242511
+          },
+          "cycle_including_sensor_and_delivery": {
+            "count": 824,
+            "nonfinite_count": 0,
+            "p50_s": 0.20536996494047344,
+            "p95_s": 0.2827827302622608,
+            "max_s": 0.3588254919741303
+          },
+          "worker_including_sensor": {
+            "count": 824,
+            "nonfinite_count": 0,
+            "p50_s": 0.19303986558225006,
+            "p95_s": 0.2667057371465489,
+            "max_s": 0.34915913199074566
+          }
+        },
+        "modules": {
+          "backup_frontend_s": {
+            "count": 130,
+            "nonfinite_count": 0,
+            "p50_s": 0.007026359089650214,
+            "p95_s": 0.01121925099287182,
+            "max_s": 0.011992677114903927
+          },
+          "backup_opt_s": {
+            "count": 120,
+            "nonfinite_count": 0,
+            "p50_s": 0.013221285538747907,
+            "p95_s": 0.05365734873339533,
+            "max_s": 0.21869864501059055
+          },
+          "backup_yaw_s": {
+            "count": 117,
+            "nonfinite_count": 0,
+            "p50_s": 0.00030448497273027897,
+            "p95_s": 0.0003560222219675779,
+            "max_s": 0.0004658580292016268
+          },
+          "corridor_s": {
+            "count": 824,
+            "nonfinite_count": 0,
+            "p50_s": 0.049822219531051815,
+            "p95_s": 0.07101370587479319,
+            "max_s": 0.11335675790905952
+          },
+          "exp_frontend_s": {
+            "count": 824,
+            "nonfinite_count": 0,
+            "p50_s": 0.12303535104729235,
+            "p95_s": 0.16096147777279837,
+            "max_s": 0.27351866196841
+          },
+          "exp_opt_s": {
+            "count": 824,
+            "nonfinite_count": 0,
+            "p50_s": 0.06227680353913456,
+            "p95_s": 0.12111137232277541,
+            "max_s": 0.22595719108358026
+          },
+          "exp_yaw_s": {
+            "count": 591,
+            "nonfinite_count": 0,
+            "p50_s": 0.0005090951453894377,
+            "p95_s": 0.0007444870425388217,
+            "max_s": 0.003549787914380431
+          },
+          "generate_backup_s": {
+            "count": 127,
+            "nonfinite_count": 0,
+            "p50_s": 0.017655009170994163,
+            "p95_s": 0.05226837820373475,
+            "max_s": 0.22735480614937842
+          },
+          "generate_exp_s": {
+            "count": 185,
+            "nonfinite_count": 0,
+            "p50_s": 0.1048642760142684,
+            "p95_s": 0.21667116601020078,
+            "max_s": 0.3449121930170804
+          },
+          "search_s": {
+            "count": 824,
+            "nonfinite_count": 0,
+            "p50_s": 0.07207886595278978,
+            "p95_s": 0.09333271826617416,
+            "max_s": 0.1710572501178831
+          },
+          "total_s": {
+            "count": 842,
+            "nonfinite_count": 0,
+            "p50_s": 0.1906612360617146,
+            "p95_s": 0.2644288198905997,
+            "max_s": 0.3490175409242511
+          }
+        },
+        "initialization_s": {
+          "point_cloud_mapping_s": 2.3340102690272033,
+          "raycast_initialization_s": 0.24362238799221814,
+          "search_initialization_s": 0.07244835211895406,
+          "numeric_initialization_s": 19.4328382210806,
+          "lidar_initialization_s": 0.009183140005916357
+        },
+        "job_running_at_episode_end": true,
+        "submitted_jobs": 843,
+        "returned_jobs": 842
+      },
+      "sensor": {
+        "updates": 144,
+        "lidar": {
+          "horizontal_rays": 440,
+          "vertical_rays": 16,
+          "min_range_m": 0.1,
+          "max_range_m": 100.0,
+          "body_translation_m": [
+            0.0,
+            0.0,
+            0.25
+          ],
+          "requested_update_hz": 2.0,
+          "observed_update_hz": 1.6
+        },
+        "sensor": {
+          "count": 144,
+          "nonfinite_count": 0,
+          "p50_s": 0.0024921054719015956,
+          "p95_s": 0.006785088253673166,
+          "max_s": 0.010175948962569237
+        },
+        "map_fusion": {
+          "count": 144,
+          "nonfinite_count": 0,
+          "p50_s": 1.75136374309659e-05,
+          "p95_s": 0.01627240643138066,
+          "max_s": 0.021066779037937522
+        },
+        "sensor_plus_map_fusion": {
+          "count": 144,
+          "nonfinite_count": 0,
+          "p50_s": 0.0026483969995751977,
+          "p95_s": 0.022868627018760888,
+          "max_s": 0.028867827029898763
+        }
+      },
+      "backup": {
+        "generation_status_counts": {
+          "SUCCESS": 117,
+          "NO_NEED": 251,
+          "OPT_FAILED": 3,
+          "FAILED": 461,
+          "FINISH": 10
+        },
+        "generated_success_count": 117,
+        "committed_with_backup": 41,
+        "published_flag_entries": 9,
+        "published_flag_intervals": [
+          {
+            "start_s": 11.65,
+            "end_s": 11.74,
+            "duration_s": 0.08999999999999986,
+            "start_position_m": [
+              -11.438496589660645,
+              -5.580111980438232,
+              0.6818870306015015
+            ],
+            "end_position_m": [
+              -11.085841178894043,
+              -5.129580974578857,
+              0.5900014638900757
+            ]
+          },
+          {
+            "start_s": 13.96,
+            "end_s": 14.31,
+            "duration_s": 0.34999999999999964,
+            "start_position_m": [
+              -2.7534563541412354,
+              0.4822154641151428,
+              0.7108666896820068
+            ],
+            "end_position_m": [
+              -1.1024430990219116,
+              1.533179521560669,
+              1.0026788711547852
+            ]
+          },
+          {
+            "start_s": 15.46,
+            "end_s": 16.240000000000002,
+            "duration_s": 0.7800000000000011,
+            "start_position_m": [
+              1.111179232597351,
+              3.7312490940093994,
+              0.5310525894165039
+            ],
+            "end_position_m": [
+              3.2135210037231445,
+              4.467111587524414,
+              0.4423271119594574
+            ]
+          },
+          {
+            "start_s": 16.730000000000004,
+            "end_s": 17.290000000000003,
+            "duration_s": 0.5599999999999987,
+            "start_position_m": [
+              3.202263593673706,
+              4.4398322105407715,
+              1.3443175554275513
+            ],
+            "end_position_m": [
+              4.468889236450195,
+              5.303238391876221,
+              1.7702370882034302
+            ]
+          },
+          {
+            "start_s": 18.240000000000002,
+            "end_s": 18.89,
+            "duration_s": 0.6499999999999986,
+            "start_position_m": [
+              8.721900939941406,
+              4.942746162414551,
+              1.8996690511703491
+            ],
+            "end_position_m": [
+              9.989595413208008,
+              5.016073226928711,
+              1.6397520303726196
+            ]
+          },
+          {
+            "start_s": 19.410000000000004,
+            "end_s": 20.110000000000003,
+            "duration_s": 0.6999999999999993,
+            "start_position_m": [
+              8.601040840148926,
+              4.606909275054932,
+              1.4468204975128174
+            ],
+            "end_position_m": [
+              8.04908275604248,
+              3.227825164794922,
+              1.2402929067611694
+            ]
+          },
+          {
+            "start_s": 22.620000000000005,
+            "end_s": 23.03,
+            "duration_s": 0.4099999999999966,
+            "start_position_m": [
+              8.709369659423828,
+              2.6466119289398193,
+              1.4256337881088257
+            ],
+            "end_position_m": [
+              9.110689163208008,
+              2.8266351222991943,
+              1.4819614887237549
+            ]
+          },
+          {
+            "start_s": 23.370000000000005,
+            "end_s": 24.270000000000003,
+            "duration_s": 0.8999999999999986,
+            "start_position_m": [
+              8.50810718536377,
+              2.8812673091888428,
+              1.466554045677185
+            ],
+            "end_position_m": [
+              7.237766742706299,
+              4.246186256408691,
+              0.9546319842338562
+            ]
+          },
+          {
+            "start_s": 24.72,
+            "end_s": 90.0,
+            "duration_s": 65.28,
+            "start_position_m": [
+              8.266757011413574,
+              4.3330979347229,
+              1.2146830558776855
+            ],
+            "end_position_m": [
+              9.675926208496094,
+              4.11521053314209,
+              0.12943147122859955
+            ]
+          }
+        ]
+      },
+      "pauses": {
+        "count": 1,
+        "total_duration_s": 63.419999999999995,
+        "intervals": [
+          {
+            "start_s": 26.580000000000005,
+            "end_s": 90.0,
+            "duration_s": 63.419999999999995,
+            "actual_speed_mean_m_s": 0.0143610697171693,
+            "reference_speed_mean_m_s": 8.164786047272455e-15,
+            "reference_speed_max_m_s": 8.164786047272452e-15,
+            "goal_distance_min_m": 3.0740406760354637,
+            "on_backup_samples": 6342,
+            "fsm_states": [
+              3
+            ],
+            "last_committed_plan": 180,
+            "source_timeline_interval_index": 0,
+            "concurrent_plan_count": 637,
+            "concurrent_plan_status_counts": {
+              "EXP_SIM_OVERTIME": 183,
+              "BACKUP_CORRIDOR_FAILED": 454
+            },
+            "concurrent_plan_ids": [
+              206,
+              207,
+              208,
+              209,
+              210,
+              211,
+              212,
+              213,
+              214,
+              215,
+              216,
+              217,
+              218,
+              219,
+              220,
+              221,
+              222,
+              223,
+              224,
+              225,
+              226,
+              227,
+              228,
+              229,
+              230,
+              231,
+              232,
+              233,
+              234,
+              235,
+              236,
+              237,
+              238,
+              239,
+              240,
+              241,
+              242,
+              243,
+              244,
+              245,
+              246,
+              247,
+              248,
+              249,
+              250,
+              251,
+              252,
+              253,
+              254,
+              255,
+              256,
+              257,
+              258,
+              259,
+              260,
+              261,
+              262,
+              263,
+              264,
+              265,
+              266,
+              267,
+              268,
+              269,
+              270,
+              271,
+              272,
+              273,
+              274,
+              275,
+              276,
+              277,
+              278,
+              279,
+              280,
+              281,
+              282,
+              283,
+              284,
+              285,
+              286,
+              287,
+              288,
+              289,
+              290,
+              291,
+              292,
+              293,
+              294,
+              295,
+              296,
+              297,
+              298,
+              299,
+              300,
+              301,
+              302,
+              303,
+              304,
+              305,
+              306,
+              307,
+              308,
+              309,
+              310,
+              311,
+              312,
+              313,
+              314,
+              315,
+              316,
+              317,
+              318,
+              319,
+              320,
+              321,
+              322,
+              323,
+              324,
+              325,
+              326,
+              327,
+              328,
+              329,
+              330,
+              331,
+              332,
+              333,
+              334,
+              335,
+              336,
+              337,
+              338,
+              339,
+              340,
+              341,
+              342,
+              343,
+              344,
+              345,
+              346,
+              347,
+              348,
+              349,
+              350,
+              351,
+              352,
+              353,
+              354,
+              355,
+              356,
+              357,
+              358,
+              359,
+              360,
+              361,
+              362,
+              363,
+              364,
+              365,
+              366,
+              367,
+              368,
+              369,
+              370,
+              371,
+              372,
+              373,
+              374,
+              375,
+              376,
+              377,
+              378,
+              379,
+              380,
+              381,
+              382,
+              383,
+              384,
+              385,
+              386,
+              387,
+              388,
+              389,
+              390,
+              391,
+              392,
+              393,
+              394,
+              395,
+              396,
+              397,
+              398,
+              399,
+              400,
+              401,
+              402,
+              403,
+              404,
+              405,
+              406,
+              407,
+              408,
+              409,
+              410,
+              411,
+              412,
+              413,
+              414,
+              415,
+              416,
+              417,
+              418,
+              419,
+              420,
+              421,
+              422,
+              423,
+              424,
+              425,
+              426,
+              427,
+              428,
+              429,
+              430,
+              431,
+              432,
+              433,
+              434,
+              435,
+              436,
+              437,
+              438,
+              439,
+              440,
+              441,
+              442,
+              443,
+              444,
+              445,
+              446,
+              447,
+              448,
+              449,
+              450,
+              451,
+              452,
+              453,
+              454,
+              455,
+              456,
+              457,
+              458,
+              459,
+              460,
+              461,
+              462,
+              463,
+              464,
+              465,
+              466,
+              467,
+              468,
+              469,
+              470,
+              471,
+              472,
+              473,
+              474,
+              475,
+              476,
+              477,
+              478,
+              479,
+              480,
+              481,
+              482,
+              483,
+              484,
+              485,
+              486,
+              487,
+              488,
+              489,
+              490,
+              491,
+              492,
+              493,
+              494,
+              495,
+              496,
+              497,
+              498,
+              499,
+              500,
+              501,
+              502,
+              503,
+              504,
+              505,
+              506,
+              507,
+              508,
+              509,
+              510,
+              511,
+              512,
+              513,
+              514,
+              515,
+              516,
+              517,
+              518,
+              519,
+              520,
+              521,
+              522,
+              523,
+              524,
+              525,
+              526,
+              527,
+              528,
+              529,
+              530,
+              531,
+              532,
+              533,
+              534,
+              535,
+              536,
+              537,
+              538,
+              539,
+              540,
+              541,
+              542,
+              543,
+              544,
+              545,
+              546,
+              547,
+              548,
+              549,
+              550,
+              551,
+              552,
+              553,
+              554,
+              555,
+              556,
+              557,
+              558,
+              559,
+              560,
+              561,
+              562,
+              563,
+              564,
+              565,
+              566,
+              567,
+              568,
+              569,
+              570,
+              571,
+              572,
+              573,
+              574,
+              575,
+              576,
+              577,
+              578,
+              579,
+              580,
+              581,
+              582,
+              583,
+              584,
+              585,
+              586,
+              587,
+              588,
+              589,
+              590,
+              591,
+              592,
+              593,
+              594,
+              595,
+              596,
+              597,
+              598,
+              599,
+              600,
+              601,
+              602,
+              603,
+              604,
+              605,
+              606,
+              607,
+              608,
+              609,
+              610,
+              611,
+              612,
+              613,
+              614,
+              615,
+              616,
+              617,
+              618,
+              619,
+              620,
+              621,
+              622,
+              623,
+              624,
+              625,
+              626,
+              627,
+              628,
+              629,
+              630,
+              631,
+              632,
+              633,
+              634,
+              635,
+              636,
+              637,
+              638,
+              639,
+              640,
+              641,
+              642,
+              643,
+              644,
+              645,
+              646,
+              647,
+              648,
+              649,
+              650,
+              651,
+              652,
+              653,
+              654,
+              655,
+              656,
+              657,
+              658,
+              659,
+              660,
+              661,
+              662,
+              663,
+              664,
+              665,
+              666,
+              667,
+              668,
+              669,
+              670,
+              671,
+              672,
+              673,
+              674,
+              675,
+              676,
+              677,
+              678,
+              679,
+              680,
+              681,
+              682,
+              683,
+              684,
+              685,
+              686,
+              687,
+              688,
+              689,
+              690,
+              691,
+              692,
+              693,
+              694,
+              695,
+              696,
+              697,
+              698,
+              699,
+              700,
+              701,
+              702,
+              703,
+              704,
+              705,
+              706,
+              707,
+              708,
+              709,
+              710,
+              711,
+              712,
+              713,
+              714,
+              715,
+              716,
+              717,
+              718,
+              719,
+              720,
+              721,
+              722,
+              723,
+              724,
+              725,
+              726,
+              727,
+              728,
+              729,
+              730,
+              731,
+              732,
+              733,
+              734,
+              735,
+              736,
+              737,
+              738,
+              739,
+              740,
+              741,
+              742,
+              743,
+              744,
+              745,
+              746,
+              747,
+              748,
+              749,
+              750,
+              751,
+              752,
+              753,
+              754,
+              755,
+              756,
+              757,
+              758,
+              759,
+              760,
+              761,
+              762,
+              763,
+              764,
+              765,
+              766,
+              767,
+              768,
+              769,
+              770,
+              771,
+              772,
+              773,
+              774,
+              775,
+              776,
+              777,
+              778,
+              779,
+              780,
+              781,
+              782,
+              783,
+              784,
+              785,
+              786,
+              787,
+              788,
+              789,
+              790,
+              791,
+              792,
+              793,
+              794,
+              795,
+              796,
+              797,
+              798,
+              799,
+              800,
+              801,
+              802,
+              803,
+              804,
+              805,
+              806,
+              807,
+              808,
+              809,
+              810,
+              811,
+              812,
+              813,
+              814,
+              815,
+              816,
+              817,
+              818,
+              819,
+              820,
+              821,
+              822,
+              823,
+              824,
+              825,
+              826,
+              827,
+              828,
+              829,
+              830,
+              831,
+              832,
+              833,
+              834,
+              835,
+              836,
+              837,
+              838,
+              839,
+              840,
+              841,
+              842
+            ]
+          }
+        ]
+      },
+      "handoff": {
+        "max_reference_jump_pvaj": [
+          0.9190397290550186,
+          0.662074683303142,
+          9.753547667156782,
+          100.91657353262801
+        ],
+        "max_replan_reference_jump_pvaj": [
+          3.978256139440565e-15,
+          1.9897892672707393e-15,
+          7.283604593613869e-15,
+          5.989774116730248e-14
+        ]
+      },
+      "execution": {
+        "final_fsm_state": "GENERATE_TRAJ",
+        "control_steps_while_worker_busy": 7881,
+        "physics_steps_while_worker_busy": 31524,
+        "physics_progress_while_planning_sim_s": 78.81,
+        "max_progress_during_one_solve_sim_s": 0.17999999999999972,
+        "time_contract": "independent CPU planner and continuously advancing Newton simulation; source trajectory timestamps and source commit rules",
+        "reference_contract": "last published command applied over the recorded Newton step; command_time stores its simulation timestamp",
+        "fsm_command_wall_period_s": 0.01,
+        "replan_wall_period_s": 0.066
+      },
+      "scene_provenance": {
+        "source_file": "src/isaac_l2f/planning/corto/table3_maps/dense_reconstructed.json",
+        "source_sha256": "aacf819961e8ec4efce1498c5eb856cce24d0a6abb4e8771be89feee26177c46",
+        "obstacle_count": 180,
+        "occupied_voxels": 103876,
+        "collision_boxes": 1372,
+        "shape": [
+          300,
+          150,
+          30
+        ],
+        "resolution": 0.1,
+        "origin": [
+          -15.0,
+          -7.5,
+          -0.01
+        ],
+        "start": [
+          -14.0,
+          -6.5,
+          0.49
+        ],
+        "goal": [
+          6.8,
+          5.2,
+          0.49
+        ],
+        "asset_sha256": "c86348f10cd39f82117cbb77cacad40e92bb1cf8872346878afb419e960109b4",
+        "provenance": "existing Dense reconstructed; not a claimed original published map"
+      },
+      "resolved_goal_m": [
+        6.825,
+        5.2250000000000005,
+        0.675
+      ],
+      "runtime": {
+        "python": "3.12.14 (main, Sep  1 2026, 14:16:52) [Clang 22.1.3 ]",
+        "torch": "2.11.0+cu130",
+        "gpu": "NVIDIA GeForce RTX 4090",
+        "numpy": "2.5.1",
+        "scipy": "1.17.0",
+        "numba": "0.68.1",
+        "newton": "1.6.1",
+        "isaaclab_release": "3.0.0",
+        "isaaclab_core_distribution": "28.0.0",
+        "openblas_num_threads": "1",
+        "omp_num_threads": "1"
+      },
+      "source_sha256": {
+        "__init__.py": "ada36069cfd84be5937076f33394a6c90879bf5597d964d98f169eb9c86ee2e6",
+        "control/__init__.py": "76b72ef98def510a99ef6816554798c00e91a9cd036ce18f0824034d1502e6f6",
+        "control/actuator.py": "65fd27b91ab4f47369a5dd8196fe7345d15ce930c386119222f2701704e619f1",
+        "control/async_planner.py": "ecfce6c9be11b9450499dfa644a4136e9f54111fd086eaddd5ba841433be9a82",
+        "control/execution.py": "d185c1e2b897e1e1c28d05cf62a952acbe6fdc227b0a590c65b8dbaa3940b993",
+        "control/tracking.py": "903090d2c5c7152e58e992a0e04d6d0fd3b15cb07cec7835b236e5cd1328a18c",
+        "demo.py": "85a5860eaa0346379b430b081a050773d64338142b20ddd82e3253236abf3ade",
+        "dynamics/__init__.py": "216145d2c07b15a9ac1acde0a390c733e5b42f773746a58f4c4c4e3ea6e0b569",
+        "dynamics/motor.py": "dc906310f1f14f57d66463d5df180e3086203c69463439ddf803ba3b0464b98e",
+        "dynamics/params.py": "c14e43be614bae41f58cf19932a6fa71768c9479880f72efd6607f721989d2c5",
+        "mapping/__init__.py": "5bc8a24dafa1347973f883d349fca9016da0438c13b1ae9305ff7e7e02438c2b",
+        "mapping/esdf.py": "1b2b058c5ab4e3c4ebb487dbbf098864766c175b85c4b703c49b9c3676d529c2",
+        "mapping/raycast.py": "d6a58cd1519f969fd2fec3740a9ef2958dc6daba01c20086b3dca88f67cc889b",
+        "mapping/rog_map.py": "a2d967ceb5582584dc70eacc1b3b7f45110f8c53356ab780ad38a10c69951556",
+        "planning/corridor.py": "1cd8b23a3e898fe6c6ea1663785eea66886c0d03a8f1d3c8f73aba184a6c6392",
+        "planning/geometry.py": "6e6972deda79eaf8b1b8d880c61ce15fe2f35bdcd78240b022282ec733d57ad2",
+        "planning/pipeline.py": "e001725eb388b18bacfee736f1f3df9790ff1e877dc2a3e9dc0c93b725a62cde",
+        "planning/risp.py": "01d6302391f2bbf2388ac88cba829235b4f9211e762fa7abe24d94a798349756",
+        "planning/search.py": "73fc0cdf423b10fb1fc0f019a8224ca146a2efede8bbb988613c023f14d28949",
+        "planning/search_kernel.py": "f3d1d274a6227af1de47e7ca63bd30f72476c60ddf4b15e7171f90cbb6d19371",
+        "simulation/__init__.py": "a6be1760411cffc53f2bcf2190ee9d3b0dc0d30586c11e237fda39d8db67a5fd",
+        "simulation/environment.py": "69dbfb77fc38fd046275fecdad469a86c721b87a8c7d794bdba3d5da29038dd5",
+        "simulation/lidar.py": "e098423a0e3cd16325e12dfa1f1f301f49b5005957a710e3ed5f9f68887286fb",
+        "simulation/metrics.py": "29923f3446bc5f269fb8e0b24065463c5cf3ea59c4bc2a0b513d761058ba496a",
+        "simulation/scene.py": "582495cdb12d363d5fd02811bb75161594dde072f20fb96ff1096e51e6fa7b55",
+        "simulation/visualization.py": "e248944aeacb2b184b0b0185bf6cd38b3912824c911231c804280056d8250057",
+        "trajectory/__init__.py": "9b081d28a24f9e9416410573411356253474d12f60deb8148e9bfddbc9fd58de",
+        "trajectory/lbfgs.py": "f6d5e64268e065f660512e1da4bee5348b03a3102d4be26a659a7f660e04214e",
+        "trajectory/minco.py": "91df875aa73facf212f1dfbdeeb21ef9db2b511b43e0361480546d68c1566c92",
+        "trajectory/numerics.py": "3f8128e6612799de47cc77f1d9130ff0ec3973fc14b82b882f63d1fd055aeeba",
+        "trajectory/super_opt.py": "b6984c985685cde3ee1b4c75f082e8f1ff9794c19c264ad9249528ad8a9f5970"
+      },
+      "raw_files": {
+        "result.json": {
+          "path": "/home/tong/tongworkspace/projects/aerial/Isaac-PathCover/results/super_risp_validation_20261115/dense/seed001/result.json",
+          "repository_relative_path": "results/super_risp_validation_20261115/dense/seed001/result.json",
+          "bytes": 136491,
+          "sha256": "ba4d2c6a52e9152635423d1b0e38ea53bea112b38217d183dc73b4d19382659d"
+        },
+        "flight.npz": {
+          "path": "/home/tong/tongworkspace/projects/aerial/Isaac-PathCover/results/super_risp_validation_20261115/dense/seed001/flight.npz",
+          "repository_relative_path": "results/super_risp_validation_20261115/dense/seed001/flight.npz",
+          "bytes": 2481474,
+          "sha256": "afa77a4a9ea7e5e55e9c61bdda5827f41e9084521dba8634df22c685714274ea"
+        },
+        "planning.json": {
+          "path": "/home/tong/tongworkspace/projects/aerial/Isaac-PathCover/results/super_risp_validation_20261115/dense/seed001/planning.json",
+          "repository_relative_path": "results/super_risp_validation_20261115/dense/seed001/planning.json",
+          "bytes": 1388472,
+          "sha256": "961f86ce38f544f4227fc1090eb4787a4c68018f8a6edbe9cfa4c136341e7360"
+        },
+        "mapping.json": {
+          "path": "/home/tong/tongworkspace/projects/aerial/Isaac-PathCover/results/super_risp_validation_20261115/dense/seed001/mapping.json",
+          "repository_relative_path": "results/super_risp_validation_20261115/dense/seed001/mapping.json",
+          "bytes": 76577,
+          "sha256": "fa8479c98b7648c2606e42a87c88b22747b54ee15dadc1bfcb45d900cba470ab"
+        },
+        "timeline.json": {
+          "path": "/home/tong/tongworkspace/projects/aerial/Isaac-PathCover/results/super_risp_validation_20261115/dense/seed001/timeline.json",
+          "repository_relative_path": "results/super_risp_validation_20261115/dense/seed001/timeline.json",
+          "bytes": 122612,
+          "sha256": "c8aee360327d8978b352e7cf69fb68537d3f29759c638fe79525378ee89587a9"
+        },
+        "fsm.json": {
+          "path": "/home/tong/tongworkspace/projects/aerial/Isaac-PathCover/results/super_risp_validation_20261115/dense/seed001/fsm.json",
+          "repository_relative_path": "results/super_risp_validation_20261115/dense/seed001/fsm.json",
+          "bytes": 2109,
+          "sha256": "efecd2d278b3c716d533d008b87da92dd2caadc6cac4422635ef6d5a5581494e"
+        },
+        "source_hashes.json": {
+          "path": "/home/tong/tongworkspace/projects/aerial/Isaac-PathCover/results/super_risp_validation_20261115/dense/seed001/source_hashes.json",
+          "repository_relative_path": "results/super_risp_validation_20261115/dense/seed001/source_hashes.json",
+          "bytes": 2898,
+          "sha256": "60a0b59d791db34cb84f95c7db70be6dcec2fa5d02bc917349c29054b12d8635"
+        }
+      }
+    },
+    {
+      "scene": "dense",
+      "seed": 2,
+      "run_directory": "/home/tong/tongworkspace/projects/aerial/Isaac-PathCover/results/super_risp_validation_20261115/dense/seed002",
+      "outcome": {
+        "arrived": false,
+        "collision": false,
+        "out_of_bounds": true,
+        "collision_free_arrival": false,
+        "goal_error_m": 13.196002811159296,
+        "resolved_goal_error_m": 13.252474968643046,
+        "goal_resolution_shift_m": 0.18834808201837377,
+        "arrival_rule": "within 0.1 m of the source-resolved goal and below 0.3 m/s for 0.5 s",
+        "finite": true,
+        "collision_check_complete": true,
+        "collision_physics_samples": 0,
+        "collision_unchecked_physics_samples": 0,
+        "out_of_bounds_physics_samples": 66,
+        "contact_force_max_N": 0.0
+      },
+      "motion": {
+        "duration_sim_s": 12.56,
+        "wall_time_s": 28.781612837221473,
+        "planner_ready_sim_s": 9.75,
+        "first_motion_s": 10.0,
+        "elapsed_from_first_motion_s": 2.5600000000000005,
+        "time_above_motion_threshold_s": 2.5700000000000003,
+        "diagnostic_definition": {
+          "slow_speed_m_s": 0.2,
+          "minimum_interval_s": 0.2,
+          "minimum_goal_distance_m": 1.0,
+          "motion_onset_speed_m_s": 0.5
+        },
+        "control_samples": 1256,
+        "valid_state_samples": 1256,
+        "invalid_state_samples": 0,
+        "physics_max_speed_m_s": 9.19806851308617
+      },
+      "speed": {
+        "all_control_samples": {
+          "actual": {
+            "count": 1256,
+            "nonfinite_count": 0,
+            "p50_m_s": 3.487502908683382e-07,
+            "p95_m_s": 6.021787520755345,
+            "max_m_s": 9.19806851308617
+          },
+          "reference": {
+            "count": 1256,
+            "nonfinite_count": 0,
+            "p50_m_s": 0.0,
+            "p95_m_s": 4.551145592206957,
+            "max_m_s": 5.243967206894461
+          }
+        },
+        "from_first_motion_through_end": {
+          "actual": {
+            "count": 257,
+            "nonfinite_count": 0,
+            "p50_m_s": 5.0385058122153294,
+            "p95_m_s": 8.240064240371643,
+            "max_m_s": 9.19806851308617
+          },
+          "reference": {
+            "count": 257,
+            "nonfinite_count": 0,
+            "p50_m_s": 3.6316672133898256,
+            "p95_m_s": 5.174420250273837,
+            "max_m_s": 5.243967206894461
+          }
+        }
+      },
+      "planning": {
+        "attempts": 42,
+        "reported_successes": 9,
+        "reported_failures": 33,
+        "commands_committed": 9,
+        "cold_start_commits": 1,
+        "replan_commits": 8,
+        "requests_without_commit": 33,
+        "status_counts": {
+          "SUCCESS_WITH_BACKUP": 9,
+          "REPLAN_OVERTIME": 29,
+          "EXP_SIM_OVERTIME": 2,
+          "EXP_OPT_FAILED": 1,
+          "BACKUP_CORRIDOR_FAILED": 1
+        },
+        "all_requests": {
+          "count": 42,
+          "planner_total": {
+            "count": 42,
+            "nonfinite_count": 0,
+            "p50_s": 0.11458968697115779,
+            "p95_s": 0.18442707658978177,
+            "max_s": 0.26445344812236726
+          },
+          "cycle_including_sensor_and_delivery": {
+            "count": 42,
+            "nonfinite_count": 0,
+            "p50_s": 0.12195951340254396,
+            "p95_s": 0.22610309546580523,
+            "max_s": 0.3079189141280949
+          },
+          "worker_including_sensor": {
+            "count": 42,
+            "nonfinite_count": 0,
+            "p50_s": 0.1149394060485065,
+            "p95_s": 0.20819275627145534,
+            "max_s": 0.29699443001300097
+          }
+        },
+        "requests_with_exp_optimization": {
+          "count": 42,
+          "planner_total": {
+            "count": 42,
+            "nonfinite_count": 0,
+            "p50_s": 0.11458968697115779,
+            "p95_s": 0.18442707658978177,
+            "max_s": 0.26445344812236726
+          },
+          "cycle_including_sensor_and_delivery": {
+            "count": 42,
+            "nonfinite_count": 0,
+            "p50_s": 0.12195951340254396,
+            "p95_s": 0.22610309546580523,
+            "max_s": 0.3079189141280949
+          },
+          "worker_including_sensor": {
+            "count": 42,
+            "nonfinite_count": 0,
+            "p50_s": 0.1149394060485065,
+            "p95_s": 0.20819275627145534,
+            "max_s": 0.29699443001300097
+          }
+        },
+        "modules": {
+          "backup_frontend_s": {
+            "count": 36,
+            "nonfinite_count": 0,
+            "p50_s": 0.005923625896684825,
+            "p95_s": 0.008730115136131644,
+            "max_s": 0.009431010810658336
+          },
+          "backup_opt_s": {
+            "count": 36,
+            "nonfinite_count": 0,
+            "p50_s": 0.011277015903033316,
+            "p95_s": 0.030347744934260845,
+            "max_s": 0.03712055110372603
+          },
+          "backup_yaw_s": {
+            "count": 36,
+            "nonfinite_count": 0,
+            "p50_s": 0.00031634350307285786,
+            "p95_s": 0.0003815433010458946,
+            "max_s": 0.0004233000800013542
+          },
+          "corridor_s": {
+            "count": 42,
+            "nonfinite_count": 0,
+            "p50_s": 0.03510607441421598,
+            "p95_s": 0.043333340086974204,
+            "max_s": 0.04773838398978114
+          },
+          "exp_frontend_s": {
+            "count": 42,
+            "nonfinite_count": 0,
+            "p50_s": 0.0420051955152303,
+            "p95_s": 0.05600437861867249,
+            "max_s": 0.06357269920408726
+          },
+          "exp_opt_s": {
+            "count": 42,
+            "nonfinite_count": 0,
+            "p50_s": 0.054037010530009866,
+            "p95_s": 0.13081454612547522,
+            "max_s": 0.22090538800694048
+          },
+          "exp_yaw_s": {
+            "count": 39,
+            "nonfinite_count": 0,
+            "p50_s": 0.000336772995069623,
+            "p95_s": 0.0003873991779983044,
+            "max_s": 0.0004693698137998581
+          },
+          "generate_backup_s": {
+            "count": 38,
+            "nonfinite_count": 0,
+            "p50_s": 0.01614253455772996,
+            "p95_s": 0.03750016980338841,
+            "max_s": 0.046253201086074114
+          },
+          "generate_exp_s": {
+            "count": 41,
+            "nonfinite_count": 0,
+            "p50_s": 0.09283580793999135,
+            "p95_s": 0.16889301012270153,
+            "max_s": 0.26440712297335267
+          },
+          "search_s": {
+            "count": 42,
+            "nonfinite_count": 0,
+            "p50_s": 0.006922155502252281,
+            "p95_s": 0.014573778095655136,
+            "max_s": 0.017928896006196737
+          },
+          "total_s": {
+            "count": 42,
+            "nonfinite_count": 0,
+            "p50_s": 0.11458968697115779,
+            "p95_s": 0.18442707658978177,
+            "max_s": 0.26445344812236726
+          }
+        },
+        "initialization_s": {
+          "point_cloud_mapping_s": 2.3498695760499686,
+          "raycast_initialization_s": 0.22960845194756985,
+          "search_initialization_s": 0.3401238229125738,
+          "numeric_initialization_s": 18.70011347089894,
+          "lidar_initialization_s": 0.009008955908939242
+        },
+        "job_running_at_episode_end": true,
+        "submitted_jobs": 43,
+        "returned_jobs": 42
+      },
+      "sensor": {
+        "updates": 6,
+        "lidar": {
+          "horizontal_rays": 440,
+          "vertical_rays": 16,
+          "min_range_m": 0.1,
+          "max_range_m": 100.0,
+          "body_translation_m": [
+            0.0,
+            0.0,
+            0.25
+          ],
+          "requested_update_hz": 2.0,
+          "observed_update_hz": 0.47770700636942676
+        },
+        "sensor": {
+          "count": 6,
+          "nonfinite_count": 0,
+          "p50_s": 0.005630086408928037,
+          "p95_s": 0.007102643023245037,
+          "max_s": 0.007235540077090263
+        },
+        "map_fusion": {
+          "count": 6,
+          "nonfinite_count": 0,
+          "p50_s": 0.016696957522071898,
+          "p95_s": 0.02503235323820263,
+          "max_s": 0.025900190928950906
+        },
+        "sensor_plus_map_fusion": {
+          "count": 6,
+          "nonfinite_count": 0,
+          "p50_s": 0.02260278188623488,
+          "p95_s": 0.0314555952209048,
+          "max_s": 0.03205266688019037
+        }
+      },
+      "backup": {
+        "generation_status_counts": {
+          "SUCCESS": 36,
+          "NO_NEED": 3,
+          "FAILED": 3
+        },
+        "generated_success_count": 36,
+        "committed_with_backup": 9,
+        "published_flag_entries": 4,
+        "published_flag_intervals": [
+          {
+            "start_s": 10.33,
+            "end_s": 10.38,
+            "duration_s": 0.05000000000000071,
+            "start_position_m": [
+              -12.926009178161621,
+              -6.440929412841797,
+              0.8798549175262451
+            ],
+            "end_position_m": [
+              -12.70688533782959,
+              -6.382933139801025,
+              0.9017881155014038
+            ]
+          },
+          {
+            "start_s": 10.77,
+            "end_s": 10.85,
+            "duration_s": 0.08000000000000007,
+            "start_position_m": [
+              -11.070363998413086,
+              -5.180969715118408,
+              0.6971381306648254
+            ],
+            "end_position_m": [
+              -10.978585243225098,
+              -4.884572982788086,
+              0.6547327637672424
+            ]
+          },
+          {
+            "start_s": 11.61,
+            "end_s": 11.95,
+            "duration_s": 0.33999999999999986,
+            "start_position_m": [
+              -9.824234962463379,
+              -2.424464225769043,
+              1.4576101303100586
+            ],
+            "end_position_m": [
+              -8.1198091506958,
+              -1.832902431488037,
+              1.5586603879928589
+            ]
+          },
+          {
+            "start_s": 12.35,
+            "end_s": 12.56,
+            "duration_s": 0.21000000000000085,
+            "start_position_m": [
+              -5.925324440002441,
+              -1.131730079650879,
+              0.1962880939245224
+            ],
+            "end_position_m": [
+              -4.854844093322754,
+              -0.7896947860717773,
+              -1.066488265991211
+            ]
+          }
+        ]
+      },
+      "pauses": {
+        "count": 0,
+        "total_duration_s": 0,
+        "intervals": []
+      },
+      "handoff": {
+        "max_reference_jump_pvaj": [
+          0.04085050887741721,
+          0.259572540045903,
+          6.715124085100374,
+          94.90612572355441
+        ],
+        "max_replan_reference_jump_pvaj": [
+          7.324948293788351e-15,
+          1.7903959895615594e-15,
+          9.230220894641107e-15,
+          1.5904098863188233e-13
+        ]
+      },
+      "execution": {
+        "final_fsm_state": "FOLLOW_TRAJ",
+        "control_steps_while_worker_busy": 276,
+        "physics_steps_while_worker_busy": 1104,
+        "physics_progress_while_planning_sim_s": 2.7600000000000002,
+        "max_progress_during_one_solve_sim_s": 0.15000000000000036,
+        "time_contract": "independent CPU planner and continuously advancing Newton simulation; source trajectory timestamps and source commit rules",
+        "reference_contract": "last published command applied over the recorded Newton step; command_time stores its simulation timestamp",
+        "fsm_command_wall_period_s": 0.01,
+        "replan_wall_period_s": 0.066
+      },
+      "scene_provenance": {
+        "source_file": "src/isaac_l2f/planning/corto/table3_maps/dense_reconstructed.json",
+        "source_sha256": "aacf819961e8ec4efce1498c5eb856cce24d0a6abb4e8771be89feee26177c46",
+        "obstacle_count": 180,
+        "occupied_voxels": 103876,
+        "collision_boxes": 1372,
+        "shape": [
+          300,
+          150,
+          30
+        ],
+        "resolution": 0.1,
+        "origin": [
+          -15.0,
+          -7.5,
+          -0.01
+        ],
+        "start": [
+          -14.0,
+          -6.5,
+          0.49
+        ],
+        "goal": [
+          6.8,
+          5.2,
+          0.49
+        ],
+        "asset_sha256": "c86348f10cd39f82117cbb77cacad40e92bb1cf8872346878afb419e960109b4",
+        "provenance": "existing Dense reconstructed; not a claimed original published map"
+      },
+      "resolved_goal_m": [
+        6.825,
+        5.2250000000000005,
+        0.675
+      ],
+      "runtime": {
+        "python": "3.12.14 (main, Sep  1 2026, 14:16:52) [Clang 22.1.3 ]",
+        "torch": "2.11.0+cu130",
+        "gpu": "NVIDIA GeForce RTX 4090",
+        "numpy": "2.5.1",
+        "scipy": "1.17.0",
+        "numba": "0.68.1",
+        "newton": "1.6.1",
+        "isaaclab_release": "3.0.0",
+        "isaaclab_core_distribution": "28.0.0",
+        "openblas_num_threads": "1",
+        "omp_num_threads": "1"
+      },
+      "source_sha256": {
+        "__init__.py": "ada36069cfd84be5937076f33394a6c90879bf5597d964d98f169eb9c86ee2e6",
+        "control/__init__.py": "76b72ef98def510a99ef6816554798c00e91a9cd036ce18f0824034d1502e6f6",
+        "control/actuator.py": "65fd27b91ab4f47369a5dd8196fe7345d15ce930c386119222f2701704e619f1",
+        "control/async_planner.py": "7e2215ba1c1a150803861d7d2f32d1a6b5d95b671db0a8937ea347d369e11ed0",
+        "control/execution.py": "d185c1e2b897e1e1c28d05cf62a952acbe6fdc227b0a590c65b8dbaa3940b993",
+        "control/tracking.py": "903090d2c5c7152e58e992a0e04d6d0fd3b15cb07cec7835b236e5cd1328a18c",
+        "demo.py": "c60467ddc324d253e14d3a3ad091a1085129ebfff8e6e9fdb40bf9f079c3af80",
+        "dynamics/__init__.py": "216145d2c07b15a9ac1acde0a390c733e5b42f773746a58f4c4c4e3ea6e0b569",
+        "dynamics/motor.py": "dc906310f1f14f57d66463d5df180e3086203c69463439ddf803ba3b0464b98e",
+        "dynamics/params.py": "c14e43be614bae41f58cf19932a6fa71768c9479880f72efd6607f721989d2c5",
+        "mapping/__init__.py": "5bc8a24dafa1347973f883d349fca9016da0438c13b1ae9305ff7e7e02438c2b",
+        "mapping/esdf.py": "1b2b058c5ab4e3c4ebb487dbbf098864766c175b85c4b703c49b9c3676d529c2",
+        "mapping/raycast.py": "d6a58cd1519f969fd2fec3740a9ef2958dc6daba01c20086b3dca88f67cc889b",
+        "mapping/rog_map.py": "a2d967ceb5582584dc70eacc1b3b7f45110f8c53356ab780ad38a10c69951556",
+        "planning/corridor.py": "1cd8b23a3e898fe6c6ea1663785eea66886c0d03a8f1d3c8f73aba184a6c6392",
+        "planning/geometry.py": "6e6972deda79eaf8b1b8d880c61ce15fe2f35bdcd78240b022282ec733d57ad2",
+        "planning/pipeline.py": "e001725eb388b18bacfee736f1f3df9790ff1e877dc2a3e9dc0c93b725a62cde",
+        "planning/risp.py": "01d6302391f2bbf2388ac88cba829235b4f9211e762fa7abe24d94a798349756",
+        "planning/search.py": "73fc0cdf423b10fb1fc0f019a8224ca146a2efede8bbb988613c023f14d28949",
+        "planning/search_kernel.py": "f3d1d274a6227af1de47e7ca63bd30f72476c60ddf4b15e7171f90cbb6d19371",
+        "simulation/__init__.py": "a6be1760411cffc53f2bcf2190ee9d3b0dc0d30586c11e237fda39d8db67a5fd",
+        "simulation/environment.py": "69dbfb77fc38fd046275fecdad469a86c721b87a8c7d794bdba3d5da29038dd5",
+        "simulation/lidar.py": "e098423a0e3cd16325e12dfa1f1f301f49b5005957a710e3ed5f9f68887286fb",
+        "simulation/metrics.py": "29923f3446bc5f269fb8e0b24065463c5cf3ea59c4bc2a0b513d761058ba496a",
+        "simulation/scene.py": "582495cdb12d363d5fd02811bb75161594dde072f20fb96ff1096e51e6fa7b55",
+        "simulation/visualization.py": "e248944aeacb2b184b0b0185bf6cd38b3912824c911231c804280056d8250057",
+        "trajectory/__init__.py": "9b081d28a24f9e9416410573411356253474d12f60deb8148e9bfddbc9fd58de",
+        "trajectory/lbfgs.py": "f6d5e64268e065f660512e1da4bee5348b03a3102d4be26a659a7f660e04214e",
+        "trajectory/minco.py": "91df875aa73facf212f1dfbdeeb21ef9db2b511b43e0361480546d68c1566c92",
+        "trajectory/numerics.py": "3f8128e6612799de47cc77f1d9130ff0ec3973fc14b82b882f63d1fd055aeeba",
+        "trajectory/super_opt.py": "b6984c985685cde3ee1b4c75f082e8f1ff9794c19c264ad9249528ad8a9f5970"
+      },
+      "raw_files": {
+        "result.json": {
+          "path": "/home/tong/tongworkspace/projects/aerial/Isaac-PathCover/results/super_risp_validation_20261115/dense/seed002/result.json",
+          "repository_relative_path": "results/super_risp_validation_20261115/dense/seed002/result.json",
+          "bytes": 9174,
+          "sha256": "7d8bbc63837b7bc813c64ba5af3acf2e8f501788a26994416050a7aa367d67fb"
+        },
+        "flight.npz": {
+          "path": "/home/tong/tongworkspace/projects/aerial/Isaac-PathCover/results/super_risp_validation_20261115/dense/seed002/flight.npz",
+          "repository_relative_path": "results/super_risp_validation_20261115/dense/seed002/flight.npz",
+          "bytes": 119272,
+          "sha256": "df9bf4c6e6f73705f2cc31e35b1a8c6eaea42958fc229581b75f57697cfc723a"
+        },
+        "planning.json": {
+          "path": "/home/tong/tongworkspace/projects/aerial/Isaac-PathCover/results/super_risp_validation_20261115/dense/seed002/planning.json",
+          "repository_relative_path": "results/super_risp_validation_20261115/dense/seed002/planning.json",
+          "bytes": 94956,
+          "sha256": "a6a85ab2818192172a6a9588784c4d5a9a8dd0e60ad5586d58495645d1841528"
+        },
+        "mapping.json": {
+          "path": "/home/tong/tongworkspace/projects/aerial/Isaac-PathCover/results/super_risp_validation_20261115/dense/seed002/mapping.json",
+          "repository_relative_path": "results/super_risp_validation_20261115/dense/seed002/mapping.json",
+          "bytes": 3107,
+          "sha256": "41a4bdc716669daaa7122ec4e5db9db4dd335648075d542672c78c93eaf885f7"
+        },
+        "timeline.json": {
+          "path": "/home/tong/tongworkspace/projects/aerial/Isaac-PathCover/results/super_risp_validation_20261115/dense/seed002/timeline.json",
+          "repository_relative_path": "results/super_risp_validation_20261115/dense/seed002/timeline.json",
+          "bytes": 4406,
+          "sha256": "38b5af381a49e301eaa7b5ecdd0b6e513a3c067f6712ac24c4b4e664e70488b6"
+        },
+        "fsm.json": {
+          "path": "/home/tong/tongworkspace/projects/aerial/Isaac-PathCover/results/super_risp_validation_20261115/dense/seed002/fsm.json",
+          "repository_relative_path": "results/super_risp_validation_20261115/dense/seed002/fsm.json",
+          "bytes": 335,
+          "sha256": "e730427cf83037adc8998523f6477221989b5ec988e8f667974f1144aaf6c354"
+        },
+        "source_hashes.json": {
+          "path": "/home/tong/tongworkspace/projects/aerial/Isaac-PathCover/results/super_risp_validation_20261115/dense/seed002/source_hashes.json",
+          "repository_relative_path": "results/super_risp_validation_20261115/dense/seed002/source_hashes.json",
+          "bytes": 2898,
+          "sha256": "61b827e926c27f77a4517fc35887020497fd1df616727dad97d31aac0903ba10"
+        }
+      }
+    },
+    {
+      "scene": "dense",
+      "seed": 3,
+      "run_directory": "/home/tong/tongworkspace/projects/aerial/Isaac-PathCover/results/super_risp_validation_20261115/dense/seed003",
+      "outcome": {
+        "arrived": false,
+        "collision": false,
+        "out_of_bounds": true,
+        "collision_free_arrival": false,
+        "goal_error_m": 6.871180389546334,
+        "resolved_goal_error_m": 6.946233371584134,
+        "goal_resolution_shift_m": 0.18834808201837377,
+        "arrival_rule": "within 0.1 m of the source-resolved goal and below 0.3 m/s for 0.5 s",
+        "finite": true,
+        "collision_check_complete": true,
+        "collision_physics_samples": 0,
+        "collision_unchecked_physics_samples": 0,
+        "out_of_bounds_physics_samples": 73,
+        "contact_force_max_N": 0.0
+      },
+      "motion": {
+        "duration_sim_s": 13.67,
+        "wall_time_s": 38.620305308140814,
+        "planner_ready_sim_s": 8.84,
+        "first_motion_s": 9.07,
+        "elapsed_from_first_motion_s": 4.6,
+        "time_above_motion_threshold_s": 4.609999999999999,
+        "diagnostic_definition": {
+          "slow_speed_m_s": 0.2,
+          "minimum_interval_s": 0.2,
+          "minimum_goal_distance_m": 1.0,
+          "motion_onset_speed_m_s": 0.5
+        },
+        "control_samples": 1367,
+        "valid_state_samples": 1367,
+        "invalid_state_samples": 0,
+        "physics_max_speed_m_s": 8.576083392548341
+      },
+      "speed": {
+        "all_control_samples": {
+          "actual": {
+            "count": 1367,
+            "nonfinite_count": 0,
+            "p50_m_s": 3.487502908683382e-07,
+            "p95_m_s": 7.354300133446612,
+            "max_m_s": 8.576083392548341
+          },
+          "reference": {
+            "count": 1367,
+            "nonfinite_count": 0,
+            "p50_m_s": 0.0,
+            "p95_m_s": 7.037526029652962,
+            "max_m_s": 7.9871487750320656
+          }
+        },
+        "from_first_motion_through_end": {
+          "actual": {
+            "count": 461,
+            "nonfinite_count": 0,
+            "p50_m_s": 4.591442703922281,
+            "p95_m_s": 8.304789101486747,
+            "max_m_s": 8.576083392548341
+          },
+          "reference": {
+            "count": 461,
+            "nonfinite_count": 0,
+            "p50_m_s": 4.598525664319632,
+            "p95_m_s": 7.961628983667266,
+            "max_m_s": 7.9871487750320656
+          }
+        }
+      },
+      "planning": {
+        "attempts": 95,
+        "reported_successes": 22,
+        "reported_failures": 73,
+        "commands_committed": 22,
+        "cold_start_commits": 1,
+        "replan_commits": 21,
+        "requests_without_commit": 73,
+        "status_counts": {
+          "SUCCESS_WITH_BACKUP": 22,
+          "REPLAN_OVERTIME": 68,
+          "BACKUP_OPT_FAILED": 1,
+          "EXP_OPT_FAILED": 4
+        },
+        "all_requests": {
+          "count": 95,
+          "planner_total": {
+            "count": 95,
+            "nonfinite_count": 0,
+            "p50_s": 0.10409348597750068,
+            "p95_s": 0.20756986741907896,
+            "max_s": 0.24959610006771982
+          },
+          "cycle_including_sensor_and_delivery": {
+            "count": 95,
+            "nonfinite_count": 0,
+            "p50_s": 0.1332902570720762,
+            "p95_s": 0.2235946007305756,
+            "max_s": 0.28882397594861686
+          },
+          "worker_including_sensor": {
+            "count": 95,
+            "nonfinite_count": 0,
+            "p50_s": 0.10991238709539175,
+            "p95_s": 0.211155896843411,
+            "max_s": 0.24989459197968245
+          }
+        },
+        "requests_with_exp_optimization": {
+          "count": 95,
+          "planner_total": {
+            "count": 95,
+            "nonfinite_count": 0,
+            "p50_s": 0.10409348597750068,
+            "p95_s": 0.20756986741907896,
+            "max_s": 0.24959610006771982
+          },
+          "cycle_including_sensor_and_delivery": {
+            "count": 95,
+            "nonfinite_count": 0,
+            "p50_s": 0.1332902570720762,
+            "p95_s": 0.2235946007305756,
+            "max_s": 0.28882397594861686
+          },
+          "worker_including_sensor": {
+            "count": 95,
+            "nonfinite_count": 0,
+            "p50_s": 0.10991238709539175,
+            "p95_s": 0.211155896843411,
+            "max_s": 0.24989459197968245
+          }
+        },
+        "modules": {
+          "backup_frontend_s": {
+            "count": 87,
+            "nonfinite_count": 0,
+            "p50_s": 0.007261452032253146,
+            "p95_s": 0.012050453713163734,
+            "max_s": 0.016931534046307206
+          },
+          "backup_opt_s": {
+            "count": 87,
+            "nonfinite_count": 0,
+            "p50_s": 0.014177439035847783,
+            "p95_s": 0.08134580368641767,
+            "max_s": 0.10411327099427581
+          },
+          "backup_yaw_s": {
+            "count": 86,
+            "nonfinite_count": 0,
+            "p50_s": 0.00034039351157844067,
+            "p95_s": 0.0006231442675925791,
+            "max_s": 0.0010168880689889193
+          },
+          "corridor_s": {
+            "count": 95,
+            "nonfinite_count": 0,
+            "p50_s": 0.03114526206627488,
+            "p95_s": 0.04817566582933068,
+            "max_s": 0.05554325599223375
+          },
+          "exp_frontend_s": {
+            "count": 95,
+            "nonfinite_count": 0,
+            "p50_s": 0.04107814095914364,
+            "p95_s": 0.07370972901117057,
+            "max_s": 0.10028001200407743
+          },
+          "exp_opt_s": {
+            "count": 95,
+            "nonfinite_count": 0,
+            "p50_s": 0.03451658692210913,
+            "p95_s": 0.10479833306744694,
+            "max_s": 0.14559346484020352
+          },
+          "exp_yaw_s": {
+            "count": 91,
+            "nonfinite_count": 0,
+            "p50_s": 0.0003486748319119215,
+            "p95_s": 0.0006202920340001583,
+            "max_s": 0.0007263540755957365
+          },
+          "generate_backup_s": {
+            "count": 90,
+            "nonfinite_count": 0,
+            "p50_s": 0.02261616801843047,
+            "p95_s": 0.08612449349602681,
+            "max_s": 0.11502748494967818
+          },
+          "generate_exp_s": {
+            "count": 94,
+            "nonfinite_count": 0,
+            "p50_s": 0.0816604170249775,
+            "p95_s": 0.16036722523858765,
+            "max_s": 0.21475707599893212
+          },
+          "search_s": {
+            "count": 95,
+            "nonfinite_count": 0,
+            "p50_s": 0.007406528107821941,
+            "p95_s": 0.019574834662489587,
+            "max_s": 0.06808841810561717
+          },
+          "total_s": {
+            "count": 95,
+            "nonfinite_count": 0,
+            "p50_s": 0.10409348597750068,
+            "p95_s": 0.20756986741907896,
+            "max_s": 0.24959610006771982
+          }
+        },
+        "initialization_s": {
+          "point_cloud_mapping_s": 2.2446587518788874,
+          "raycast_initialization_s": 0.23482361622154713,
+          "search_initialization_s": 0.2242805811110884,
+          "numeric_initialization_s": 20.62489438103512,
+          "lidar_initialization_s": 0.011264778906479478
+        },
+        "job_running_at_episode_end": true,
+        "submitted_jobs": 96,
+        "returned_jobs": 95
+      },
+      "sensor": {
+        "updates": 10,
+        "lidar": {
+          "horizontal_rays": 440,
+          "vertical_rays": 16,
+          "min_range_m": 0.1,
+          "max_range_m": 100.0,
+          "body_translation_m": [
+            0.0,
+            0.0,
+            0.25
+          ],
+          "requested_update_hz": 2.0,
+          "observed_update_hz": 0.731528895391368
+        },
+        "sensor": {
+          "count": 10,
+          "nonfinite_count": 0,
+          "p50_s": 0.005035662441514432,
+          "p95_s": 0.008985425566788758,
+          "max_s": 0.010771543020382524
+        },
+        "map_fusion": {
+          "count": 10,
+          "nonfinite_count": 0,
+          "p50_s": 0.016081350622698665,
+          "p95_s": 0.03325170584721489,
+          "max_s": 0.04051200905814767
+        },
+        "sensor_plus_map_fusion": {
+          "count": 10,
+          "nonfinite_count": 0,
+          "p50_s": 0.021113944239914417,
+          "p95_s": 0.03983391664223744,
+          "max_s": 0.04731440218165517
+        }
+      },
+      "backup": {
+        "generation_status_counts": {
+          "SUCCESS": 86,
+          "OPT_FAILED": 1,
+          "NO_NEED": 4,
+          "FAILED": 4
+        },
+        "generated_success_count": 86,
+        "committed_with_backup": 22,
+        "published_flag_entries": 5,
+        "published_flag_intervals": [
+          {
+            "start_s": 9.5,
+            "end_s": 9.57,
+            "duration_s": 0.07000000000000028,
+            "start_position_m": [
+              -12.512537956237793,
+              -6.329330921173096,
+              0.8957381844520569
+            ],
+            "end_position_m": [
+              -12.176872253417969,
+              -6.177457332611084,
+              0.8609703183174133
+            ]
+          },
+          {
+            "start_s": 10.0,
+            "end_s": 10.42,
+            "duration_s": 0.41999999999999993,
+            "start_position_m": [
+              -10.805810928344727,
+              -4.41880464553833,
+              0.5974489450454712
+            ],
+            "end_position_m": [
+              -9.973158836364746,
+              -2.3081629276275635,
+              0.8044799566268921
+            ]
+          },
+          {
+            "start_s": 10.870000000000001,
+            "end_s": 11.08,
+            "duration_s": 0.20999999999999908,
+            "start_position_m": [
+              -8.628399848937988,
+              -2.2245614528656006,
+              0.3360188901424408
+            ],
+            "end_position_m": [
+              -8.108613014221191,
+              -2.4849512577056885,
+              0.45266541838645935
+            ]
+          },
+          {
+            "start_s": 12.49,
+            "end_s": 12.73,
+            "duration_s": 0.2400000000000002,
+            "start_position_m": [
+              -2.9858193397521973,
+              0.2579761743545532,
+              0.7241374850273132
+            ],
+            "end_position_m": [
+              -1.5300990343093872,
+              1.0955606698989868,
+              0.9042262434959412
+            ]
+          },
+          {
+            "start_s": 13.36,
+            "end_s": 13.67,
+            "duration_s": 0.3100000000000005,
+            "start_position_m": [
+              0.026288799941539764,
+              2.301618814468384,
+              0.4880933165550232
+            ],
+            "end_position_m": [
+              0.5734807252883911,
+              2.7307722568511963,
+              -1.0418263673782349
+            ]
+          }
+        ]
+      },
+      "pauses": {
+        "count": 0,
+        "total_duration_s": 0,
+        "intervals": []
+      },
+      "handoff": {
+        "max_reference_jump_pvaj": [
+          0.038770556123498987,
+          0.08823595983462026,
+          3.445724591552882,
+          80.27557573825398
+        ],
+        "max_replan_reference_jump_pvaj": [
+          3.582082587194985e-15,
+          9.945640348601413e-16,
+          2.0297354698375684e-14,
+          2.3031519783307546e-13
+        ]
+      },
+      "execution": {
+        "final_fsm_state": "FOLLOW_TRAJ",
+        "control_steps_while_worker_busy": 479,
+        "physics_steps_while_worker_busy": 1916,
+        "physics_progress_while_planning_sim_s": 4.79,
+        "max_progress_during_one_solve_sim_s": 0.11000000000000121,
+        "time_contract": "independent CPU planner and continuously advancing Newton simulation; source trajectory timestamps and source commit rules",
+        "reference_contract": "last published command applied over the recorded Newton step; command_time stores its simulation timestamp",
+        "fsm_command_wall_period_s": 0.01,
+        "replan_wall_period_s": 0.066
+      },
+      "scene_provenance": {
+        "source_file": "src/isaac_l2f/planning/corto/table3_maps/dense_reconstructed.json",
+        "source_sha256": "aacf819961e8ec4efce1498c5eb856cce24d0a6abb4e8771be89feee26177c46",
+        "obstacle_count": 180,
+        "occupied_voxels": 103876,
+        "collision_boxes": 1372,
+        "shape": [
+          300,
+          150,
+          30
+        ],
+        "resolution": 0.1,
+        "origin": [
+          -15.0,
+          -7.5,
+          -0.01
+        ],
+        "start": [
+          -14.0,
+          -6.5,
+          0.49
+        ],
+        "goal": [
+          6.8,
+          5.2,
+          0.49
+        ],
+        "asset_sha256": "c86348f10cd39f82117cbb77cacad40e92bb1cf8872346878afb419e960109b4",
+        "provenance": "existing Dense reconstructed; not a claimed original published map"
+      },
+      "resolved_goal_m": [
+        6.825,
+        5.2250000000000005,
+        0.675
+      ],
+      "runtime": {
+        "python": "3.12.14 (main, Sep  1 2026, 14:16:52) [Clang 22.1.3 ]",
+        "torch": "2.11.0+cu130",
+        "gpu": "NVIDIA GeForce RTX 4090",
+        "numpy": "2.5.1",
+        "scipy": "1.17.0",
+        "numba": "0.68.1",
+        "newton": "1.6.1",
+        "isaaclab_release": "3.0.0",
+        "isaaclab_core_distribution": "28.0.0",
+        "openblas_num_threads": "1",
+        "omp_num_threads": "1"
+      },
+      "source_sha256": {
+        "__init__.py": "ada36069cfd84be5937076f33394a6c90879bf5597d964d98f169eb9c86ee2e6",
+        "control/__init__.py": "76b72ef98def510a99ef6816554798c00e91a9cd036ce18f0824034d1502e6f6",
+        "control/actuator.py": "65fd27b91ab4f47369a5dd8196fe7345d15ce930c386119222f2701704e619f1",
+        "control/async_planner.py": "7e2215ba1c1a150803861d7d2f32d1a6b5d95b671db0a8937ea347d369e11ed0",
+        "control/execution.py": "d185c1e2b897e1e1c28d05cf62a952acbe6fdc227b0a590c65b8dbaa3940b993",
+        "control/tracking.py": "903090d2c5c7152e58e992a0e04d6d0fd3b15cb07cec7835b236e5cd1328a18c",
+        "demo.py": "c60467ddc324d253e14d3a3ad091a1085129ebfff8e6e9fdb40bf9f079c3af80",
+        "dynamics/__init__.py": "216145d2c07b15a9ac1acde0a390c733e5b42f773746a58f4c4c4e3ea6e0b569",
+        "dynamics/motor.py": "dc906310f1f14f57d66463d5df180e3086203c69463439ddf803ba3b0464b98e",
+        "dynamics/params.py": "c14e43be614bae41f58cf19932a6fa71768c9479880f72efd6607f721989d2c5",
+        "mapping/__init__.py": "5bc8a24dafa1347973f883d349fca9016da0438c13b1ae9305ff7e7e02438c2b",
+        "mapping/esdf.py": "1b2b058c5ab4e3c4ebb487dbbf098864766c175b85c4b703c49b9c3676d529c2",
+        "mapping/raycast.py": "d6a58cd1519f969fd2fec3740a9ef2958dc6daba01c20086b3dca88f67cc889b",
+        "mapping/rog_map.py": "a2d967ceb5582584dc70eacc1b3b7f45110f8c53356ab780ad38a10c69951556",
+        "planning/corridor.py": "1cd8b23a3e898fe6c6ea1663785eea66886c0d03a8f1d3c8f73aba184a6c6392",
+        "planning/geometry.py": "6e6972deda79eaf8b1b8d880c61ce15fe2f35bdcd78240b022282ec733d57ad2",
+        "planning/pipeline.py": "e001725eb388b18bacfee736f1f3df9790ff1e877dc2a3e9dc0c93b725a62cde",
+        "planning/risp.py": "01d6302391f2bbf2388ac88cba829235b4f9211e762fa7abe24d94a798349756",
+        "planning/search.py": "73fc0cdf423b10fb1fc0f019a8224ca146a2efede8bbb988613c023f14d28949",
+        "planning/search_kernel.py": "f3d1d274a6227af1de47e7ca63bd30f72476c60ddf4b15e7171f90cbb6d19371",
+        "simulation/__init__.py": "a6be1760411cffc53f2bcf2190ee9d3b0dc0d30586c11e237fda39d8db67a5fd",
+        "simulation/environment.py": "69dbfb77fc38fd046275fecdad469a86c721b87a8c7d794bdba3d5da29038dd5",
+        "simulation/lidar.py": "e098423a0e3cd16325e12dfa1f1f301f49b5005957a710e3ed5f9f68887286fb",
+        "simulation/metrics.py": "29923f3446bc5f269fb8e0b24065463c5cf3ea59c4bc2a0b513d761058ba496a",
+        "simulation/scene.py": "582495cdb12d363d5fd02811bb75161594dde072f20fb96ff1096e51e6fa7b55",
+        "simulation/visualization.py": "e248944aeacb2b184b0b0185bf6cd38b3912824c911231c804280056d8250057",
+        "trajectory/__init__.py": "9b081d28a24f9e9416410573411356253474d12f60deb8148e9bfddbc9fd58de",
+        "trajectory/lbfgs.py": "f6d5e64268e065f660512e1da4bee5348b03a3102d4be26a659a7f660e04214e",
+        "trajectory/minco.py": "91df875aa73facf212f1dfbdeeb21ef9db2b511b43e0361480546d68c1566c92",
+        "trajectory/numerics.py": "3f8128e6612799de47cc77f1d9130ff0ec3973fc14b82b882f63d1fd055aeeba",
+        "trajectory/super_opt.py": "b6984c985685cde3ee1b4c75f082e8f1ff9794c19c264ad9249528ad8a9f5970"
+      },
+      "raw_files": {
+        "result.json": {
+          "path": "/home/tong/tongworkspace/projects/aerial/Isaac-PathCover/results/super_risp_validation_20261115/dense/seed003/result.json",
+          "repository_relative_path": "results/super_risp_validation_20261115/dense/seed003/result.json",
+          "bytes": 9530,
+          "sha256": "e3e9834e3b01d2f3931dea09e100b061b5af12885813072258579912afc15173"
+        },
+        "flight.npz": {
+          "path": "/home/tong/tongworkspace/projects/aerial/Isaac-PathCover/results/super_risp_validation_20261115/dense/seed003/flight.npz",
+          "repository_relative_path": "results/super_risp_validation_20261115/dense/seed003/flight.npz",
+          "bytes": 206872,
+          "sha256": "760c1e17066935696d4e358eee2fbad894c7415a913ce45fd55a37b1fbfa92ff"
+        },
+        "planning.json": {
+          "path": "/home/tong/tongworkspace/projects/aerial/Isaac-PathCover/results/super_risp_validation_20261115/dense/seed003/planning.json",
+          "repository_relative_path": "results/super_risp_validation_20261115/dense/seed003/planning.json",
+          "bytes": 217908,
+          "sha256": "9e2833912d01fcdbed09fdc0a0e2ec665eed1b4ca941455ffff6645fd507838c"
+        },
+        "mapping.json": {
+          "path": "/home/tong/tongworkspace/projects/aerial/Isaac-PathCover/results/super_risp_validation_20261115/dense/seed003/mapping.json",
+          "repository_relative_path": "results/super_risp_validation_20261115/dense/seed003/mapping.json",
+          "bytes": 5272,
+          "sha256": "6fa01c44676155de3f676735662ea8fa413c6a3c388e243deeecddfdba6b8afd"
+        },
+        "timeline.json": {
+          "path": "/home/tong/tongworkspace/projects/aerial/Isaac-PathCover/results/super_risp_validation_20261115/dense/seed003/timeline.json",
+          "repository_relative_path": "results/super_risp_validation_20261115/dense/seed003/timeline.json",
+          "bytes": 4746,
+          "sha256": "2cd39a34efda134959203725caac025a797e30a6b1403e74a7916eed0bb647e2"
+        },
+        "fsm.json": {
+          "path": "/home/tong/tongworkspace/projects/aerial/Isaac-PathCover/results/super_risp_validation_20261115/dense/seed003/fsm.json",
+          "repository_relative_path": "results/super_risp_validation_20261115/dense/seed003/fsm.json",
+          "bytes": 348,
+          "sha256": "7bbeef96530ad98cdd96e379397de0a3e904fa9c998971bbb64f6c2ac829c796"
+        },
+        "source_hashes.json": {
+          "path": "/home/tong/tongworkspace/projects/aerial/Isaac-PathCover/results/super_risp_validation_20261115/dense/seed003/source_hashes.json",
+          "repository_relative_path": "results/super_risp_validation_20261115/dense/seed003/source_hashes.json",
+          "bytes": 2898,
+          "sha256": "61b827e926c27f77a4517fc35887020497fd1df616727dad97d31aac0903ba10"
+        }
+      }
+    },
+    {
+      "scene": "dense",
+      "seed": 4,
+      "run_directory": "/home/tong/tongworkspace/projects/aerial/Isaac-PathCover/results/super_risp_validation_20261115/dense/seed004",
+      "outcome": {
+        "arrived": true,
+        "collision": true,
+        "out_of_bounds": false,
+        "collision_free_arrival": false,
+        "goal_error_m": 0.1821406744393215,
+        "resolved_goal_error_m": 0.006532524580656399,
+        "goal_resolution_shift_m": 0.18834808201837377,
+        "arrival_rule": "within 0.1 m of the source-resolved goal and below 0.3 m/s for 0.5 s",
+        "finite": true,
+        "collision_check_complete": true,
+        "collision_physics_samples": 76,
+        "collision_unchecked_physics_samples": 0,
+        "out_of_bounds_physics_samples": 0,
+        "contact_force_max_N": 594.7295532226562
+      },
+      "motion": {
+        "duration_sim_s": 17.98,
+        "wall_time_s": 46.840378811815754,
+        "planner_ready_sim_s": 9.22,
+        "first_motion_s": 9.44,
+        "elapsed_from_first_motion_s": 8.540000000000001,
+        "time_above_motion_threshold_s": 7.840000000000003,
+        "diagnostic_definition": {
+          "slow_speed_m_s": 0.2,
+          "minimum_interval_s": 0.2,
+          "minimum_goal_distance_m": 1.0,
+          "motion_onset_speed_m_s": 0.5
+        },
+        "control_samples": 1798,
+        "valid_state_samples": 1798,
+        "invalid_state_samples": 0,
+        "physics_max_speed_m_s": 9.068474238910525
+      },
+      "speed": {
+        "all_control_samples": {
+          "actual": {
+            "count": 1798,
+            "nonfinite_count": 0,
+            "p50_m_s": 3.487502908683382e-07,
+            "p95_m_s": 7.505840634170928,
+            "max_m_s": 9.068354119992136
+          },
+          "reference": {
+            "count": 1798,
+            "nonfinite_count": 0,
+            "p50_m_s": 0.0,
+            "p95_m_s": 7.267100204990859,
+            "max_m_s": 7.984193612924029
+          }
+        },
+        "from_first_motion_through_end": {
+          "actual": {
+            "count": 855,
+            "nonfinite_count": 0,
+            "p50_m_s": 3.6714185907912946,
+            "p95_m_s": 8.396211851308964,
+            "max_m_s": 9.068354119992136
+          },
+          "reference": {
+            "count": 855,
+            "nonfinite_count": 0,
+            "p50_m_s": 3.240119525437782,
+            "p95_m_s": 7.724814488279936,
+            "max_m_s": 7.984193612924029
+          }
+        }
+      },
+      "planning": {
+        "attempts": 176,
+        "reported_successes": 89,
+        "reported_failures": 87,
+        "commands_committed": 88,
+        "cold_start_commits": 2,
+        "replan_commits": 86,
+        "requests_without_commit": 88,
+        "status_counts": {
+          "SUCCESS_WITH_BACKUP": 20,
+          "REPLAN_OVERTIME": 64,
+          "SUCCESS_NO_BACKUP": 68,
+          "BACKUP_OPT_FAILED": 2,
+          "EXP_SIM_OVERTIME": 3,
+          "ON_BACKUP_WAIT_FOR_REST": 5,
+          "BACKUP_CORRIDOR_FAILED": 3,
+          "BACKUP_EMPTY_VISIBLE_INTERVAL": 1,
+          "CORRIDOR_FAILED": 2,
+          "EXP_OPT_FAILED": 7,
+          "SUCCESS_NO_BACKUP_RETAINED_COMMAND": 1
+        },
+        "all_requests": {
+          "count": 176,
+          "planner_total": {
+            "count": 176,
+            "nonfinite_count": 0,
+            "p50_s": 0.07854690053500235,
+            "p95_s": 0.20650341728469357,
+            "max_s": 0.2718290768098086
+          },
+          "cycle_including_sensor_and_delivery": {
+            "count": 176,
+            "nonfinite_count": 0,
+            "p50_s": 0.09748366288840771,
+            "p95_s": 0.2372900759219192,
+            "max_s": 0.27655196096748114
+          },
+          "worker_including_sensor": {
+            "count": 176,
+            "nonfinite_count": 0,
+            "p50_s": 0.08095771190710366,
+            "p95_s": 0.21518997650127858,
+            "max_s": 0.2720656921155751
+          }
+        },
+        "requests_with_exp_optimization": {
+          "count": 104,
+          "planner_total": {
+            "count": 104,
+            "nonfinite_count": 0,
+            "p50_s": 0.12560894200578332,
+            "p95_s": 0.22330115563236175,
+            "max_s": 0.2718290768098086
+          },
+          "cycle_including_sensor_and_delivery": {
+            "count": 104,
+            "nonfinite_count": 0,
+            "p50_s": 0.14845395053271204,
+            "p95_s": 0.24921543254749848,
+            "max_s": 0.27655196096748114
+          },
+          "worker_including_sensor": {
+            "count": 104,
+            "nonfinite_count": 0,
+            "p50_s": 0.12915585993323475,
+            "p95_s": 0.22582872105995191,
+            "max_s": 0.2720656921155751
+          }
+        },
+        "modules": {
+          "backup_frontend_s": {
+            "count": 152,
+            "nonfinite_count": 0,
+            "p50_s": 0.006968928617425263,
+            "p95_s": 0.011830472492147236,
+            "max_s": 0.0161569369956851
+          },
+          "backup_opt_s": {
+            "count": 84,
+            "nonfinite_count": 0,
+            "p50_s": 0.012699276092462242,
+            "p95_s": 0.06551656707888465,
+            "max_s": 0.09324522688984871
+          },
+          "backup_yaw_s": {
+            "count": 76,
+            "nonfinite_count": 0,
+            "p50_s": 0.0003366890596225858,
+            "p95_s": 0.0007006258238106966,
+            "max_s": 0.0012218619231134653
+          },
+          "corridor_s": {
+            "count": 104,
+            "nonfinite_count": 0,
+            "p50_s": 0.031220634002238512,
+            "p95_s": 0.05096065630204975,
+            "max_s": 0.08155075693503022
+          },
+          "exp_frontend_s": {
+            "count": 104,
+            "nonfinite_count": 0,
+            "p50_s": 0.04266013600863516,
+            "p95_s": 0.13889368361560628,
+            "max_s": 0.1840426737908274
+          },
+          "exp_opt_s": {
+            "count": 104,
+            "nonfinite_count": 0,
+            "p50_s": 0.037216459517367184,
+            "p95_s": 0.11110567089635875,
+            "max_s": 0.1490031499415636
+          },
+          "exp_yaw_s": {
+            "count": 94,
+            "nonfinite_count": 0,
+            "p50_s": 0.00037064659409224987,
+            "p95_s": 0.0006615138379856943,
+            "max_s": 0.0012796949595212936
+          },
+          "generate_backup_s": {
+            "count": 153,
+            "nonfinite_count": 0,
+            "p50_s": 0.01431217696517706,
+            "p95_s": 0.05339204519987106,
+            "max_s": 0.09954424109309912
+          },
+          "generate_exp_s": {
+            "count": 167,
+            "nonfinite_count": 0,
+            "p50_s": 0.052696408005431294,
+            "p95_s": 0.17654900248162447,
+            "max_s": 0.2211592961102724
+          },
+          "search_s": {
+            "count": 98,
+            "nonfinite_count": 0,
+            "p50_s": 0.006723666447214782,
+            "p95_s": 0.09792082570493221,
+            "max_s": 0.131792897824198
+          },
+          "total_s": {
+            "count": 176,
+            "nonfinite_count": 0,
+            "p50_s": 0.07854690053500235,
+            "p95_s": 0.20650341728469357,
+            "max_s": 0.2718290768098086
+          }
+        },
+        "initialization_s": {
+          "point_cloud_mapping_s": 2.5568365391809493,
+          "raycast_initialization_s": 0.2650708840228617,
+          "search_initialization_s": 0.10850147809833288,
+          "numeric_initialization_s": 19.739842736162245,
+          "lidar_initialization_s": 0.00989720388315618
+        },
+        "job_running_at_episode_end": false,
+        "submitted_jobs": 176,
+        "returned_jobs": 176
+      },
+      "sensor": {
+        "updates": 16,
+        "lidar": {
+          "horizontal_rays": 440,
+          "vertical_rays": 16,
+          "min_range_m": 0.1,
+          "max_range_m": 100.0,
+          "body_translation_m": [
+            0.0,
+            0.0,
+            0.25
+          ],
+          "requested_update_hz": 2.0,
+          "observed_update_hz": 0.8898776418242491
+        },
+        "sensor": {
+          "count": 16,
+          "nonfinite_count": 0,
+          "p50_s": 0.00592648854944855,
+          "p95_s": 0.01009912573499605,
+          "max_s": 0.010111092124134302
+        },
+        "map_fusion": {
+          "count": 16,
+          "nonfinite_count": 0,
+          "p50_s": 0.014840635471045971,
+          "p95_s": 0.02829951047897339,
+          "max_s": 0.03543285792693496
+        },
+        "sensor_plus_map_fusion": {
+          "count": 16,
+          "nonfinite_count": 0,
+          "p50_s": 0.021993006695993245,
+          "p95_s": 0.03607016219757497,
+          "max_s": 0.04554395005106926
+        }
+      },
+      "backup": {
+        "generation_status_counts": {
+          "SUCCESS": 76,
+          "OPT_FAILED": 8,
+          "FINISH": 68,
+          "NO_NEED": 18,
+          "FAILED": 6
+        },
+        "generated_success_count": 76,
+        "committed_with_backup": 20,
+        "published_flag_entries": 4,
+        "published_flag_intervals": [
+          {
+            "start_s": 9.78,
+            "end_s": 9.85,
+            "duration_s": 0.07000000000000028,
+            "start_position_m": [
+              -13.004322052001953,
+              -6.454160690307617,
+              0.879410982131958
+            ],
+            "end_position_m": [
+              -12.678287506103516,
+              -6.361653804779053,
+              0.8967727422714233
+            ]
+          },
+          {
+            "start_s": 10.620000000000001,
+            "end_s": 11.09,
+            "duration_s": 0.46999999999999886,
+            "start_position_m": [
+              -10.683286666870117,
+              -3.1603708267211914,
+              0.45433127880096436
+            ],
+            "end_position_m": [
+              -9.246667861938477,
+              -1.8809744119644165,
+              0.7861342430114746
+            ]
+          },
+          {
+            "start_s": 12.39,
+            "end_s": 12.76,
+            "duration_s": 0.3699999999999992,
+            "start_position_m": [
+              -3.557943820953369,
+              -0.3608701825141907,
+              0.6090836524963379
+            ],
+            "end_position_m": [
+              -1.7129065990447998,
+              1.0563892126083374,
+              0.7347014546394348
+            ]
+          },
+          {
+            "start_s": 13.86,
+            "end_s": 15.06,
+            "duration_s": 1.200000000000001,
+            "start_position_m": [
+              2.1288516521453857,
+              3.2478365898132324,
+              1.071048617362976
+            ],
+            "end_position_m": [
+              4.437261581420898,
+              4.091482162475586,
+              0.6837642788887024
+            ]
+          }
+        ]
+      },
+      "pauses": {
+        "count": 0,
+        "total_duration_s": 0,
+        "intervals": []
+      },
+      "handoff": {
+        "max_reference_jump_pvaj": [
+          1.41279200224542,
+          0.05033438075130505,
+          2.218054301767798,
+          76.10961044348895
+        ],
+        "max_replan_reference_jump_pvaj": [
+          3.6637359812630166e-15,
+          3.5038047658940695e-15,
+          4.784842277628053e-14,
+          8.581959348755779e-14
+        ]
+      },
+      "execution": {
+        "final_fsm_state": "WAIT_GOAL",
+        "control_steps_while_worker_busy": 699,
+        "physics_steps_while_worker_busy": 2796,
+        "physics_progress_while_planning_sim_s": 6.99,
+        "max_progress_during_one_solve_sim_s": 0.1399999999999988,
+        "time_contract": "independent CPU planner and continuously advancing Newton simulation; source trajectory timestamps and source commit rules",
+        "reference_contract": "last published command applied over the recorded Newton step; command_time stores its simulation timestamp",
+        "fsm_command_wall_period_s": 0.01,
+        "replan_wall_period_s": 0.066
+      },
+      "scene_provenance": {
+        "source_file": "src/isaac_l2f/planning/corto/table3_maps/dense_reconstructed.json",
+        "source_sha256": "aacf819961e8ec4efce1498c5eb856cce24d0a6abb4e8771be89feee26177c46",
+        "obstacle_count": 180,
+        "occupied_voxels": 103876,
+        "collision_boxes": 1372,
+        "shape": [
+          300,
+          150,
+          30
+        ],
+        "resolution": 0.1,
+        "origin": [
+          -15.0,
+          -7.5,
+          -0.01
+        ],
+        "start": [
+          -14.0,
+          -6.5,
+          0.49
+        ],
+        "goal": [
+          6.8,
+          5.2,
+          0.49
+        ],
+        "asset_sha256": "c86348f10cd39f82117cbb77cacad40e92bb1cf8872346878afb419e960109b4",
+        "provenance": "existing Dense reconstructed; not a claimed original published map"
+      },
+      "resolved_goal_m": [
+        6.825,
+        5.2250000000000005,
+        0.675
+      ],
+      "runtime": {
+        "python": "3.12.14 (main, Sep  1 2026, 14:16:52) [Clang 22.1.3 ]",
+        "torch": "2.11.0+cu130",
+        "gpu": "NVIDIA GeForce RTX 4090",
+        "numpy": "2.5.1",
+        "scipy": "1.17.0",
+        "numba": "0.68.1",
+        "newton": "1.6.1",
+        "isaaclab_release": "3.0.0",
+        "isaaclab_core_distribution": "28.0.0",
+        "openblas_num_threads": "1",
+        "omp_num_threads": "1"
+      },
+      "source_sha256": {
+        "__init__.py": "ada36069cfd84be5937076f33394a6c90879bf5597d964d98f169eb9c86ee2e6",
+        "control/__init__.py": "76b72ef98def510a99ef6816554798c00e91a9cd036ce18f0824034d1502e6f6",
+        "control/actuator.py": "65fd27b91ab4f47369a5dd8196fe7345d15ce930c386119222f2701704e619f1",
+        "control/async_planner.py": "7e2215ba1c1a150803861d7d2f32d1a6b5d95b671db0a8937ea347d369e11ed0",
+        "control/execution.py": "d185c1e2b897e1e1c28d05cf62a952acbe6fdc227b0a590c65b8dbaa3940b993",
+        "control/tracking.py": "903090d2c5c7152e58e992a0e04d6d0fd3b15cb07cec7835b236e5cd1328a18c",
+        "demo.py": "c60467ddc324d253e14d3a3ad091a1085129ebfff8e6e9fdb40bf9f079c3af80",
+        "dynamics/__init__.py": "216145d2c07b15a9ac1acde0a390c733e5b42f773746a58f4c4c4e3ea6e0b569",
+        "dynamics/motor.py": "dc906310f1f14f57d66463d5df180e3086203c69463439ddf803ba3b0464b98e",
+        "dynamics/params.py": "c14e43be614bae41f58cf19932a6fa71768c9479880f72efd6607f721989d2c5",
+        "mapping/__init__.py": "5bc8a24dafa1347973f883d349fca9016da0438c13b1ae9305ff7e7e02438c2b",
+        "mapping/esdf.py": "1b2b058c5ab4e3c4ebb487dbbf098864766c175b85c4b703c49b9c3676d529c2",
+        "mapping/raycast.py": "d6a58cd1519f969fd2fec3740a9ef2958dc6daba01c20086b3dca88f67cc889b",
+        "mapping/rog_map.py": "a2d967ceb5582584dc70eacc1b3b7f45110f8c53356ab780ad38a10c69951556",
+        "planning/corridor.py": "1cd8b23a3e898fe6c6ea1663785eea66886c0d03a8f1d3c8f73aba184a6c6392",
+        "planning/geometry.py": "6e6972deda79eaf8b1b8d880c61ce15fe2f35bdcd78240b022282ec733d57ad2",
+        "planning/pipeline.py": "e001725eb388b18bacfee736f1f3df9790ff1e877dc2a3e9dc0c93b725a62cde",
+        "planning/risp.py": "01d6302391f2bbf2388ac88cba829235b4f9211e762fa7abe24d94a798349756",
+        "planning/search.py": "73fc0cdf423b10fb1fc0f019a8224ca146a2efede8bbb988613c023f14d28949",
+        "planning/search_kernel.py": "f3d1d274a6227af1de47e7ca63bd30f72476c60ddf4b15e7171f90cbb6d19371",
+        "simulation/__init__.py": "a6be1760411cffc53f2bcf2190ee9d3b0dc0d30586c11e237fda39d8db67a5fd",
+        "simulation/environment.py": "69dbfb77fc38fd046275fecdad469a86c721b87a8c7d794bdba3d5da29038dd5",
+        "simulation/lidar.py": "e098423a0e3cd16325e12dfa1f1f301f49b5005957a710e3ed5f9f68887286fb",
+        "simulation/metrics.py": "29923f3446bc5f269fb8e0b24065463c5cf3ea59c4bc2a0b513d761058ba496a",
+        "simulation/scene.py": "582495cdb12d363d5fd02811bb75161594dde072f20fb96ff1096e51e6fa7b55",
+        "simulation/visualization.py": "e248944aeacb2b184b0b0185bf6cd38b3912824c911231c804280056d8250057",
+        "trajectory/__init__.py": "9b081d28a24f9e9416410573411356253474d12f60deb8148e9bfddbc9fd58de",
+        "trajectory/lbfgs.py": "f6d5e64268e065f660512e1da4bee5348b03a3102d4be26a659a7f660e04214e",
+        "trajectory/minco.py": "91df875aa73facf212f1dfbdeeb21ef9db2b511b43e0361480546d68c1566c92",
+        "trajectory/numerics.py": "3f8128e6612799de47cc77f1d9130ff0ec3973fc14b82b882f63d1fd055aeeba",
+        "trajectory/super_opt.py": "b6984c985685cde3ee1b4c75f082e8f1ff9794c19c264ad9249528ad8a9f5970"
+      },
+      "raw_files": {
+        "result.json": {
+          "path": "/home/tong/tongworkspace/projects/aerial/Isaac-PathCover/results/super_risp_validation_20261115/dense/seed004/result.json",
+          "repository_relative_path": "results/super_risp_validation_20261115/dense/seed004/result.json",
+          "bytes": 9442,
+          "sha256": "fbac18a580eb873cda5bfe76665d0701586ea70bbf1ef9f693239aeedc70f95d"
+        },
+        "flight.npz": {
+          "path": "/home/tong/tongworkspace/projects/aerial/Isaac-PathCover/results/super_risp_validation_20261115/dense/seed004/flight.npz",
+          "repository_relative_path": "results/super_risp_validation_20261115/dense/seed004/flight.npz",
+          "bytes": 363004,
+          "sha256": "af8ce02ded6f214ed77693f8baa80bae3cb91599c3ebc566893d0b838cfabcf2"
+        },
+        "planning.json": {
+          "path": "/home/tong/tongworkspace/projects/aerial/Isaac-PathCover/results/super_risp_validation_20261115/dense/seed004/planning.json",
+          "repository_relative_path": "results/super_risp_validation_20261115/dense/seed004/planning.json",
+          "bytes": 317485,
+          "sha256": "a91fd17c153968b2cb2336eba12aa7f921cb52817d601a32ecaf99b6695e7723"
+        },
+        "mapping.json": {
+          "path": "/home/tong/tongworkspace/projects/aerial/Isaac-PathCover/results/super_risp_validation_20261115/dense/seed004/mapping.json",
+          "repository_relative_path": "results/super_risp_validation_20261115/dense/seed004/mapping.json",
+          "bytes": 8439,
+          "sha256": "4266722db9f48a033c388d1e9cb0eb55bd132594eec40ca207b3a136c0aa8ed6"
+        },
+        "timeline.json": {
+          "path": "/home/tong/tongworkspace/projects/aerial/Isaac-PathCover/results/super_risp_validation_20261115/dense/seed004/timeline.json",
+          "repository_relative_path": "results/super_risp_validation_20261115/dense/seed004/timeline.json",
+          "bytes": 4656,
+          "sha256": "9f3420c3eaa624a025cc0f0d36b0720c729fd7f805be19cffbaa2825f1daac0d"
+        },
+        "fsm.json": {
+          "path": "/home/tong/tongworkspace/projects/aerial/Isaac-PathCover/results/super_risp_validation_20261115/dense/seed004/fsm.json",
+          "repository_relative_path": "results/super_risp_validation_20261115/dense/seed004/fsm.json",
+          "bytes": 677,
+          "sha256": "e2d379075bb8490238619f8cd94d33bb6ee78a19eace6146e35226d19a601479"
+        },
+        "source_hashes.json": {
+          "path": "/home/tong/tongworkspace/projects/aerial/Isaac-PathCover/results/super_risp_validation_20261115/dense/seed004/source_hashes.json",
+          "repository_relative_path": "results/super_risp_validation_20261115/dense/seed004/source_hashes.json",
+          "bytes": 2898,
+          "sha256": "61b827e926c27f77a4517fc35887020497fd1df616727dad97d31aac0903ba10"
+        }
+      }
+    },
+    {
+      "scene": "dense",
+      "seed": 5,
+      "run_directory": "/home/tong/tongworkspace/projects/aerial/Isaac-PathCover/results/super_risp_validation_20261115/dense/seed005",
+      "outcome": {
+        "arrived": false,
+        "collision": true,
+        "out_of_bounds": true,
+        "collision_free_arrival": false,
+        "goal_error_m": 3.004649518653095,
+        "resolved_goal_error_m": 3.0787637623016546,
+        "goal_resolution_shift_m": 0.18834808201837377,
+        "arrival_rule": "within 0.1 m of the source-resolved goal and below 0.3 m/s for 0.5 s",
+        "finite": true,
+        "collision_check_complete": true,
+        "collision_physics_samples": 84,
+        "collision_unchecked_physics_samples": 0,
+        "out_of_bounds_physics_samples": 102,
+        "contact_force_max_N": 375.6052551269531
+      },
+      "motion": {
+        "duration_sim_s": 22.830000000000002,
+        "wall_time_s": 54.652411934919655,
+        "planner_ready_sim_s": 10.13,
+        "first_motion_s": 10.36,
+        "elapsed_from_first_motion_s": 12.470000000000002,
+        "time_above_motion_threshold_s": 12.130000000000006,
+        "diagnostic_definition": {
+          "slow_speed_m_s": 0.2,
+          "minimum_interval_s": 0.2,
+          "minimum_goal_distance_m": 1.0,
+          "motion_onset_speed_m_s": 0.5
+        },
+        "control_samples": 2283,
+        "valid_state_samples": 2283,
+        "invalid_state_samples": 0,
+        "physics_max_speed_m_s": 8.835822101694102
+      },
+      "speed": {
+        "all_control_samples": {
+          "actual": {
+            "count": 2283,
+            "nonfinite_count": 0,
+            "p50_m_s": 0.6894594614111765,
+            "p95_m_s": 7.423194643033426,
+            "max_m_s": 8.835320537666759
+          },
+          "reference": {
+            "count": 2283,
+            "nonfinite_count": 0,
+            "p50_m_s": 2.8887347570024945e-15,
+            "p95_m_s": 6.290541860831125,
+            "max_m_s": 7.996472595381897
+          }
+        },
+        "from_first_motion_through_end": {
+          "actual": {
+            "count": 1248,
+            "nonfinite_count": 0,
+            "p50_m_s": 3.061546461486687,
+            "p95_m_s": 7.861579354561205,
+            "max_m_s": 8.835320537666759
+          },
+          "reference": {
+            "count": 1248,
+            "nonfinite_count": 0,
+            "p50_m_s": 2.542302309878193,
+            "p95_m_s": 6.9571254044149216,
+            "max_m_s": 7.996472595381897
+          }
+        }
+      },
+      "planning": {
+        "attempts": 192,
+        "reported_successes": 65,
+        "reported_failures": 127,
+        "commands_committed": 64,
+        "cold_start_commits": 8,
+        "replan_commits": 56,
+        "requests_without_commit": 128,
+        "status_counts": {
+          "SUCCESS_WITH_BACKUP": 20,
+          "REPLAN_OVERTIME": 76,
+          "BACKUP_OPT_FAILED": 1,
+          "ON_BACKUP_WAIT_FOR_REST": 16,
+          "EXP_OPT_FAILED": 13,
+          "EXP_SIM_OVERTIME": 19,
+          "SUCCESS_NO_BACKUP": 44,
+          "SUCCESS_NO_BACKUP_RETAINED_COMMAND": 1,
+          "BACKUP_CORRIDOR_FAILED": 2
+        },
+        "all_requests": {
+          "count": 192,
+          "planner_total": {
+            "count": 192,
+            "nonfinite_count": 0,
+            "p50_s": 0.11866839358117431,
+            "p95_s": 0.24855924489675077,
+            "max_s": 0.3684893420431763
+          },
+          "cycle_including_sensor_and_delivery": {
+            "count": 192,
+            "nonfinite_count": 0,
+            "p50_s": 0.13633584999479353,
+            "p95_s": 0.26844867157051333,
+            "max_s": 0.3745117580983788
+          },
+          "worker_including_sensor": {
+            "count": 192,
+            "nonfinite_count": 0,
+            "p50_s": 0.12096969783306122,
+            "p95_s": 0.2549003162421286,
+            "max_s": 0.3686936020385474
+          }
+        },
+        "requests_with_exp_optimization": {
+          "count": 142,
+          "planner_total": {
+            "count": 142,
+            "nonfinite_count": 0,
+            "p50_s": 0.14134518906939775,
+            "p95_s": 0.26201890932861704,
+            "max_s": 0.3684893420431763
+          },
+          "cycle_including_sensor_and_delivery": {
+            "count": 142,
+            "nonfinite_count": 0,
+            "p50_s": 0.16126486705616117,
+            "p95_s": 0.2856385223916731,
+            "max_s": 0.3745117580983788
+          },
+          "worker_including_sensor": {
+            "count": 142,
+            "nonfinite_count": 0,
+            "p50_s": 0.14389960002154112,
+            "p95_s": 0.27826628438197054,
+            "max_s": 0.3686936020385474
+          }
+        },
+        "modules": {
+          "backup_frontend_s": {
+            "count": 141,
+            "nonfinite_count": 0,
+            "p50_s": 0.0065249300096184015,
+            "p95_s": 0.012846230994910002,
+            "max_s": 0.01784493587911129
+          },
+          "backup_opt_s": {
+            "count": 96,
+            "nonfinite_count": 0,
+            "p50_s": 0.015889463014900684,
+            "p95_s": 0.07355573371751234,
+            "max_s": 0.11948293796740472
+          },
+          "backup_yaw_s": {
+            "count": 94,
+            "nonfinite_count": 0,
+            "p50_s": 0.0003421419532969594,
+            "p95_s": 0.0005591920460574325,
+            "max_s": 0.0009182977955788374
+          },
+          "corridor_s": {
+            "count": 142,
+            "nonfinite_count": 0,
+            "p50_s": 0.03294467355590314,
+            "p95_s": 0.06297205347800626,
+            "max_s": 0.08606239105574787
+          },
+          "exp_frontend_s": {
+            "count": 142,
+            "nonfinite_count": 0,
+            "p50_s": 0.05012599297333509,
+            "p95_s": 0.14786508675897492,
+            "max_s": 0.17702918010763824
+          },
+          "exp_opt_s": {
+            "count": 142,
+            "nonfinite_count": 0,
+            "p50_s": 0.04296201351098716,
+            "p95_s": 0.12085316638695073,
+            "max_s": 0.24647096288390458
+          },
+          "exp_yaw_s": {
+            "count": 110,
+            "nonfinite_count": 0,
+            "p50_s": 0.0003497195430099964,
+            "p95_s": 0.0006453911890275776,
+            "max_s": 0.0012212239671498537
+          },
+          "generate_backup_s": {
+            "count": 134,
+            "nonfinite_count": 0,
+            "p50_s": 0.017990844324231148,
+            "p95_s": 0.07935047502396626,
+            "max_s": 0.10892290016636252
+          },
+          "generate_exp_s": {
+            "count": 173,
+            "nonfinite_count": 0,
+            "p50_s": 0.07419084012508392,
+            "p95_s": 0.20795542798005048,
+            "max_s": 0.34646110283210874
+          },
+          "search_s": {
+            "count": 131,
+            "nonfinite_count": 0,
+            "p50_s": 0.010444118874147534,
+            "p95_s": 0.08949198538903147,
+            "max_s": 0.1355684648733586
+          },
+          "total_s": {
+            "count": 192,
+            "nonfinite_count": 0,
+            "p50_s": 0.11866839358117431,
+            "p95_s": 0.24855924489675077,
+            "max_s": 0.3684893420431763
+          }
+        },
+        "initialization_s": {
+          "point_cloud_mapping_s": 3.603210436878726,
+          "raycast_initialization_s": 0.30279245995916426,
+          "search_initialization_s": 0.7985141088720411,
+          "numeric_initialization_s": 20.794248532969505,
+          "lidar_initialization_s": 0.012459575897082686
+        },
+        "job_running_at_episode_end": true,
+        "submitted_jobs": 193,
+        "returned_jobs": 192
+      },
+      "sensor": {
+        "updates": 24,
+        "lidar": {
+          "horizontal_rays": 440,
+          "vertical_rays": 16,
+          "min_range_m": 0.1,
+          "max_range_m": 100.0,
+          "body_translation_m": [
+            0.0,
+            0.0,
+            0.25
+          ],
+          "requested_update_hz": 2.0,
+          "observed_update_hz": 1.0512483574244413
+        },
+        "sensor": {
+          "count": 24,
+          "nonfinite_count": 0,
+          "p50_s": 0.005201412946917117,
+          "p95_s": 0.00914360978640616,
+          "max_s": 0.010841338895261288
+        },
+        "map_fusion": {
+          "count": 24,
+          "nonfinite_count": 0,
+          "p50_s": 0.01310135459061712,
+          "p95_s": 0.024028860579710445,
+          "max_s": 0.024823380168527365
+        },
+        "sensor_plus_map_fusion": {
+          "count": 24,
+          "nonfinite_count": 0,
+          "p50_s": 0.019830615143291652,
+          "p95_s": 0.029418932879343627,
+          "max_s": 0.03314846009016037
+        }
+      },
+      "backup": {
+        "generation_status_counts": {
+          "SUCCESS": 94,
+          "OPT_FAILED": 2,
+          "NO_NEED": 49,
+          "FINISH": 45,
+          "FAILED": 2
+        },
+        "generated_success_count": 94,
+        "committed_with_backup": 20,
+        "published_flag_entries": 10,
+        "published_flag_intervals": [
+          {
+            "start_s": 10.71,
+            "end_s": 10.81,
+            "duration_s": 0.09999999999999964,
+            "start_position_m": [
+              -12.958932876586914,
+              -6.4254865646362305,
+              0.9734432101249695
+            ],
+            "end_position_m": [
+              -12.481060981750488,
+              -6.266571998596191,
+              0.9989060163497925
+            ]
+          },
+          {
+            "start_s": 11.43,
+            "end_s": 11.82,
+            "duration_s": 0.39000000000000057,
+            "start_position_m": [
+              -10.666268348693848,
+              -3.6350769996643066,
+              0.716032087802887
+            ],
+            "end_position_m": [
+              -9.195305824279785,
+              -1.7388933897018433,
+              0.7694206237792969
+            ]
+          },
+          {
+            "start_s": 12.47,
+            "end_s": 12.48,
+            "duration_s": 0.009999999999999787,
+            "start_position_m": [
+              -8.058420181274414,
+              -2.3896448612213135,
+              0.882636308670044
+            ],
+            "end_position_m": [
+              -8.058420181274414,
+              -2.3896448612213135,
+              0.882636308670044
+            ]
+          },
+          {
+            "start_s": 12.91,
+            "end_s": 13.15,
+            "duration_s": 0.2400000000000002,
+            "start_position_m": [
+              -4.961915016174316,
+              -1.3260746002197266,
+              0.9147421717643738
+            ],
+            "end_position_m": [
+              -3.5556390285491943,
+              -0.014588939025998116,
+              0.8906247019767761
+            ]
+          },
+          {
+            "start_s": 13.41,
+            "end_s": 14.06,
+            "duration_s": 0.6500000000000004,
+            "start_position_m": [
+              -2.5188496112823486,
+              0.6410678625106812,
+              1.0006999969482422
+            ],
+            "end_position_m": [
+              -1.326438307762146,
+              1.575964093208313,
+              1.0260543823242188
+            ]
+          },
+          {
+            "start_s": 14.75,
+            "end_s": 15.49,
+            "duration_s": 0.7400000000000002,
+            "start_position_m": [
+              -0.09222809970378876,
+              2.7629263401031494,
+              0.6180546879768372
+            ],
+            "end_position_m": [
+              2.154778003692627,
+              3.9237582683563232,
+              0.563427209854126
+            ]
+          },
+          {
+            "start_s": 16.060000000000002,
+            "end_s": 16.950000000000003,
+            "duration_s": 0.8900000000000006,
+            "start_position_m": [
+              3.047072172164917,
+              5.413773536682129,
+              0.5414349436759949
+            ],
+            "end_position_m": [
+              5.360247611999512,
+              6.108776569366455,
+              0.7624648809432983
+            ]
+          },
+          {
+            "start_s": 18.82,
+            "end_s": 20.020000000000003,
+            "duration_s": 1.2000000000000028,
+            "start_position_m": [
+              8.396883964538574,
+              4.996664524078369,
+              0.9610255360603333
+            ],
+            "end_position_m": [
+              10.734281539916992,
+              4.0755720138549805,
+              1.6402074098587036
+            ]
+          },
+          {
+            "start_s": 20.190000000000005,
+            "end_s": 21.700000000000003,
+            "duration_s": 1.509999999999998,
+            "start_position_m": [
+              10.77171516418457,
+              4.085340976715088,
+              1.65226149559021
+            ],
+            "end_position_m": [
+              10.036370277404785,
+              4.029633522033691,
+              0.8258481025695801
+            ]
+          },
+          {
+            "start_s": 21.880000000000003,
+            "end_s": 22.200000000000003,
+            "duration_s": 0.3200000000000003,
+            "start_position_m": [
+              10.017836570739746,
+              4.1296162605285645,
+              1.2057043313980103
+            ],
+            "end_position_m": [
+              9.932448387145996,
+              4.447465896606445,
+              1.2480119466781616
+            ]
+          }
+        ]
+      },
+      "pauses": {
+        "count": 0,
+        "total_duration_s": 0,
+        "intervals": []
+      },
+      "handoff": {
+        "max_reference_jump_pvaj": [
+          0.9456291886340777,
+          0.6538549291399127,
+          10.934059430442101,
+          92.77220594972383
+        ],
+        "max_replan_reference_jump_pvaj": [
+          3.582082587194985e-15,
+          1.2560739669470201e-15,
+          1.188509174727471e-14,
+          1.9260126504177777e-13
+        ]
+      },
+      "execution": {
+        "final_fsm_state": "FOLLOW_TRAJ",
+        "control_steps_while_worker_busy": 1170,
+        "physics_steps_while_worker_busy": 4680,
+        "physics_progress_while_planning_sim_s": 11.700000000000001,
+        "max_progress_during_one_solve_sim_s": 0.21000000000000085,
+        "time_contract": "independent CPU planner and continuously advancing Newton simulation; source trajectory timestamps and source commit rules",
+        "reference_contract": "last published command applied over the recorded Newton step; command_time stores its simulation timestamp",
+        "fsm_command_wall_period_s": 0.01,
+        "replan_wall_period_s": 0.066
+      },
+      "scene_provenance": {
+        "source_file": "src/isaac_l2f/planning/corto/table3_maps/dense_reconstructed.json",
+        "source_sha256": "aacf819961e8ec4efce1498c5eb856cce24d0a6abb4e8771be89feee26177c46",
+        "obstacle_count": 180,
+        "occupied_voxels": 103876,
+        "collision_boxes": 1372,
+        "shape": [
+          300,
+          150,
+          30
+        ],
+        "resolution": 0.1,
+        "origin": [
+          -15.0,
+          -7.5,
+          -0.01
+        ],
+        "start": [
+          -14.0,
+          -6.5,
+          0.49
+        ],
+        "goal": [
+          6.8,
+          5.2,
+          0.49
+        ],
+        "asset_sha256": "c86348f10cd39f82117cbb77cacad40e92bb1cf8872346878afb419e960109b4",
+        "provenance": "existing Dense reconstructed; not a claimed original published map"
+      },
+      "resolved_goal_m": [
+        6.825,
+        5.2250000000000005,
+        0.675
+      ],
+      "runtime": {
+        "python": "3.12.14 (main, Sep  1 2026, 14:16:52) [Clang 22.1.3 ]",
+        "torch": "2.11.0+cu130",
+        "gpu": "NVIDIA GeForce RTX 4090",
+        "numpy": "2.5.1",
+        "scipy": "1.17.0",
+        "numba": "0.68.1",
+        "newton": "1.6.1",
+        "isaaclab_release": "3.0.0",
+        "isaaclab_core_distribution": "28.0.0",
+        "openblas_num_threads": "1",
+        "omp_num_threads": "1"
+      },
+      "source_sha256": {
+        "__init__.py": "ada36069cfd84be5937076f33394a6c90879bf5597d964d98f169eb9c86ee2e6",
+        "control/__init__.py": "76b72ef98def510a99ef6816554798c00e91a9cd036ce18f0824034d1502e6f6",
+        "control/actuator.py": "65fd27b91ab4f47369a5dd8196fe7345d15ce930c386119222f2701704e619f1",
+        "control/async_planner.py": "7e2215ba1c1a150803861d7d2f32d1a6b5d95b671db0a8937ea347d369e11ed0",
+        "control/execution.py": "d185c1e2b897e1e1c28d05cf62a952acbe6fdc227b0a590c65b8dbaa3940b993",
+        "control/tracking.py": "903090d2c5c7152e58e992a0e04d6d0fd3b15cb07cec7835b236e5cd1328a18c",
+        "demo.py": "c60467ddc324d253e14d3a3ad091a1085129ebfff8e6e9fdb40bf9f079c3af80",
+        "dynamics/__init__.py": "216145d2c07b15a9ac1acde0a390c733e5b42f773746a58f4c4c4e3ea6e0b569",
+        "dynamics/motor.py": "dc906310f1f14f57d66463d5df180e3086203c69463439ddf803ba3b0464b98e",
+        "dynamics/params.py": "c14e43be614bae41f58cf19932a6fa71768c9479880f72efd6607f721989d2c5",
+        "mapping/__init__.py": "5bc8a24dafa1347973f883d349fca9016da0438c13b1ae9305ff7e7e02438c2b",
+        "mapping/esdf.py": "1b2b058c5ab4e3c4ebb487dbbf098864766c175b85c4b703c49b9c3676d529c2",
+        "mapping/raycast.py": "d6a58cd1519f969fd2fec3740a9ef2958dc6daba01c20086b3dca88f67cc889b",
+        "mapping/rog_map.py": "a2d967ceb5582584dc70eacc1b3b7f45110f8c53356ab780ad38a10c69951556",
+        "planning/corridor.py": "1cd8b23a3e898fe6c6ea1663785eea66886c0d03a8f1d3c8f73aba184a6c6392",
+        "planning/geometry.py": "6e6972deda79eaf8b1b8d880c61ce15fe2f35bdcd78240b022282ec733d57ad2",
+        "planning/pipeline.py": "e001725eb388b18bacfee736f1f3df9790ff1e877dc2a3e9dc0c93b725a62cde",
+        "planning/risp.py": "01d6302391f2bbf2388ac88cba829235b4f9211e762fa7abe24d94a798349756",
+        "planning/search.py": "73fc0cdf423b10fb1fc0f019a8224ca146a2efede8bbb988613c023f14d28949",
+        "planning/search_kernel.py": "f3d1d274a6227af1de47e7ca63bd30f72476c60ddf4b15e7171f90cbb6d19371",
+        "simulation/__init__.py": "a6be1760411cffc53f2bcf2190ee9d3b0dc0d30586c11e237fda39d8db67a5fd",
+        "simulation/environment.py": "69dbfb77fc38fd046275fecdad469a86c721b87a8c7d794bdba3d5da29038dd5",
+        "simulation/lidar.py": "e098423a0e3cd16325e12dfa1f1f301f49b5005957a710e3ed5f9f68887286fb",
+        "simulation/metrics.py": "29923f3446bc5f269fb8e0b24065463c5cf3ea59c4bc2a0b513d761058ba496a",
+        "simulation/scene.py": "582495cdb12d363d5fd02811bb75161594dde072f20fb96ff1096e51e6fa7b55",
+        "simulation/visualization.py": "e248944aeacb2b184b0b0185bf6cd38b3912824c911231c804280056d8250057",
+        "trajectory/__init__.py": "9b081d28a24f9e9416410573411356253474d12f60deb8148e9bfddbc9fd58de",
+        "trajectory/lbfgs.py": "f6d5e64268e065f660512e1da4bee5348b03a3102d4be26a659a7f660e04214e",
+        "trajectory/minco.py": "91df875aa73facf212f1dfbdeeb21ef9db2b511b43e0361480546d68c1566c92",
+        "trajectory/numerics.py": "3f8128e6612799de47cc77f1d9130ff0ec3973fc14b82b882f63d1fd055aeeba",
+        "trajectory/super_opt.py": "b6984c985685cde3ee1b4c75f082e8f1ff9794c19c264ad9249528ad8a9f5970"
+      },
+      "raw_files": {
+        "result.json": {
+          "path": "/home/tong/tongworkspace/projects/aerial/Isaac-PathCover/results/super_risp_validation_20261115/dense/seed005/result.json",
+          "repository_relative_path": "results/super_risp_validation_20261115/dense/seed005/result.json",
+          "bytes": 11688,
+          "sha256": "c0856509e01de922872ca58a03760217d48d978e53785271a2f53518eb653aa9"
+        },
+        "flight.npz": {
+          "path": "/home/tong/tongworkspace/projects/aerial/Isaac-PathCover/results/super_risp_validation_20261115/dense/seed005/flight.npz",
+          "repository_relative_path": "results/super_risp_validation_20261115/dense/seed005/flight.npz",
+          "bytes": 517510,
+          "sha256": "df637430fe8a9995ca7e6977788b6c7e69f052c28c3ce32bf32f689c3ac78a9f"
+        },
+        "planning.json": {
+          "path": "/home/tong/tongworkspace/projects/aerial/Isaac-PathCover/results/super_risp_validation_20261115/dense/seed005/planning.json",
+          "repository_relative_path": "results/super_risp_validation_20261115/dense/seed005/planning.json",
+          "bytes": 355066,
+          "sha256": "26f28a99e488b2e64fada048bc34157004495e0922b52af69bd27dc0030f641f"
+        },
+        "mapping.json": {
+          "path": "/home/tong/tongworkspace/projects/aerial/Isaac-PathCover/results/super_risp_validation_20261115/dense/seed005/mapping.json",
+          "repository_relative_path": "results/super_risp_validation_20261115/dense/seed005/mapping.json",
+          "bytes": 12746,
+          "sha256": "a8d0ebbcca29e2f20ae76d9e74d13f06f2e1399916a06b839897060c4faa0e3a"
+        },
+        "timeline.json": {
+          "path": "/home/tong/tongworkspace/projects/aerial/Isaac-PathCover/results/super_risp_validation_20261115/dense/seed005/timeline.json",
+          "repository_relative_path": "results/super_risp_validation_20261115/dense/seed005/timeline.json",
+          "bytes": 6709,
+          "sha256": "842da85fb033b58db4c77d168595507f189a2cb79ec9ccfd75a27b65f6f0a870"
+        },
+        "fsm.json": {
+          "path": "/home/tong/tongworkspace/projects/aerial/Isaac-PathCover/results/super_risp_validation_20261115/dense/seed005/fsm.json",
+          "repository_relative_path": "results/super_risp_validation_20261115/dense/seed005/fsm.json",
+          "bytes": 1952,
+          "sha256": "465198f136411eace4ea81c60a1fa133969252440c10299c74d72c788b673aed"
+        },
+        "source_hashes.json": {
+          "path": "/home/tong/tongworkspace/projects/aerial/Isaac-PathCover/results/super_risp_validation_20261115/dense/seed005/source_hashes.json",
+          "repository_relative_path": "results/super_risp_validation_20261115/dense/seed005/source_hashes.json",
+          "bytes": 2898,
+          "sha256": "61b827e926c27f77a4517fc35887020497fd1df616727dad97d31aac0903ba10"
+        }
+      }
+    },
+    {
+      "scene": "medium",
+      "seed": 0,
+      "run_directory": "/home/tong/tongworkspace/projects/aerial/Isaac-PathCover/results/super_risp_validation_20261115/medium/seed000",
+      "outcome": {
+        "arrived": false,
+        "collision": false,
+        "out_of_bounds": true,
+        "collision_free_arrival": false,
+        "goal_error_m": 2.393612341125366,
+        "resolved_goal_error_m": 2.3807603797247023,
+        "goal_resolution_shift_m": 0.01658312395177658,
+        "arrival_rule": "within 0.1 m of the source-resolved goal and below 0.3 m/s for 0.5 s",
+        "finite": true,
+        "collision_check_complete": true,
+        "collision_physics_samples": 0,
+        "collision_unchecked_physics_samples": 0,
+        "out_of_bounds_physics_samples": 67,
+        "contact_force_max_N": 0.0
+      },
+      "motion": {
+        "duration_sim_s": 20.930000000000003,
+        "wall_time_s": 38.366893106140196,
+        "planner_ready_sim_s": 15.08,
+        "first_motion_s": 15.38,
+        "elapsed_from_first_motion_s": 5.5500000000000025,
+        "time_above_motion_threshold_s": 5.520000000000005,
+        "diagnostic_definition": {
+          "slow_speed_m_s": 0.2,
+          "minimum_interval_s": 0.2,
+          "minimum_goal_distance_m": 1.0,
+          "motion_onset_speed_m_s": 0.5
+        },
+        "control_samples": 2093,
+        "valid_state_samples": 2093,
+        "invalid_state_samples": 0,
+        "physics_max_speed_m_s": 9.51062956972873
+      },
+      "speed": {
+        "all_control_samples": {
+          "actual": {
+            "count": 2093,
+            "nonfinite_count": 0,
+            "p50_m_s": 3.524810463221353e-07,
+            "p95_m_s": 8.29482726197735,
+            "max_m_s": 9.51062956972873
+          },
+          "reference": {
+            "count": 2093,
+            "nonfinite_count": 0,
+            "p50_m_s": 0.0,
+            "p95_m_s": 7.797383450068627,
+            "max_m_s": 8.000071035122808
+          }
+        },
+        "from_first_motion_through_end": {
+          "actual": {
+            "count": 556,
+            "nonfinite_count": 0,
+            "p50_m_s": 5.324424395513079,
+            "p95_m_s": 9.206666063925027,
+            "max_m_s": 9.51062956972873
+          },
+          "reference": {
+            "count": 556,
+            "nonfinite_count": 0,
+            "p50_m_s": 4.968715931376607,
+            "p95_m_s": 7.986555552108537,
+            "max_m_s": 8.000071035122808
+          }
+        }
+      },
+      "planning": {
+        "attempts": 133,
+        "reported_successes": 100,
+        "reported_failures": 33,
+        "commands_committed": 97,
+        "cold_start_commits": 3,
+        "replan_commits": 94,
+        "requests_without_commit": 36,
+        "status_counts": {
+          "SUCCESS_WITH_BACKUP": 21,
+          "EXP_OPT_FAILED": 6,
+          "REPLAN_OVERTIME": 24,
+          "BACKUP_CORRIDOR_FAILED": 1,
+          "BACKUP_OPT_FAILED": 2,
+          "SUCCESS_NO_BACKUP": 76,
+          "SUCCESS_NO_BACKUP_RETAINED_COMMAND": 3
+        },
+        "all_requests": {
+          "count": 133,
+          "planner_total": {
+            "count": 133,
+            "nonfinite_count": 0,
+            "p50_s": 0.013142007868736982,
+            "p95_s": 0.15226922524161637,
+            "max_s": 0.2917533088475466
+          },
+          "cycle_including_sensor_and_delivery": {
+            "count": 133,
+            "nonfinite_count": 0,
+            "p50_s": 0.02584774000570178,
+            "p95_s": 0.18411063891835494,
+            "max_s": 0.3135701399296522
+          },
+          "worker_including_sensor": {
+            "count": 133,
+            "nonfinite_count": 0,
+            "p50_s": 0.018862419994547963,
+            "p95_s": 0.16731349523179215,
+            "max_s": 0.2988745120819658
+          }
+        },
+        "requests_with_exp_optimization": {
+          "count": 74,
+          "planner_total": {
+            "count": 74,
+            "nonfinite_count": 0,
+            "p50_s": 0.07810089096892625,
+            "p95_s": 0.20187404052121558,
+            "max_s": 0.2917533088475466
+          },
+          "cycle_including_sensor_and_delivery": {
+            "count": 74,
+            "nonfinite_count": 0,
+            "p50_s": 0.09581247600726783,
+            "p95_s": 0.21960477662505573,
+            "max_s": 0.3135701399296522
+          },
+          "worker_including_sensor": {
+            "count": 74,
+            "nonfinite_count": 0,
+            "p50_s": 0.08006252150516957,
+            "p95_s": 0.20216487878933542,
+            "max_s": 0.2988745120819658
+          }
+        },
+        "modules": {
+          "backup_frontend_s": {
+            "count": 122,
+            "nonfinite_count": 0,
+            "p50_s": 0.003945756587199867,
+            "p95_s": 0.009783052699640393,
+            "max_s": 0.013862063875421882
+          },
+          "backup_opt_s": {
+            "count": 45,
+            "nonfinite_count": 0,
+            "p50_s": 0.01002379390411079,
+            "p95_s": 0.06947057358920565,
+            "max_s": 0.2005033770110458
+          },
+          "backup_yaw_s": {
+            "count": 43,
+            "nonfinite_count": 0,
+            "p50_s": 0.00031721009872853756,
+            "p95_s": 0.0007062801625579595,
+            "max_s": 0.0008500311523675919
+          },
+          "corridor_s": {
+            "count": 74,
+            "nonfinite_count": 0,
+            "p50_s": 0.01713202241808176,
+            "p95_s": 0.02752681195270268,
+            "max_s": 0.03435013513080776
+          },
+          "exp_frontend_s": {
+            "count": 74,
+            "nonfinite_count": 0,
+            "p50_s": 0.019887401955202222,
+            "p95_s": 0.033652990811970034,
+            "max_s": 0.044806788209825754
+          },
+          "exp_opt_s": {
+            "count": 74,
+            "nonfinite_count": 0,
+            "p50_s": 0.032066655927337706,
+            "p95_s": 0.10938526084646577,
+            "max_s": 0.17281687399372458
+          },
+          "exp_yaw_s": {
+            "count": 68,
+            "nonfinite_count": 0,
+            "p50_s": 0.0003392850048840046,
+            "p95_s": 0.0006529600010253488,
+            "max_s": 0.0010364470072090626
+          },
+          "generate_backup_s": {
+            "count": 124,
+            "nonfinite_count": 0,
+            "p50_s": 0.003994900034740567,
+            "p95_s": 0.04161272164201363,
+            "max_s": 0.20934354793280363
+          },
+          "generate_exp_s": {
+            "count": 125,
+            "nonfinite_count": 0,
+            "p50_s": 0.01586445397697389,
+            "p95_s": 0.10769013045355676,
+            "max_s": 0.16154918004758656
+          },
+          "search_s": {
+            "count": 56,
+            "nonfinite_count": 0,
+            "p50_s": 0.0007975510088726878,
+            "p95_s": 0.0022459683241322637,
+            "max_s": 0.005370359867811203
+          },
+          "total_s": {
+            "count": 133,
+            "nonfinite_count": 0,
+            "p50_s": 0.013142007868736982,
+            "p95_s": 0.15226922524161637,
+            "max_s": 0.2917533088475466
+          }
+        },
+        "initialization_s": {
+          "point_cloud_mapping_s": 1.5429644579999149,
+          "raycast_initialization_s": 0.2885506709571928,
+          "search_initialization_s": 0.08335729502141476,
+          "numeric_initialization_s": 23.306345510995016,
+          "lidar_initialization_s": 0.011738809058442712
+        },
+        "job_running_at_episode_end": true,
+        "submitted_jobs": 134,
+        "returned_jobs": 133
+      },
+      "sensor": {
+        "updates": 11,
+        "lidar": {
+          "horizontal_rays": 440,
+          "vertical_rays": 16,
+          "min_range_m": 0.1,
+          "max_range_m": 100.0,
+          "body_translation_m": [
+            0.0,
+            0.0,
+            0.25
+          ],
+          "requested_update_hz": 2.0,
+          "observed_update_hz": 0.5255613951266125
+        },
+        "sensor": {
+          "count": 11,
+          "nonfinite_count": 0,
+          "p50_s": 0.007151288911700249,
+          "p95_s": 0.011711869039572775,
+          "max_s": 0.012728071073070168
+        },
+        "map_fusion": {
+          "count": 11,
+          "nonfinite_count": 0,
+          "p50_s": 0.01275123585946858,
+          "p95_s": 0.03815548005513847,
+          "max_s": 0.04891836713068187
+        },
+        "sensor_plus_map_fusion": {
+          "count": 11,
+          "nonfinite_count": 0,
+          "p50_s": 0.020043832948431373,
+          "p95_s": 0.049867349094711244,
+          "max_s": 0.06164643820375204
+        }
+      },
+      "backup": {
+        "generation_status_counts": {
+          "SUCCESS": 43,
+          "NO_NEED": 9,
+          "FAILED": 2,
+          "OPT_FAILED": 2,
+          "FINISH": 77
+        },
+        "generated_success_count": 43,
+        "committed_with_backup": 21,
+        "published_flag_entries": 2,
+        "published_flag_intervals": [
+          {
+            "start_s": 16.53,
+            "end_s": 16.66,
+            "duration_s": 0.129999999999999,
+            "start_position_m": [
+              -3.2717673778533936,
+              -2.579758405685425,
+              1.1472641229629517
+            ],
+            "end_position_m": [
+              -2.333606719970703,
+              -2.4861066341400146,
+              1.075363278388977
+            ]
+          },
+          {
+            "start_s": 17.410000000000004,
+            "end_s": 17.67,
+            "duration_s": 0.259999999999998,
+            "start_position_m": [
+              2.0458786487579346,
+              -3.24666428565979,
+              1.2056738138198853
+            ],
+            "end_position_m": [
+              4.168820858001709,
+              -3.0981714725494385,
+              0.8024005889892578
+            ]
+          }
+        ]
+      },
+      "pauses": {
+        "count": 0,
+        "total_duration_s": 0,
+        "intervals": []
+      },
+      "handoff": {
+        "max_reference_jump_pvaj": [
+          0.6873850843896728,
+          0.4887122845883501,
+          9.239507521511896,
+          85.97746337143272
+        ],
+        "max_replan_reference_jump_pvaj": [
+          3.580361673049448e-15,
+          1.831026719408895e-15,
+          1.8832275663208235e-14,
+          5.775484856810238e-13
+        ]
+      },
+      "execution": {
+        "final_fsm_state": "GENERATE_TRAJ",
+        "control_steps_while_worker_busy": 440,
+        "physics_steps_while_worker_busy": 1760,
+        "physics_progress_while_planning_sim_s": 4.4,
+        "max_progress_during_one_solve_sim_s": 0.16000000000000014,
+        "time_contract": "independent CPU planner and continuously advancing Newton simulation; source trajectory timestamps and source commit rules",
+        "reference_contract": "last published command applied over the recorded Newton step; command_time stores its simulation timestamp",
+        "fsm_command_wall_period_s": 0.01,
+        "replan_wall_period_s": 0.066
+      },
+      "scene_provenance": {
+        "source_file": "src/isaac_l2f/planning/corto/medium_obstacles.json",
+        "source_sha256": "e7cd31aa9b3e079bb2e86f75d88a332f07561f35b8b668883adb787233424d46",
+        "obstacle_count": 100,
+        "occupied_voxels": 59870,
+        "collision_boxes": 762,
+        "shape": [
+          300,
+          150,
+          30
+        ],
+        "resolution": 0.1,
+        "origin": [
+          -15.0,
+          -7.5,
+          -0.01
+        ],
+        "start": [
+          -11.04,
+          -2.11,
+          1.28
+        ],
+        "goal": [
+          12.68,
+          -3.47,
+          1.04
+        ],
+        "asset_sha256": "2c67742d407728b86109df7e1f2689c916ce5c8111ca2a55996871becaae7571",
+        "provenance": "original Medium"
+      },
+      "resolved_goal_m": [
+        12.675,
+        -3.475,
+        1.0250000000000001
+      ],
+      "runtime": {
+        "python": "3.12.14 (main, Sep  1 2026, 14:16:52) [Clang 22.1.3 ]",
+        "torch": "2.11.0+cu130",
+        "gpu": "NVIDIA GeForce RTX 4090",
+        "numpy": "2.5.1",
+        "scipy": "1.17.0",
+        "numba": "0.68.1",
+        "newton": "1.6.1",
+        "isaaclab_release": "3.0.0",
+        "isaaclab_core_distribution": "28.0.0",
+        "openblas_num_threads": "1",
+        "omp_num_threads": "1"
+      },
+      "source_sha256": {
+        "__init__.py": "ada36069cfd84be5937076f33394a6c90879bf5597d964d98f169eb9c86ee2e6",
+        "control/__init__.py": "76b72ef98def510a99ef6816554798c00e91a9cd036ce18f0824034d1502e6f6",
+        "control/actuator.py": "65fd27b91ab4f47369a5dd8196fe7345d15ce930c386119222f2701704e619f1",
+        "control/async_planner.py": "ecfce6c9be11b9450499dfa644a4136e9f54111fd086eaddd5ba841433be9a82",
+        "control/execution.py": "d185c1e2b897e1e1c28d05cf62a952acbe6fdc227b0a590c65b8dbaa3940b993",
+        "control/tracking.py": "903090d2c5c7152e58e992a0e04d6d0fd3b15cb07cec7835b236e5cd1328a18c",
+        "demo.py": "85a5860eaa0346379b430b081a050773d64338142b20ddd82e3253236abf3ade",
+        "dynamics/__init__.py": "216145d2c07b15a9ac1acde0a390c733e5b42f773746a58f4c4c4e3ea6e0b569",
+        "dynamics/motor.py": "dc906310f1f14f57d66463d5df180e3086203c69463439ddf803ba3b0464b98e",
+        "dynamics/params.py": "c14e43be614bae41f58cf19932a6fa71768c9479880f72efd6607f721989d2c5",
+        "mapping/__init__.py": "5bc8a24dafa1347973f883d349fca9016da0438c13b1ae9305ff7e7e02438c2b",
+        "mapping/esdf.py": "1b2b058c5ab4e3c4ebb487dbbf098864766c175b85c4b703c49b9c3676d529c2",
+        "mapping/raycast.py": "d6a58cd1519f969fd2fec3740a9ef2958dc6daba01c20086b3dca88f67cc889b",
+        "mapping/rog_map.py": "a2d967ceb5582584dc70eacc1b3b7f45110f8c53356ab780ad38a10c69951556",
+        "planning/corridor.py": "1cd8b23a3e898fe6c6ea1663785eea66886c0d03a8f1d3c8f73aba184a6c6392",
+        "planning/geometry.py": "6e6972deda79eaf8b1b8d880c61ce15fe2f35bdcd78240b022282ec733d57ad2",
+        "planning/pipeline.py": "e001725eb388b18bacfee736f1f3df9790ff1e877dc2a3e9dc0c93b725a62cde",
+        "planning/risp.py": "01d6302391f2bbf2388ac88cba829235b4f9211e762fa7abe24d94a798349756",
+        "planning/search.py": "73fc0cdf423b10fb1fc0f019a8224ca146a2efede8bbb988613c023f14d28949",
+        "planning/search_kernel.py": "f3d1d274a6227af1de47e7ca63bd30f72476c60ddf4b15e7171f90cbb6d19371",
+        "simulation/__init__.py": "a6be1760411cffc53f2bcf2190ee9d3b0dc0d30586c11e237fda39d8db67a5fd",
+        "simulation/environment.py": "69dbfb77fc38fd046275fecdad469a86c721b87a8c7d794bdba3d5da29038dd5",
+        "simulation/lidar.py": "e098423a0e3cd16325e12dfa1f1f301f49b5005957a710e3ed5f9f68887286fb",
+        "simulation/metrics.py": "29923f3446bc5f269fb8e0b24065463c5cf3ea59c4bc2a0b513d761058ba496a",
+        "simulation/scene.py": "582495cdb12d363d5fd02811bb75161594dde072f20fb96ff1096e51e6fa7b55",
+        "simulation/visualization.py": "e248944aeacb2b184b0b0185bf6cd38b3912824c911231c804280056d8250057",
+        "trajectory/__init__.py": "9b081d28a24f9e9416410573411356253474d12f60deb8148e9bfddbc9fd58de",
+        "trajectory/lbfgs.py": "f6d5e64268e065f660512e1da4bee5348b03a3102d4be26a659a7f660e04214e",
+        "trajectory/minco.py": "91df875aa73facf212f1dfbdeeb21ef9db2b511b43e0361480546d68c1566c92",
+        "trajectory/numerics.py": "3f8128e6612799de47cc77f1d9130ff0ec3973fc14b82b882f63d1fd055aeeba",
+        "trajectory/super_opt.py": "b6984c985685cde3ee1b4c75f082e8f1ff9794c19c264ad9249528ad8a9f5970"
+      },
+      "raw_files": {
+        "result.json": {
+          "path": "/home/tong/tongworkspace/projects/aerial/Isaac-PathCover/results/super_risp_validation_20261115/medium/seed000/result.json",
+          "repository_relative_path": "results/super_risp_validation_20261115/medium/seed000/result.json",
+          "bytes": 8524,
+          "sha256": "15c13685bfbcefda363914af11193da6af096541e958d8a0a96de8b5e52c472f"
+        },
+        "flight.npz": {
+          "path": "/home/tong/tongworkspace/projects/aerial/Isaac-PathCover/results/super_risp_validation_20261115/medium/seed000/flight.npz",
+          "repository_relative_path": "results/super_risp_validation_20261115/medium/seed000/flight.npz",
+          "bytes": 550165,
+          "sha256": "cb5a458a75796cbd5a6444213d5a1eabd8bd539183a07ea31b011f87f99188c4"
+        },
+        "planning.json": {
+          "path": "/home/tong/tongworkspace/projects/aerial/Isaac-PathCover/results/super_risp_validation_20261115/medium/seed000/planning.json",
+          "repository_relative_path": "results/super_risp_validation_20261115/medium/seed000/planning.json",
+          "bytes": 229861,
+          "sha256": "d69be8b74cce06110752d0a69f84fa8b6a4ca0f588e2f52aa5ec1a52ba74587e"
+        },
+        "mapping.json": {
+          "path": "/home/tong/tongworkspace/projects/aerial/Isaac-PathCover/results/super_risp_validation_20261115/medium/seed000/mapping.json",
+          "repository_relative_path": "results/super_risp_validation_20261115/medium/seed000/mapping.json",
+          "bytes": 5885,
+          "sha256": "a56f0ac7bd31007cb8e621c3ff8e525f0c429e2d101f029d37746d629fff63ac"
+        },
+        "timeline.json": {
+          "path": "/home/tong/tongworkspace/projects/aerial/Isaac-PathCover/results/super_risp_validation_20261115/medium/seed000/timeline.json",
+          "repository_relative_path": "results/super_risp_validation_20261115/medium/seed000/timeline.json",
+          "bytes": 3859,
+          "sha256": "beddbab5bce1471c99b0f2d985144d09ae693b6a55877404637421a6f92251f8"
+        },
+        "fsm.json": {
+          "path": "/home/tong/tongworkspace/projects/aerial/Isaac-PathCover/results/super_risp_validation_20261115/medium/seed000/fsm.json",
+          "repository_relative_path": "results/super_risp_validation_20261115/medium/seed000/fsm.json",
+          "bytes": 927,
+          "sha256": "76b78bdeee221b497ee69dab9d2882b0ac8a104731f718d79b7ce590018aef0f"
+        },
+        "source_hashes.json": {
+          "path": "/home/tong/tongworkspace/projects/aerial/Isaac-PathCover/results/super_risp_validation_20261115/medium/seed000/source_hashes.json",
+          "repository_relative_path": "results/super_risp_validation_20261115/medium/seed000/source_hashes.json",
+          "bytes": 2898,
+          "sha256": "60a0b59d791db34cb84f95c7db70be6dcec2fa5d02bc917349c29054b12d8635"
+        }
+      }
+    },
+    {
+      "scene": "medium",
+      "seed": 1,
+      "run_directory": "/home/tong/tongworkspace/projects/aerial/Isaac-PathCover/results/super_risp_validation_20261115/medium/seed001",
+      "outcome": {
+        "arrived": true,
+        "collision": true,
+        "out_of_bounds": true,
+        "collision_free_arrival": false,
+        "goal_error_m": 0.02493769262607425,
+        "resolved_goal_error_m": 0.009774164720490497,
+        "goal_resolution_shift_m": 0.01658312395177658,
+        "arrival_rule": "within 0.1 m of the source-resolved goal and below 0.3 m/s for 0.5 s",
+        "finite": true,
+        "collision_check_complete": true,
+        "collision_physics_samples": 6,
+        "collision_unchecked_physics_samples": 0,
+        "out_of_bounds_physics_samples": 267,
+        "contact_force_max_N": 173.3757781982422
+      },
+      "motion": {
+        "duration_sim_s": 19.500000000000004,
+        "wall_time_s": 41.73181545198895,
+        "planner_ready_sim_s": 10.290000000000001,
+        "first_motion_s": 10.55,
+        "elapsed_from_first_motion_s": 8.950000000000003,
+        "time_above_motion_threshold_s": 8.240000000000002,
+        "diagnostic_definition": {
+          "slow_speed_m_s": 0.2,
+          "minimum_interval_s": 0.2,
+          "minimum_goal_distance_m": 1.0,
+          "motion_onset_speed_m_s": 0.5
+        },
+        "control_samples": 1950,
+        "valid_state_samples": 1950,
+        "invalid_state_samples": 0,
+        "physics_max_speed_m_s": 8.675816028739138
+      },
+      "speed": {
+        "all_control_samples": {
+          "actual": {
+            "count": 1950,
+            "nonfinite_count": 0,
+            "p50_m_s": 4.1670169933431537e-07,
+            "p95_m_s": 8.077876665423696,
+            "max_m_s": 8.675278147487255
+          },
+          "reference": {
+            "count": 1950,
+            "nonfinite_count": 0,
+            "p50_m_s": 0.0,
+            "p95_m_s": 7.687069659864628,
+            "max_m_s": 8.00005469239391
+          }
+        },
+        "from_first_motion_through_end": {
+          "actual": {
+            "count": 896,
+            "nonfinite_count": 0,
+            "p50_m_s": 3.0141246958666303,
+            "p95_m_s": 8.515117111842017,
+            "max_m_s": 8.675278147487255
+          },
+          "reference": {
+            "count": 896,
+            "nonfinite_count": 0,
+            "p50_m_s": 1.479861158764597,
+            "p95_m_s": 7.8562351650090285,
+            "max_m_s": 8.00005469239391
+          }
+        }
+      },
+      "planning": {
+        "attempts": 273,
+        "reported_successes": 131,
+        "reported_failures": 142,
+        "commands_committed": 126,
+        "cold_start_commits": 5,
+        "replan_commits": 121,
+        "requests_without_commit": 147,
+        "status_counts": {
+          "SUCCESS_WITH_BACKUP": 16,
+          "REPLAN_OVERTIME": 30,
+          "BACKUP_OPT_FAILED": 6,
+          "BACKUP_CORRIDOR_FAILED": 3,
+          "SUCCESS_NO_BACKUP": 110,
+          "EXP_OPT_FAILED": 29,
+          "SUCCESS_NO_BACKUP_RETAINED_COMMAND": 5,
+          "CORRIDOR_FAILED": 69,
+          "BACKUP_EMPTY_VISIBLE_INTERVAL": 5
+        },
+        "all_requests": {
+          "count": 273,
+          "planner_total": {
+            "count": 273,
+            "nonfinite_count": 0,
+            "p50_s": 0.005988691933453083,
+            "p95_s": 0.12589284898713227,
+            "max_s": 0.2774031809531152
+          },
+          "cycle_including_sensor_and_delivery": {
+            "count": 273,
+            "nonfinite_count": 0,
+            "p50_s": 0.022784239845350385,
+            "p95_s": 0.1401309018488973,
+            "max_s": 0.2796605690382421
+          },
+          "worker_including_sensor": {
+            "count": 273,
+            "nonfinite_count": 0,
+            "p50_s": 0.006537554087117314,
+            "p95_s": 0.1292855267878621,
+            "max_s": 0.2778327870182693
+          }
+        },
+        "requests_with_exp_optimization": {
+          "count": 110,
+          "planner_total": {
+            "count": 110,
+            "nonfinite_count": 0,
+            "p50_s": 0.033705957466736436,
+            "p95_s": 0.15299493896309285,
+            "max_s": 0.2774031809531152
+          },
+          "cycle_including_sensor_and_delivery": {
+            "count": 110,
+            "nonfinite_count": 0,
+            "p50_s": 0.04663494403939694,
+            "p95_s": 0.17725176084786648,
+            "max_s": 0.2796605690382421
+          },
+          "worker_including_sensor": {
+            "count": 110,
+            "nonfinite_count": 0,
+            "p50_s": 0.034221997018903494,
+            "p95_s": 0.16640079215867437,
+            "max_s": 0.2778327870182693
+          }
+        },
+        "modules": {
+          "backup_frontend_s": {
+            "count": 161,
+            "nonfinite_count": 0,
+            "p50_s": 0.0035018930211663246,
+            "p95_s": 0.009917861083522439,
+            "max_s": 0.014641764108091593
+          },
+          "backup_opt_s": {
+            "count": 51,
+            "nonfinite_count": 0,
+            "p50_s": 0.007683444069698453,
+            "p95_s": 0.03145959845278412,
+            "max_s": 0.04272479214705527
+          },
+          "backup_yaw_s": {
+            "count": 44,
+            "nonfinite_count": 0,
+            "p50_s": 0.00034529948607087135,
+            "p95_s": 0.0006419840385206045,
+            "max_s": 0.0009595400188118219
+          },
+          "corridor_s": {
+            "count": 110,
+            "nonfinite_count": 0,
+            "p50_s": 0.012008497607894242,
+            "p95_s": 0.026885722845327108,
+            "max_s": 0.0504443091340363
+          },
+          "exp_frontend_s": {
+            "count": 110,
+            "nonfinite_count": 0,
+            "p50_s": 0.014704147004522383,
+            "p95_s": 0.0330470307613723,
+            "max_s": 0.060874581104144454
+          },
+          "exp_opt_s": {
+            "count": 110,
+            "nonfinite_count": 0,
+            "p50_s": 0.010537990485318005,
+            "p95_s": 0.10095551768317818,
+            "max_s": 0.24011286813765764
+          },
+          "exp_yaw_s": {
+            "count": 81,
+            "nonfinite_count": 0,
+            "p50_s": 0.00036601186729967594,
+            "p95_s": 0.0006402530707418919,
+            "max_s": 0.001470354851335287
+          },
+          "generate_backup_s": {
+            "count": 164,
+            "nonfinite_count": 0,
+            "p50_s": 0.0037751670461148024,
+            "p95_s": 0.0275873373961076,
+            "max_s": 0.051209256052970886
+          },
+          "generate_exp_s": {
+            "count": 165,
+            "nonfinite_count": 0,
+            "p50_s": 0.00010667811147868633,
+            "p95_s": 0.11589120393618942,
+            "max_s": 0.26106804492883384
+          },
+          "search_s": {
+            "count": 166,
+            "nonfinite_count": 0,
+            "p50_s": 0.0019083365332335234,
+            "p95_s": 0.0035072093014605343,
+            "max_s": 0.006662623956799507
+          },
+          "total_s": {
+            "count": 273,
+            "nonfinite_count": 0,
+            "p50_s": 0.005988691933453083,
+            "p95_s": 0.12589284898713227,
+            "max_s": 0.2774031809531152
+          }
+        },
+        "initialization_s": {
+          "point_cloud_mapping_s": 1.3324104030616581,
+          "raycast_initialization_s": 0.2318013501353562,
+          "search_initialization_s": 0.06836981303058565,
+          "numeric_initialization_s": 19.870412214891985,
+          "lidar_initialization_s": 0.012383488938212395
+        },
+        "job_running_at_episode_end": false,
+        "submitted_jobs": 273,
+        "returned_jobs": 273
+      },
+      "sensor": {
+        "updates": 16,
+        "lidar": {
+          "horizontal_rays": 440,
+          "vertical_rays": 16,
+          "min_range_m": 0.1,
+          "max_range_m": 100.0,
+          "body_translation_m": [
+            0.0,
+            0.0,
+            0.25
+          ],
+          "requested_update_hz": 2.0,
+          "observed_update_hz": 0.8205128205128204
+        },
+        "sensor": {
+          "count": 16,
+          "nonfinite_count": 0,
+          "p50_s": 0.006032285979017615,
+          "p95_s": 0.010928824834991246,
+          "max_s": 0.014953485922887921
+        },
+        "map_fusion": {
+          "count": 16,
+          "nonfinite_count": 0,
+          "p50_s": 0.009410062339156866,
+          "p95_s": 0.027005736716091633,
+          "max_s": 0.03615959989838302
+        },
+        "sensor_plus_map_fusion": {
+          "count": 16,
+          "nonfinite_count": 0,
+          "p50_s": 0.018346031429246068,
+          "p95_s": 0.03705633245408535,
+          "max_s": 0.05111308582127094
+        }
+      },
+      "backup": {
+        "generation_status_counts": {
+          "SUCCESS": 44,
+          "FAILED": 9,
+          "OPT_FAILED": 7,
+          "FINISH": 110,
+          "NO_NEED": 103
+        },
+        "generated_success_count": 44,
+        "committed_with_backup": 16,
+        "published_flag_entries": 0,
+        "published_flag_intervals": []
+      },
+      "pauses": {
+        "count": 0,
+        "total_duration_s": 0,
+        "intervals": []
+      },
+      "handoff": {
+        "max_reference_jump_pvaj": [
+          0.9974958072093745,
+          0.13960189626976055,
+          4.680763514364982,
+          90.95925497363456
+        ],
+        "max_replan_reference_jump_pvaj": [
+          5.407139474782739e-15,
+          2.7012892057857038e-15,
+          5.962218089060634e-15,
+          3.891802844472395e-14
+        ]
+      },
+      "execution": {
+        "final_fsm_state": "WAIT_GOAL",
+        "control_steps_while_worker_busy": 559,
+        "physics_steps_while_worker_busy": 2236,
+        "physics_progress_while_planning_sim_s": 5.59,
+        "max_progress_during_one_solve_sim_s": 0.13000000000000078,
+        "time_contract": "independent CPU planner and continuously advancing Newton simulation; source trajectory timestamps and source commit rules",
+        "reference_contract": "last published command applied over the recorded Newton step; command_time stores its simulation timestamp",
+        "fsm_command_wall_period_s": 0.01,
+        "replan_wall_period_s": 0.066
+      },
+      "scene_provenance": {
+        "source_file": "src/isaac_l2f/planning/corto/medium_obstacles.json",
+        "source_sha256": "e7cd31aa9b3e079bb2e86f75d88a332f07561f35b8b668883adb787233424d46",
+        "obstacle_count": 100,
+        "occupied_voxels": 59870,
+        "collision_boxes": 762,
+        "shape": [
+          300,
+          150,
+          30
+        ],
+        "resolution": 0.1,
+        "origin": [
+          -15.0,
+          -7.5,
+          -0.01
+        ],
+        "start": [
+          -11.04,
+          -2.11,
+          1.28
+        ],
+        "goal": [
+          12.68,
+          -3.47,
+          1.04
+        ],
+        "asset_sha256": "2c67742d407728b86109df7e1f2689c916ce5c8111ca2a55996871becaae7571",
+        "provenance": "original Medium"
+      },
+      "resolved_goal_m": [
+        12.675,
+        -3.475,
+        1.0250000000000001
+      ],
+      "runtime": {
+        "python": "3.12.14 (main, Sep  1 2026, 14:16:52) [Clang 22.1.3 ]",
+        "torch": "2.11.0+cu130",
+        "gpu": "NVIDIA GeForce RTX 4090",
+        "numpy": "2.5.1",
+        "scipy": "1.17.0",
+        "numba": "0.68.1",
+        "newton": "1.6.1",
+        "isaaclab_release": "3.0.0",
+        "isaaclab_core_distribution": "28.0.0",
+        "openblas_num_threads": "1",
+        "omp_num_threads": "1"
+      },
+      "source_sha256": {
+        "__init__.py": "ada36069cfd84be5937076f33394a6c90879bf5597d964d98f169eb9c86ee2e6",
+        "control/__init__.py": "76b72ef98def510a99ef6816554798c00e91a9cd036ce18f0824034d1502e6f6",
+        "control/actuator.py": "65fd27b91ab4f47369a5dd8196fe7345d15ce930c386119222f2701704e619f1",
+        "control/async_planner.py": "ecfce6c9be11b9450499dfa644a4136e9f54111fd086eaddd5ba841433be9a82",
+        "control/execution.py": "d185c1e2b897e1e1c28d05cf62a952acbe6fdc227b0a590c65b8dbaa3940b993",
+        "control/tracking.py": "903090d2c5c7152e58e992a0e04d6d0fd3b15cb07cec7835b236e5cd1328a18c",
+        "demo.py": "85a5860eaa0346379b430b081a050773d64338142b20ddd82e3253236abf3ade",
+        "dynamics/__init__.py": "216145d2c07b15a9ac1acde0a390c733e5b42f773746a58f4c4c4e3ea6e0b569",
+        "dynamics/motor.py": "dc906310f1f14f57d66463d5df180e3086203c69463439ddf803ba3b0464b98e",
+        "dynamics/params.py": "c14e43be614bae41f58cf19932a6fa71768c9479880f72efd6607f721989d2c5",
+        "mapping/__init__.py": "5bc8a24dafa1347973f883d349fca9016da0438c13b1ae9305ff7e7e02438c2b",
+        "mapping/esdf.py": "1b2b058c5ab4e3c4ebb487dbbf098864766c175b85c4b703c49b9c3676d529c2",
+        "mapping/raycast.py": "d6a58cd1519f969fd2fec3740a9ef2958dc6daba01c20086b3dca88f67cc889b",
+        "mapping/rog_map.py": "a2d967ceb5582584dc70eacc1b3b7f45110f8c53356ab780ad38a10c69951556",
+        "planning/corridor.py": "1cd8b23a3e898fe6c6ea1663785eea66886c0d03a8f1d3c8f73aba184a6c6392",
+        "planning/geometry.py": "6e6972deda79eaf8b1b8d880c61ce15fe2f35bdcd78240b022282ec733d57ad2",
+        "planning/pipeline.py": "e001725eb388b18bacfee736f1f3df9790ff1e877dc2a3e9dc0c93b725a62cde",
+        "planning/risp.py": "01d6302391f2bbf2388ac88cba829235b4f9211e762fa7abe24d94a798349756",
+        "planning/search.py": "73fc0cdf423b10fb1fc0f019a8224ca146a2efede8bbb988613c023f14d28949",
+        "planning/search_kernel.py": "f3d1d274a6227af1de47e7ca63bd30f72476c60ddf4b15e7171f90cbb6d19371",
+        "simulation/__init__.py": "a6be1760411cffc53f2bcf2190ee9d3b0dc0d30586c11e237fda39d8db67a5fd",
+        "simulation/environment.py": "69dbfb77fc38fd046275fecdad469a86c721b87a8c7d794bdba3d5da29038dd5",
+        "simulation/lidar.py": "e098423a0e3cd16325e12dfa1f1f301f49b5005957a710e3ed5f9f68887286fb",
+        "simulation/metrics.py": "29923f3446bc5f269fb8e0b24065463c5cf3ea59c4bc2a0b513d761058ba496a",
+        "simulation/scene.py": "582495cdb12d363d5fd02811bb75161594dde072f20fb96ff1096e51e6fa7b55",
+        "simulation/visualization.py": "e248944aeacb2b184b0b0185bf6cd38b3912824c911231c804280056d8250057",
+        "trajectory/__init__.py": "9b081d28a24f9e9416410573411356253474d12f60deb8148e9bfddbc9fd58de",
+        "trajectory/lbfgs.py": "f6d5e64268e065f660512e1da4bee5348b03a3102d4be26a659a7f660e04214e",
+        "trajectory/minco.py": "91df875aa73facf212f1dfbdeeb21ef9db2b511b43e0361480546d68c1566c92",
+        "trajectory/numerics.py": "3f8128e6612799de47cc77f1d9130ff0ec3973fc14b82b882f63d1fd055aeeba",
+        "trajectory/super_opt.py": "b6984c985685cde3ee1b4c75f082e8f1ff9794c19c264ad9249528ad8a9f5970"
+      },
+      "raw_files": {
+        "result.json": {
+          "path": "/home/tong/tongworkspace/projects/aerial/Isaac-PathCover/results/super_risp_validation_20261115/medium/seed001/result.json",
+          "repository_relative_path": "results/super_risp_validation_20261115/medium/seed001/result.json",
+          "bytes": 7902,
+          "sha256": "943a49397c823eb051fa785752f88ffbb00245fd415dbee5b71de07577e1ccd3"
+        },
+        "flight.npz": {
+          "path": "/home/tong/tongworkspace/projects/aerial/Isaac-PathCover/results/super_risp_validation_20261115/medium/seed001/flight.npz",
+          "repository_relative_path": "results/super_risp_validation_20261115/medium/seed001/flight.npz",
+          "bytes": 572069,
+          "sha256": "3f640f49af6244f54d450a9b732d1a06748a0b025b4dea77a0da0d83ee0b7d7b"
+        },
+        "planning.json": {
+          "path": "/home/tong/tongworkspace/projects/aerial/Isaac-PathCover/results/super_risp_validation_20261115/medium/seed001/planning.json",
+          "repository_relative_path": "results/super_risp_validation_20261115/medium/seed001/planning.json",
+          "bytes": 403146,
+          "sha256": "ff77c469e42b437cf67cf4ec0df816677a70409c43f32148653d1d31c870436a"
+        },
+        "mapping.json": {
+          "path": "/home/tong/tongworkspace/projects/aerial/Isaac-PathCover/results/super_risp_validation_20261115/medium/seed001/mapping.json",
+          "repository_relative_path": "results/super_risp_validation_20261115/medium/seed001/mapping.json",
+          "bytes": 8595,
+          "sha256": "944f5756f1edb6112fb2796027e546b24292359d5fbf77728f1c4a2b745d7a22"
+        },
+        "timeline.json": {
+          "path": "/home/tong/tongworkspace/projects/aerial/Isaac-PathCover/results/super_risp_validation_20261115/medium/seed001/timeline.json",
+          "repository_relative_path": "results/super_risp_validation_20261115/medium/seed001/timeline.json",
+          "bytes": 3261,
+          "sha256": "e17cb697bdb6096be556f879bf06190411d10bc614deaf96dc4257fa3b756408"
+        },
+        "fsm.json": {
+          "path": "/home/tong/tongworkspace/projects/aerial/Isaac-PathCover/results/super_risp_validation_20261115/medium/seed001/fsm.json",
+          "repository_relative_path": "results/super_risp_validation_20261115/medium/seed001/fsm.json",
+          "bytes": 1397,
+          "sha256": "e468931e04a84b4a5a46dcc533a4e535a6ee34a68b4343ef5c48440038b8e6c7"
+        },
+        "source_hashes.json": {
+          "path": "/home/tong/tongworkspace/projects/aerial/Isaac-PathCover/results/super_risp_validation_20261115/medium/seed001/source_hashes.json",
+          "repository_relative_path": "results/super_risp_validation_20261115/medium/seed001/source_hashes.json",
+          "bytes": 2898,
+          "sha256": "60a0b59d791db34cb84f95c7db70be6dcec2fa5d02bc917349c29054b12d8635"
+        }
+      }
+    },
+    {
+      "scene": "medium",
+      "seed": 2,
+      "run_directory": "/home/tong/tongworkspace/projects/aerial/Isaac-PathCover/results/super_risp_validation_20261115/medium/seed002",
+      "outcome": {
+        "arrived": true,
+        "collision": false,
+        "out_of_bounds": false,
+        "collision_free_arrival": true,
+        "goal_error_m": 0.01967041383626545,
+        "resolved_goal_error_m": 0.003998759084076756,
+        "goal_resolution_shift_m": 0.01658312395177658,
+        "arrival_rule": "within 0.1 m of the source-resolved goal and below 0.3 m/s for 0.5 s",
+        "finite": true,
+        "collision_check_complete": true,
+        "collision_physics_samples": 0,
+        "collision_unchecked_physics_samples": 0,
+        "out_of_bounds_physics_samples": 0,
+        "contact_force_max_N": 0.0
+      },
+      "motion": {
+        "duration_sim_s": 16.110000000000003,
+        "wall_time_s": 33.59684574394487,
+        "planner_ready_sim_s": 10.69,
+        "first_motion_s": 10.97,
+        "elapsed_from_first_motion_s": 5.140000000000002,
+        "time_above_motion_threshold_s": 4.24,
+        "diagnostic_definition": {
+          "slow_speed_m_s": 0.2,
+          "minimum_interval_s": 0.2,
+          "minimum_goal_distance_m": 1.0,
+          "motion_onset_speed_m_s": 0.5
+        },
+        "control_samples": 1611,
+        "valid_state_samples": 1611,
+        "invalid_state_samples": 0,
+        "physics_max_speed_m_s": 9.036698188011224
+      },
+      "speed": {
+        "all_control_samples": {
+          "actual": {
+            "count": 1611,
+            "nonfinite_count": 0,
+            "p50_m_s": 3.6642736716889753e-07,
+            "p95_m_s": 7.826169654106292,
+            "max_m_s": 9.03662793574115
+          },
+          "reference": {
+            "count": 1611,
+            "nonfinite_count": 0,
+            "p50_m_s": 0.0,
+            "p95_m_s": 7.734357875809316,
+            "max_m_s": 7.993413055259174
+          }
+        },
+        "from_first_motion_through_end": {
+          "actual": {
+            "count": 515,
+            "nonfinite_count": 0,
+            "p50_m_s": 6.489766609872899,
+            "p95_m_s": 8.559628042484661,
+            "max_m_s": 9.03662793574115
+          },
+          "reference": {
+            "count": 515,
+            "nonfinite_count": 0,
+            "p50_m_s": 5.6955391715594095,
+            "p95_m_s": 7.968606860741583,
+            "max_m_s": 7.993413055259174
+          }
+        }
+      },
+      "planning": {
+        "attempts": 92,
+        "reported_successes": 58,
+        "reported_failures": 34,
+        "commands_committed": 57,
+        "cold_start_commits": 1,
+        "replan_commits": 56,
+        "requests_without_commit": 35,
+        "status_counts": {
+          "SUCCESS_WITH_BACKUP": 18,
+          "REPLAN_OVERTIME": 30,
+          "BACKUP_OPT_FAILED": 1,
+          "EXP_SIM_OVERTIME": 2,
+          "BACKUP_CORRIDOR_FAILED": 1,
+          "SUCCESS_NO_BACKUP": 39,
+          "SUCCESS_NO_BACKUP_RETAINED_COMMAND": 1
+        },
+        "all_requests": {
+          "count": 92,
+          "planner_total": {
+            "count": 92,
+            "nonfinite_count": 0,
+            "p50_s": 0.077256447984837,
+            "p95_s": 0.17458980372175578,
+            "max_s": 0.23402546695433557
+          },
+          "cycle_including_sensor_and_delivery": {
+            "count": 92,
+            "nonfinite_count": 0,
+            "p50_s": 0.0901309004984796,
+            "p95_s": 0.19925390462158252,
+            "max_s": 0.2548763998784125
+          },
+          "worker_including_sensor": {
+            "count": 92,
+            "nonfinite_count": 0,
+            "p50_s": 0.07877884595654905,
+            "p95_s": 0.19012708166847006,
+            "max_s": 0.23448895011097193
+          }
+        },
+        "requests_with_exp_optimization": {
+          "count": 73,
+          "planner_total": {
+            "count": 73,
+            "nonfinite_count": 0,
+            "p50_s": 0.08439869782887399,
+            "p95_s": 0.18309166980907313,
+            "max_s": 0.23402546695433557
+          },
+          "cycle_including_sensor_and_delivery": {
+            "count": 73,
+            "nonfinite_count": 0,
+            "p50_s": 0.10125898709520698,
+            "p95_s": 0.20781244891695674,
+            "max_s": 0.2548763998784125
+          },
+          "worker_including_sensor": {
+            "count": 73,
+            "nonfinite_count": 0,
+            "p50_s": 0.08997644088231027,
+            "p95_s": 0.19502158709801728,
+            "max_s": 0.23448895011097193
+          }
+        },
+        "modules": {
+          "backup_frontend_s": {
+            "count": 87,
+            "nonfinite_count": 0,
+            "p50_s": 0.007027206942439079,
+            "p95_s": 0.009807230811566115,
+            "max_s": 0.014326085103675723
+          },
+          "backup_opt_s": {
+            "count": 48,
+            "nonfinite_count": 0,
+            "p50_s": 0.012056789011694491,
+            "p95_s": 0.04201846329960972,
+            "max_s": 0.05178344389423728
+          },
+          "backup_yaw_s": {
+            "count": 46,
+            "nonfinite_count": 0,
+            "p50_s": 0.000354648451320827,
+            "p95_s": 0.0006312611512839794,
+            "max_s": 0.0007425618823617697
+          },
+          "corridor_s": {
+            "count": 73,
+            "nonfinite_count": 0,
+            "p50_s": 0.02186082908883691,
+            "p95_s": 0.03256482412107287,
+            "max_s": 0.03585564298555255
+          },
+          "exp_frontend_s": {
+            "count": 73,
+            "nonfinite_count": 0,
+            "p50_s": 0.025433765025809407,
+            "p95_s": 0.0388923805207014,
+            "max_s": 0.041653783060610294
+          },
+          "exp_opt_s": {
+            "count": 73,
+            "nonfinite_count": 0,
+            "p50_s": 0.036762368166819215,
+            "p95_s": 0.12735060718841842,
+            "max_s": 0.20744366687722504
+          },
+          "exp_yaw_s": {
+            "count": 71,
+            "nonfinite_count": 0,
+            "p50_s": 0.00039724004454910755,
+            "p95_s": 0.0006154915317893028,
+            "max_s": 0.0008524390868842602
+          },
+          "generate_backup_s": {
+            "count": 89,
+            "nonfinite_count": 0,
+            "p50_s": 0.01354106911458075,
+            "p95_s": 0.042210829257965085,
+            "max_s": 0.06034359708428383
+          },
+          "generate_exp_s": {
+            "count": 91,
+            "nonfinite_count": 0,
+            "p50_s": 0.05604018596932292,
+            "p95_s": 0.14817313011735678,
+            "max_s": 0.23398653604090214
+          },
+          "search_s": {
+            "count": 53,
+            "nonfinite_count": 0,
+            "p50_s": 0.0008047609589993954,
+            "p95_s": 0.003753869468346237,
+            "max_s": 0.006004740949720144
+          },
+          "total_s": {
+            "count": 92,
+            "nonfinite_count": 0,
+            "p50_s": 0.077256447984837,
+            "p95_s": 0.17458980372175578,
+            "max_s": 0.23402546695433557
+          }
+        },
+        "initialization_s": {
+          "point_cloud_mapping_s": 1.332242239965126,
+          "raycast_initialization_s": 0.22549339104443789,
+          "search_initialization_s": 0.06891615898348391,
+          "numeric_initialization_s": 19.618227227125317,
+          "lidar_initialization_s": 0.011790922144427896
+        },
+        "job_running_at_episode_end": false,
+        "submitted_jobs": 92,
+        "returned_jobs": 92
+      },
+      "sensor": {
+        "updates": 9,
+        "lidar": {
+          "horizontal_rays": 440,
+          "vertical_rays": 16,
+          "min_range_m": 0.1,
+          "max_range_m": 100.0,
+          "body_translation_m": [
+            0.0,
+            0.0,
+            0.25
+          ],
+          "requested_update_hz": 2.0,
+          "observed_update_hz": 0.5586592178770948
+        },
+        "sensor": {
+          "count": 9,
+          "nonfinite_count": 0,
+          "p50_s": 0.00742574199102819,
+          "p95_s": 0.011923539685085416,
+          "max_s": 0.012164642801508307
+        },
+        "map_fusion": {
+          "count": 9,
+          "nonfinite_count": 0,
+          "p50_s": 0.01130507211200893,
+          "p95_s": 0.034803286893293255,
+          "max_s": 0.04055832209996879
+        },
+        "sensor_plus_map_fusion": {
+          "count": 9,
+          "nonfinite_count": 0,
+          "p50_s": 0.0189326130785048,
+          "p95_s": 0.046606275020167225,
+          "max_s": 0.05212020711041987
+        }
+      },
+      "backup": {
+        "generation_status_counts": {
+          "SUCCESS": 46,
+          "OPT_FAILED": 2,
+          "NO_NEED": 3,
+          "FAILED": 2,
+          "FINISH": 39
+        },
+        "generated_success_count": 46,
+        "committed_with_backup": 18,
+        "published_flag_entries": 3,
+        "published_flag_intervals": [
+          {
+            "start_s": 12.08,
+            "end_s": 12.12,
+            "duration_s": 0.03999999999999915,
+            "start_position_m": [
+              -4.016284942626953,
+              -2.397371530532837,
+              1.7609450817108154
+            ],
+            "end_position_m": [
+              -3.8074471950531006,
+              -2.3214876651763916,
+              1.7498775720596313
+            ]
+          },
+          {
+            "start_s": 12.56,
+            "end_s": 12.88,
+            "duration_s": 0.3200000000000003,
+            "start_position_m": [
+              -0.7686917185783386,
+              -2.860804319381714,
+              1.1145323514938354
+            ],
+            "end_position_m": [
+              1.4949556589126587,
+              -3.018953323364258,
+              1.5087653398513794
+            ]
+          },
+          {
+            "start_s": 13.34,
+            "end_s": 13.49,
+            "duration_s": 0.15000000000000036,
+            "start_position_m": [
+              3.306079149246216,
+              -2.649385929107666,
+              2.028851270675659
+            ],
+            "end_position_m": [
+              4.117234230041504,
+              -2.9460582733154297,
+              2.380704402923584
+            ]
+          }
+        ]
+      },
+      "pauses": {
+        "count": 0,
+        "total_duration_s": 0,
+        "intervals": []
+      },
+      "handoff": {
+        "max_reference_jump_pvaj": [
+          0.022480464098606216,
+          0.06230184337183638,
+          2.471510782817394,
+          59.84858596012653
+        ],
+        "max_replan_reference_jump_pvaj": [
+          5.333694441429199e-15,
+          3.930820621426258e-15,
+          4.903517144982409e-14,
+          3.1960604014201354e-13
+        ]
+      },
+      "execution": {
+        "final_fsm_state": "WAIT_GOAL",
+        "control_steps_while_worker_busy": 383,
+        "physics_steps_while_worker_busy": 1532,
+        "physics_progress_while_planning_sim_s": 3.83,
+        "max_progress_during_one_solve_sim_s": 0.120000000000001,
+        "time_contract": "independent CPU planner and continuously advancing Newton simulation; source trajectory timestamps and source commit rules",
+        "reference_contract": "last published command applied over the recorded Newton step; command_time stores its simulation timestamp",
+        "fsm_command_wall_period_s": 0.01,
+        "replan_wall_period_s": 0.066
+      },
+      "scene_provenance": {
+        "source_file": "src/isaac_l2f/planning/corto/medium_obstacles.json",
+        "source_sha256": "e7cd31aa9b3e079bb2e86f75d88a332f07561f35b8b668883adb787233424d46",
+        "obstacle_count": 100,
+        "occupied_voxels": 59870,
+        "collision_boxes": 762,
+        "shape": [
+          300,
+          150,
+          30
+        ],
+        "resolution": 0.1,
+        "origin": [
+          -15.0,
+          -7.5,
+          -0.01
+        ],
+        "start": [
+          -11.04,
+          -2.11,
+          1.28
+        ],
+        "goal": [
+          12.68,
+          -3.47,
+          1.04
+        ],
+        "asset_sha256": "2c67742d407728b86109df7e1f2689c916ce5c8111ca2a55996871becaae7571",
+        "provenance": "original Medium"
+      },
+      "resolved_goal_m": [
+        12.675,
+        -3.475,
+        1.0250000000000001
+      ],
+      "runtime": {
+        "python": "3.12.14 (main, Sep  1 2026, 14:16:52) [Clang 22.1.3 ]",
+        "torch": "2.11.0+cu130",
+        "gpu": "NVIDIA GeForce RTX 4090",
+        "numpy": "2.5.1",
+        "scipy": "1.17.0",
+        "numba": "0.68.1",
+        "newton": "1.6.1",
+        "isaaclab_release": "3.0.0",
+        "isaaclab_core_distribution": "28.0.0",
+        "openblas_num_threads": "1",
+        "omp_num_threads": "1"
+      },
+      "source_sha256": {
+        "__init__.py": "ada36069cfd84be5937076f33394a6c90879bf5597d964d98f169eb9c86ee2e6",
+        "control/__init__.py": "76b72ef98def510a99ef6816554798c00e91a9cd036ce18f0824034d1502e6f6",
+        "control/actuator.py": "65fd27b91ab4f47369a5dd8196fe7345d15ce930c386119222f2701704e619f1",
+        "control/async_planner.py": "ecfce6c9be11b9450499dfa644a4136e9f54111fd086eaddd5ba841433be9a82",
+        "control/execution.py": "d185c1e2b897e1e1c28d05cf62a952acbe6fdc227b0a590c65b8dbaa3940b993",
+        "control/tracking.py": "903090d2c5c7152e58e992a0e04d6d0fd3b15cb07cec7835b236e5cd1328a18c",
+        "demo.py": "85a5860eaa0346379b430b081a050773d64338142b20ddd82e3253236abf3ade",
+        "dynamics/__init__.py": "216145d2c07b15a9ac1acde0a390c733e5b42f773746a58f4c4c4e3ea6e0b569",
+        "dynamics/motor.py": "dc906310f1f14f57d66463d5df180e3086203c69463439ddf803ba3b0464b98e",
+        "dynamics/params.py": "c14e43be614bae41f58cf19932a6fa71768c9479880f72efd6607f721989d2c5",
+        "mapping/__init__.py": "5bc8a24dafa1347973f883d349fca9016da0438c13b1ae9305ff7e7e02438c2b",
+        "mapping/esdf.py": "1b2b058c5ab4e3c4ebb487dbbf098864766c175b85c4b703c49b9c3676d529c2",
+        "mapping/raycast.py": "d6a58cd1519f969fd2fec3740a9ef2958dc6daba01c20086b3dca88f67cc889b",
+        "mapping/rog_map.py": "a2d967ceb5582584dc70eacc1b3b7f45110f8c53356ab780ad38a10c69951556",
+        "planning/corridor.py": "1cd8b23a3e898fe6c6ea1663785eea66886c0d03a8f1d3c8f73aba184a6c6392",
+        "planning/geometry.py": "6e6972deda79eaf8b1b8d880c61ce15fe2f35bdcd78240b022282ec733d57ad2",
+        "planning/pipeline.py": "e001725eb388b18bacfee736f1f3df9790ff1e877dc2a3e9dc0c93b725a62cde",
+        "planning/risp.py": "01d6302391f2bbf2388ac88cba829235b4f9211e762fa7abe24d94a798349756",
+        "planning/search.py": "73fc0cdf423b10fb1fc0f019a8224ca146a2efede8bbb988613c023f14d28949",
+        "planning/search_kernel.py": "f3d1d274a6227af1de47e7ca63bd30f72476c60ddf4b15e7171f90cbb6d19371",
+        "simulation/__init__.py": "a6be1760411cffc53f2bcf2190ee9d3b0dc0d30586c11e237fda39d8db67a5fd",
+        "simulation/environment.py": "69dbfb77fc38fd046275fecdad469a86c721b87a8c7d794bdba3d5da29038dd5",
+        "simulation/lidar.py": "e098423a0e3cd16325e12dfa1f1f301f49b5005957a710e3ed5f9f68887286fb",
+        "simulation/metrics.py": "29923f3446bc5f269fb8e0b24065463c5cf3ea59c4bc2a0b513d761058ba496a",
+        "simulation/scene.py": "582495cdb12d363d5fd02811bb75161594dde072f20fb96ff1096e51e6fa7b55",
+        "simulation/visualization.py": "e248944aeacb2b184b0b0185bf6cd38b3912824c911231c804280056d8250057",
+        "trajectory/__init__.py": "9b081d28a24f9e9416410573411356253474d12f60deb8148e9bfddbc9fd58de",
+        "trajectory/lbfgs.py": "f6d5e64268e065f660512e1da4bee5348b03a3102d4be26a659a7f660e04214e",
+        "trajectory/minco.py": "91df875aa73facf212f1dfbdeeb21ef9db2b511b43e0361480546d68c1566c92",
+        "trajectory/numerics.py": "3f8128e6612799de47cc77f1d9130ff0ec3973fc14b82b882f63d1fd055aeeba",
+        "trajectory/super_opt.py": "b6984c985685cde3ee1b4c75f082e8f1ff9794c19c264ad9249528ad8a9f5970"
+      },
+      "raw_files": {
+        "result.json": {
+          "path": "/home/tong/tongworkspace/projects/aerial/Isaac-PathCover/results/super_risp_validation_20261115/medium/seed002/result.json",
+          "repository_relative_path": "results/super_risp_validation_20261115/medium/seed002/result.json",
+          "bytes": 8868,
+          "sha256": "f87b95a2d3797f9366a1c3fa060d925aaa536809e9233adb0712dd371fa60aa2"
+        },
+        "flight.npz": {
+          "path": "/home/tong/tongworkspace/projects/aerial/Isaac-PathCover/results/super_risp_validation_20261115/medium/seed002/flight.npz",
+          "repository_relative_path": "results/super_risp_validation_20261115/medium/seed002/flight.npz",
+          "bytes": 437648,
+          "sha256": "ac444370c013656bcd96effb35c7280aba9c9b479bdfcccc543af25809b745a1"
+        },
+        "planning.json": {
+          "path": "/home/tong/tongworkspace/projects/aerial/Isaac-PathCover/results/super_risp_validation_20261115/medium/seed002/planning.json",
+          "repository_relative_path": "results/super_risp_validation_20261115/medium/seed002/planning.json",
+          "bytes": 181776,
+          "sha256": "cb533e24c428390ce3e193f705b37fee545bc1dcaf9b836c9ef9978b5ec89001"
+        },
+        "mapping.json": {
+          "path": "/home/tong/tongworkspace/projects/aerial/Isaac-PathCover/results/super_risp_validation_20261115/medium/seed002/mapping.json",
+          "repository_relative_path": "results/super_risp_validation_20261115/medium/seed002/mapping.json",
+          "bytes": 4814,
+          "sha256": "164024aa58df32f672a843c49b5f56e59258dd305f62a3be284560c8250dd495"
+        },
+        "timeline.json": {
+          "path": "/home/tong/tongworkspace/projects/aerial/Isaac-PathCover/results/super_risp_validation_20261115/medium/seed002/timeline.json",
+          "repository_relative_path": "results/super_risp_validation_20261115/medium/seed002/timeline.json",
+          "bytes": 4186,
+          "sha256": "58416dd475062d9d0f286904fdff0c5225f5f60fde1d9c50828bcfaa315a20ae"
+        },
+        "fsm.json": {
+          "path": "/home/tong/tongworkspace/projects/aerial/Isaac-PathCover/results/super_risp_validation_20261115/medium/seed002/fsm.json",
+          "repository_relative_path": "results/super_risp_validation_20261115/medium/seed002/fsm.json",
+          "bytes": 462,
+          "sha256": "61aadcf2637d9616cc33bd0ad07ad66f945afdb78a065788f8fa6c9478251d6b"
+        },
+        "source_hashes.json": {
+          "path": "/home/tong/tongworkspace/projects/aerial/Isaac-PathCover/results/super_risp_validation_20261115/medium/seed002/source_hashes.json",
+          "repository_relative_path": "results/super_risp_validation_20261115/medium/seed002/source_hashes.json",
+          "bytes": 2898,
+          "sha256": "60a0b59d791db34cb84f95c7db70be6dcec2fa5d02bc917349c29054b12d8635"
+        }
+      }
+    }
+  ]
+}

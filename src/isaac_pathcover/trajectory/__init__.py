@@ -1,7 +1,6 @@
-"""Native Python PathCover trajectory optimization."""
-from .gcopter import GCopter, OptimizationResult, TrajectoryConfig
+"""SUPER trajectory optimization with analytic MINCO gradients."""
+from .super_opt import BackupTrajOpt, ExpTrajOpt, OptimizationResult, OptimizerConfig, YawTrajOpt
 from .minco import MINCO, PiecewisePolynomial
-from .flatness import FlatnessMap, flatness
 
-__all__ = ["GCopter", "OptimizationResult", "TrajectoryConfig", "MINCO",
-           "PiecewisePolynomial", "FlatnessMap", "flatness"]
+__all__ = ["ExpTrajOpt", "BackupTrajOpt", "YawTrajOpt", "OptimizerConfig",
+           "OptimizationResult", "MINCO", "PiecewisePolynomial"]

@@ -8,7 +8,7 @@ Half-spaces use ``A @ x <= b``. Dual hull construction follows PathCover
 from __future__ import annotations
 
 import numpy as np
-from scipy.optimize import linprog
+from scipy.optimize._highspy import _core as highs
 from scipy.spatial import ConvexHull
 
 
@@ -36,7 +36,12 @@ def remove_redundant(A, b, seed):
     return A[retained].copy(), b[retained].copy()
 
 
-def chebyshev_center(A, b):
+_interior_solver = highs._Highs()
+_interior_solver.setOptionValue("output_flag", False)
+_interior_solver.setOptionValue("threads", 1)
+
+
+def chebyshev_center(A, b, *, signed=False):
     """Maximize the inscribed-ball radius; return (center, radius).
 
     The Euclidean normal lengths make this independent of plane scaling.
@@ -45,14 +50,28 @@ def chebyshev_center(A, b):
     A, b = np.asarray(A, dtype=float), np.asarray(b, dtype=float)
     dimension = A.shape[1]
     normals = np.linalg.norm(A, axis=1)
-    result = linprog(
-        np.r_[np.zeros(dimension), -1.0],
-        A_ub=np.column_stack((A, normals)), b_ub=b,
-        bounds=[(None, None)] * dimension + [(0.0, None)], method="highs",
-    )
-    if not result.success:
-        raise GeometryError(f"polytope has no bounded inscribed ball: {result.message}")
-    return result.x[:-1], float(result.x[-1])
+    # Calling the installed HiGHS API directly avoids linprog's repeated
+    # general-input parsing for this fixed four-variable linear program.
+    model = highs.HighsLp()
+    model.num_col_, model.num_row_ = dimension + 1, len(A)
+    model.col_cost_ = np.r_[np.zeros(dimension), -1.0]
+    model.col_lower_ = [-highs.kHighsInf] * dimension + [-highs.kHighsInf if signed else 0.0]
+    model.col_upper_ = [highs.kHighsInf] * (dimension + 1)
+    model.row_lower_ = [-highs.kHighsInf] * len(A)
+    model.row_upper_ = b
+    matrix = model.a_matrix_
+    matrix.format_ = highs.MatrixFormat.kRowwise
+    matrix.start_ = np.arange(0, (len(A) + 1) * (dimension + 1), dimension + 1, dtype=np.int32)
+    matrix.index_ = np.tile(np.arange(dimension + 1, dtype=np.int32), len(A))
+    matrix.value_ = np.column_stack((A / normals[:, None], np.ones(len(A)))).ravel()
+    model.row_upper_ = b / normals
+    _interior_solver.passModel(model)
+    _interior_solver.run()
+    status = _interior_solver.getModelStatus()
+    if status != highs.HighsModelStatus.kOptimal:
+        raise GeometryError(f"polytope interior: {_interior_solver.modelStatusToString(status)}")
+    solution = np.asarray(_interior_solver.getSolution().col_value)
+    return solution[:-1], float(solution[-1])
 
 
 def vertices(A, b, interior=None):

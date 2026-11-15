@@ -1,136 +1,109 @@
 # Isaac-PathCover
 
-Isaac-PathCover 用原生 Python 实现 PathCover，并通过 L2F 电机及旋翼动力学接入 Isaac Lab 3.0 / Newton。输入点云经过稀疏地图、障碍膨胀、全局搜索和凸走廊，生成可跟踪的 MINCO 多项式轨迹。
+在现有 Isaac Lab / Newton 四旋翼上运行原生 Python SUPER。地图、搜索、轨迹优化和执行状态机来自 SUPER `2ad3419`。CIRI 的几何生成替换为 PathCover/RISP `8723a05d`。
 
-官方算法固定为 [PathCover 8723a05d](https://github.com/kunalnk123690/PathCover/tree/8723a05d1993bf0199a453b47dc6ee167d493c23)。质量、惯量、电机和旋翼参数来自原 Isaac-L2F。来源提交及文件 SHA256 见 [docs/sources.json](docs/sources.json)。本仓库独立运行，不导入原 Isaac-L2F，也不包含 CORTO 规划或历史训练代码。
+当前验收仍有未解决项。medium seed2 已无碰撞到达。dense seed4 已到达，但途中发生碰撞。显式备用热启动的部分完整数值解也与 C++ 存在明显差异。全部 9 次运行、严格数值对照和剩余问题见 [验收记录](docs/super_validation.md)。
 
-## 运行演示
+## 运行
 
-在仓库根目录运行以下命令。它依次完成 medium 和 dense 飞行，并保存结果。
-
-```bash
-OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 .venv/bin/python -m isaac_pathcover.demo --scene both --seeds 0 --duration 60 --output results/demo
-```
-
-`--duration` 是每次试验的最大仿真时长。满足到达条件后提前结束。批量验收使用固定种子：
-
-默认运行模式为**异步规划**：独立 CPU 进程承担地图更新和 GCOPTER 求解，Newton 在规划期间持续推进。使用 GCOPTER 原有收敛规则，并记录真实求解耗时；允许求解结果在原定交接时刻后接入，前提是与当前实测状态匹配且满足轨迹约束。验收关注实际求解耗时、有效交接频率和无碰撞到达率。旧版暂停仿真时间的同步对照可使用 `--synchronous`。实现见[异步重规划](docs/async_replanning.md)。
+在仓库根目录运行。规划在独立 CPU 进程执行，Newton 持续推进。
 
 ```bash
-OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 .venv/bin/python -m isaac_pathcover.demo --scene both --seeds 0 1 2 3 4 --duration 60 --output results/validation
+OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 .venv/bin/python -m isaac_pathcover.demo \
+  --scene both --seeds 0 1 2 --duration 90 --output results/super_risp_validation_20261115
 ```
 
-每个 `results/demo/<scene>/seed000/` 包含：
+`--duration` 是试验观察时长，以仿真秒计。到达终点后结束。仅检查规划器：
+
+```bash
+OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 .venv/bin/python -m isaac_pathcover.demo \
+  --scene both --plan-only --output results/super_risp_planning
+```
+
+地图更新使用现有场景表面点云与机载激光雷达。medium 保留 100 个障碍物场景，dense 保留 180 个障碍物重建场景。场景文件、实体碰撞几何和起终点不变。
+
+| 场景 | 起点 / m | 终点 / m |
+|---|---|---|
+| medium | `[-11.04, -2.11, 1.28]` | `[12.68, -3.47, 1.04]` |
+| dense | `[-14, -6.5, 0.49]` | `[6.8, 5.2, 0.49]` |
+
+## 单一流水线
+
+| 模块 | 实现与源语义 |
+|---|---|
+| `mapping/rog_map.py` | ROG-Map 对数几率、增量占据计数、膨胀、虚拟高度、射线和地图查询 |
+| `planning/search.py` | SUPER A*、占据起点逃逸、距离启发式与路径长度视野 |
+| `planning/corridor.py` | SUPER 路径分段、重叠、简化与局部目标；RISP 生成点种子和线段种子多面体 |
+| `planning/risp.py` | PathCover 随机分割；线段种子和机器人半径适配 CIRI 接口 |
+| `trajectory/minco.py` | MINCO S4NU、解析伴随梯度、分段多项式截取与拼接 |
+| `trajectory/super_opt.py` | ExpTrajOpt、BackupTrajOpt、YawTrajOpt、时间和位置参数化、原惩罚与收敛规则 |
+| `trajectory/lbfgs.py` | cautious L-BFGS 与 Lewis–Overton 线搜索 |
+| `planning/pipeline.py` | PlanFromRest、ReplanOnce、带时间戳的轨迹引导、旧路径复用、主轨迹与备用轨迹生成 |
+| `control/execution.py` | ExpTraj、BackupTraj、CmdTraj、旧前缀拼接、备用轨迹切换、SUPER 状态机 |
+| `control/async_planner.py` | 独立规划进程、共享仿真时钟和最新测量状态 |
+| `control/tracking.py` | 保留的几何控制器；接收 SUPER 位置与偏航指令 |
+| `simulation/` | 保留的 Newton 刚体、旋翼分配、电机滞后、场景与传感器 |
+
+规划使用 Python、NumPy、SciPy 和 Numba。数值核由 Numba 在 CPU 编译并缓存，保留一套 Python 算法源码。运行时不调用 ROS、C++ 对照程序或自定义 C++/CUDA 扩展。现有 Newton 仿真使用 Isaac Lab、PyTorch、Warp 和 Newton 官方依赖。旧 NanoVox、JPS/DMP、GCOPTER 规划器与同步演示入口已经移除。
+
+## 原始时间与执行语义
+
+默认规划参数来自 SUPER 的 `super_planner/config/static_dense.yaml`。物理频率为 400 Hz，控制频率为 100 Hz。ROS 2 的 15 Hz 重规划参数在源码中转换为 66 ms 墙钟定时器。Python 保留该调度周期，正在执行的规划请求不会排成积压队列。
+
+规划进程读取持续推进的 Newton 仿真时钟。新命令保持 SUPER 自身的起始时间，收到命令时不重置轨迹时间。ReplanOnce 拼接旧轨迹前缀，BackupTraj 进入同一个 CmdTraj。
+
+SUPER 源码保留以下时间判断：
+
+- `generateExpTraj`：生成期间仿真时间增加超过 `replan_forward_dt` 时返回失败。
+- `ReplanOnce`：墙钟耗时超过 `0.9 × replan_forward_dt` 时返回失败。
+- A*：使用源搜索超时和原时钟语义。
+
+默认 `replan_forward_dt=0.1 s`。这些是源码行为。性能报告记录其实际触发次数，不把 15 Hz、0.1 s 或实时因子作为额外验收门槛。
+
+默认 `goal_vel_en=false`。局部轨迹的末端速度为零。连续飞行依靠及时重规划与前缀接续；备用轨迹负责原算法中的制动。
+
+## 飞行数据
+
+每个 `<output>/<scene>/seed000/` 保存：
 
 | 文件 | 内容 |
 |---|---|
-| `flight.html` | 可离线打开的障碍、初始走廊、初始轨迹和完整飞行路径 |
-| `flight.npz` | 100 Hz 控制轨迹、400 Hz 物理状态、参考、接触力、转子状态和指令 |
-| `result.json` | 到达、碰撞、跟踪误差、动力学统计和耗时 |
-| `planning.json` | 每次求解的状态、代价、迭代、约束残差、交接和执行拒绝原因 |
-| `mapping.json` | 每次传感器扫描、点云融合、占据变化和耗时 |
-| `plans/NNNN/trajectory.npz` | 每次求解成功的多项式系数、分段时长和搜索路径 |
-| `plans/NNNN/corridor.json` | 对应多面体、种子点和局部终点 |
-| `trajectory.npz`、`corridor.json` | 首次接受的轨迹和走廊 |
+| `flight.npz` | 实际状态、400 Hz 物理状态、PVAJ 参考、偏航参考、电机、接触力、备用轨迹标记和状态机状态 |
+| `speed.csv` | 仿真时间、实际速度、参考速度、备用轨迹标记与状态机 |
+| `planning.json` | 每次请求、求解时刻、模块耗时、优化状态、原时间判断、轨迹提交与参考跳变量 |
+| `mapping.json` | 扫描与地图融合记录 |
+| `fsm.json` | 原状态机切换的时间、前后状态和回调来源 |
+| `timeline.json` | 中途低速区间、并发规划记录、备用轨迹区间、模块 P50/P95 |
+| `plans/NNNN/` | 主轨迹、偏航、备用轨迹、实际命令、搜索路径与走廊 |
+| `result.json` | 到达、碰撞、跟踪误差、耗时、软件版本和硬件 |
+| `source_hashes.json` | 该次运行使用的 Python 源文件 SHA256 |
+| `flight.html` | 原始障碍、初始走廊和实际飞行路径 |
 
-可以使用 [`scripts/record_rerun.py`](scripts/record_rerun.py) 将已录制的 Newton 轨迹转成 Rerun `.rrd`，交互回放障碍物、无人机姿态、实际轨迹、参考轨迹和速度曲线。使用说明见 [Rerun 回放](docs/rerun_recording.md)。
+低速区间是诊断统计，不参与规划接受。原始速度曲线和规划时间线用于区分启动等待、参考制动、规划失败与跟踪偏差。
 
-场景目录中的 `summary.json` 汇总所有种子。`source_hashes.json` 固定本次运行的 Python 源码。候选求解成功但执行检查失败时，候选仍会保存；以 `handoff.accepted` 判断是否执行。
-
-## 安装
-
-使用 Python 3.12。规划及数值测试依赖 NumPy 2.5.1、SciPy 1.17.0 和 PyTorch 2.11.0。完整仿真还需要兼容的 NVIDIA 驱动和 CUDA GPU。
+## Rerun
 
 ```bash
-python3 scripts/install_simulation.py
+/home/tong/.local/share/pipx/venvs/rerun-sdk/bin/python scripts/record_rerun.py \
+  --scene both --source results/super_risp_validation_20261115 \
+  --output results/rerun_super_risp_20261115
+/home/tong/.local/bin/rerun results/rerun_super_risp_20261115/*.rrd
 ```
 
-仅安装规划及测试环境：
+回放包含真实无人机姿态、主轨迹、备用轨迹、实际与参考速度、规划耗时、状态机和接触力。
+
+## 验证与来源
 
 ```bash
-uv venv --python 3.12
-uv pip install '.[test]'
+OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 .venv/bin/python -m pytest -q -ra
 ```
 
-只生成两图的轨迹和走廊，无须启动 Newton：
+固定输入与原 C++ 输出保存在 `tests/fixtures/`。离线对照入口位于 `tests/reference/super_mapping/`、`super_trajectory/`、`super_execution/`。C++ 仅生成数值证据，运行包不依赖这些程序。
 
-```bash
-.venv/bin/python -m isaac_pathcover.demo --scene both --plan-only --output results/planning
-```
+SUPER 参数中与现有场景范围、Newton 执行接口有关的适配在模块文档中说明。来源提交和文件哈希见 [docs/sources.json](docs/sources.json)。历史实验位于 [docs/history](docs/history)，原始实验数据保留在 `results/`。
 
-运行程序在 NumPy 导入前默认设置单线程 BLAS。性能复现时显式设置 `OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1`。如果调用者已经设置这些变量，程序保留调用者的值。
+安装沿用现有 [安装说明](docs/installation.md)。使用 `.venv/bin/python`。
 
-完整安装使用固定提交的官方源码布局，只安装必需的 core、Newton、contrib 和 PhysX 配置组件。后两个组件由官方场景模块导入，实际物理后端仍只有 Newton。安装不会添加 RSL、TensorBoard 或 Transformers。详细步骤和版本见 [安装说明](docs/installation.md)。
+## 许可
 
-## 实现范围
-
-| 模块 | 实现 |
-|---|---|
-| `mapping/nanovox.py` | 稀疏 8³ 体素块、整数对数几率、命中/未命中融合、占据及距离查询 |
-| `mapping/inflation.py` | 官方椭球膨胀和邻域外壳，增加支持删除占据体素的精确增量更新 |
-| `planning/search.py` | 3D JPS、距离势场、DMP 路径细化；规划流程优先复用当前地图中安全的旧路径段 |
-| `planning/risp.py` | 原 RISP 随机分割、切平面及点集更新 |
-| `planning/corridor.py` | 路径与多面体求交、连续重叠走廊、局部终点及起始区域选择 |
-| `trajectory/minco.py` | S3NU/S4NU 约束系统、分段多项式、能量与解析伴随梯度 |
-| `trajectory/flatness.py` | 含阻力的微分平坦性映射及解析反向传播 |
-| `trajectory/gcopter.py` | 原时空参数化、目标与惩罚、梯形积分、联合时间优化；新增基于上一条轨迹的热启动 |
-| `trajectory/lbfgs.py` | 原 cautious L-BFGS 和 Lewis–Overton 线搜索 |
-| `control/` | 官方几何控制、轨迹交接、L2F 旋翼分配及电机状态 |
-| `simulation/` | Newton/MJWarp 刚体、精确障碍实体、机载激光雷达和结果统计 |
-
-优化器没有调用 `scipy.optimize.minimize`。SciPy 用于线性代数、线性规划和几何计算。正式执行不调用自定义原生扩展、ROS、Gazebo 或 MOSEK。
-
-默认冷启动保留官方目标权重、梯度、约束、时间参数化、初始化和停止流程。重规划增加基于上一条轨迹的热启动，但不修改目标函数与求解器。仅将物理参数匹配到 L2F 的 0.752 kg 无人机。随机分割使用持续的 NumPy 随机生成器；数值对照可注入保存的官方随机序列。
-
-GCOPTER 的“收敛”状态不保证软约束满足。Newton 交接增加了独立执行检查，超限候选保留原求解记录并被拒绝。检查复用原惩罚宽度 `μ=0.01` 作为明确的软残差容许带。姿态、角速度和推力采用采样检查。完整规则见 [执行与验收](docs/execution.md)。
-
-## 场景与时钟
-
-medium 使用已有的 100 障碍场景。dense 使用已有的 180 障碍重建场景。两者的体素、起终点和原始文件哈希均保存在 [场景来源](src/isaac_pathcover/simulation/scenes/provenance.json)。dense 的来源标记为 reconstructed。
-
-| 场景 | 占据体素 | Newton 障碍盒 | 起点 / m | 终点 / m |
-|---|---:|---:|---|---|
-| medium | 59,870 | 762 | `[-11.04, -2.11, 1.28]` | `[12.68, -3.47, 1.04]` |
-| dense | 103,876 | 1,372 | `[-14, -6.5, 0.49]` | `[6.8, 5.2, 0.49]` |
-
-演示从已知静态场景的表面点云初始化地图。飞行中继续融合机载扫描。物理频率为 400 Hz，控制频率为 100 Hz，扫描和重新规划频率为 2 Hz。
-
-默认异步模式不在求解时暂停 Newton；以前的同步模式仍可通过 `--synchronous` 复现。2 Hz 是仿真时间中的请求上限，繁忙时跳过请求，不等于已实现 2 Hz 墙钟实时规划。实际规划频率、墙钟延迟和仿真推进量均保存在报告中。
-
-## 验证与复现
-
-```bash
-OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 .venv/bin/python -m pytest -q
-```
-
-测试直接读取固定官方输入与输出。常规测试不需要 C++ 编译器。`tests/reference/` 中的独立驱动用于重新编译官方头文件并复算数值证据；它们不进入 Python 安装包。
-
-- [地图与全局搜索对照](docs/mapping_search_validation.md)：占据、膨胀、JPS/DMP 和配对性能。
-- [RISP 与走廊对照](docs/corridor_validation.md)：平面、随机序列、连续覆盖和性能。
-- [轨迹数值对照](docs/numerical_validation.md)：MINCO、平坦性、目标、梯度、非凸收敛及性能。
-- [执行与验收规则](docs/execution.md)：传感器、时钟、失败处理、交接门限和指标定义。
-- [Newton 闭环结果](docs/newton_validation.md)：两图各 5 个固定种子的完整数据，以及原交接方式的对照。
-- [2026-11-15 工程优化](docs/engineering_optimizations.md)：原仓库增量/热启动机制、精确增量膨胀、旧路径复用和 GCOPTER 热启动的实现及种子 0 实测对照。
-- [异步重规划验收](docs/async_replanning.md)：SUPER 延迟预测、轨迹交接和 Newton 连续仿真的实测对照。
-
-数值测试保留正常与异常结果。近零比推力或倒置姿态会使原平坦性映射病态。两种语言的非凸优化也可能沿不同浮点路径停止。完整目标和梯度对照用于判断移植一致性；Newton 到达和碰撞率单独验证。
-
-## 已完成的飞行验收与限制
-
-2026-11-15 的历史异步验收：medium/dense 在种子 0–4 下均 **5/5 无碰撞到达**。当时使用了已删除的 1.5 s 人为截止时间，因此 23 次规划被提前终止或拒绝。完整墙钟规划周期中位数分别为 1.376/1.208 s。最新实现不再通过固定墙钟预算拒绝轨迹，改用实测状态和轨迹约束决定交接。详细指标见[异步重规划验收](docs/async_replanning.md)。
-
-下述统计对应 2026-11-14 的五种子基线。2026-11-15 优化后各场景额外验证了种子 0，决策周期 P50 降至 medium 0.913 s、dense 1.216 s；两次均无碰撞到达，但仍未达到墙钟 2 Hz。完整对照见[工程优化报告](docs/engineering_optimizations.md)。
-
-2026-11-14，medium 和 dense 的种子 0–4 均无碰撞到达。两图的合并跟踪均方根误差分别为 1.34 cm 和 1.98 cm，最大误差为 5.31 cm 和 8.00 cm。它们是本次 10 次试验的观测结果。
-
-仍有以下未达标项：
-
-- 完整周期的 p50/p95 为 medium 2.33/9.21 s、dense 2.42/4.19 s。234 次周期均超过 0.5 s，未达到墙钟 2 Hz。
-- 实际闭环状态仍有规划界限超调。两图最大角速度范数为 5.55/5.22 rad/s，高于规划器的 3 rad/s。电机状态推算的 100 Hz 推力峰值为 10.25/13.64 N，高于规划上界 10 N。详情见飞行报告。
-- 一个真实近奇异姿态的梯度缩放差为 `0.00124633`，没有通过正常 `3e-8` 阈值。该例在常规测试中标为严格 `xfail`，完整输入及 C++ 对照保留在仓库中。
-
-执行检查恢复了本组试验中的无碰撞到达，但没有将软约束优化和采样检查变为严格的连续时间可行性证明。
-
-## 许可证
-
-主许可证为 BSD-3-Clause。移植模块保留对应来源的许可说明，见 [licenses/](licenses/)。
+SUPER 移植代码按 LGPL-3.0-or-later 分发。MINCO/L-BFGS 相关代码保留其 MIT 许可。PathCover 和 Newton 接口保留原来源许可。完整条款及声明位于 [licenses](licenses)。

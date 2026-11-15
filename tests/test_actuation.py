@@ -32,7 +32,8 @@ def test_motor_impulse_matches_quadrature():
 
 def test_source_tracker_hover():
     state = np.r_[[1., 2., 1.5], [1., 0., 0., 0.], np.zeros(6)]
-    wrench, rotation = GeometricTracker().command(state, state[:3], np.zeros(3), np.zeros(3), .01)
+    wrench, rotation = GeometricTracker().command(state, state[:3], np.zeros(3), np.zeros(3),
+                                                yaw=0., yaw_rate=0.)
     np.testing.assert_allclose(wrench, [.752 * 9.8066, 0., 0., 0.], atol=1e-13)
     np.testing.assert_allclose(rotation, np.eye(3))
 

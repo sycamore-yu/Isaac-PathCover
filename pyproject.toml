@@ -5,12 +5,12 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "isaac-pathcover"
 version = "0.1.0"
-description = "Native Python PathCover and GCOPTER on Isaac Lab 3.0 / Newton with L2F rotor dynamics"
+description = "Native Python SUPER with PathCover/RISP corridors on Isaac Lab / Newton"
 requires-python = ">=3.12,<3.13"
 readme = "README.md"
-license = "BSD-3-Clause"
+license = "BSD-3-Clause AND MIT AND LGPL-3.0-or-later"
 license-files = ["LICENSE", "licenses/*.txt"]
-dependencies = ["numpy==2.5.1", "scipy==1.17.0", "torch==2.11.0"]
+dependencies = ["numpy==2.5.1", "scipy==1.17.0", "numba==0.68.1", "torch==2.11.0"]
 
 [project.optional-dependencies]
 simulation = [

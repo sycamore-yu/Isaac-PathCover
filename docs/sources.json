@@ -17,5 +17,21 @@
     "source_commit": "e3f7d9ff1f5d7f8280de3ece9000b7117f66bcf4",
     "core_distribution": "28.0.0",
     "newton": "1.6.1"
+  },
+  "super": {
+    "url": "https://github.com/hku-mars/SUPER",
+    "commit": "2ad3419c127a617c6d7df6925e81a14175a9c096",
+    "config": "super_planner/config/static_dense.yaml",
+    "files": {
+      "super_planner/src/super_core/super_planner.cpp": "22e0c6d6f4fa220abeaf811a42b3e4a117d0fd81037bd0ca3f8feff75c144cb1",
+      "super_planner/src/super_core/fsm.cpp": "63537c9a49c738f777b193b974be2bc1f7cd9231eaaceb9e2fb8ad175aca4708",
+      "super_planner/src/super_core/corridor_generator.cpp": "054c486ff22ec6a57fdb5d7e544428f2dba16be8dd18b25cc860749209a0e04c",
+      "super_planner/src/super_core/astar.cpp": "7e69c7ff12cc342276b0a06b253a3a7500e28be057931af9477d121d17121b55",
+      "super_planner/src/traj_opt/exp_traj_optimizer_s4.cpp": "1baf48508ef4a3720ec3dd231fcf5ed46d2bf8e8935cf4058aa397536e4bd600",
+      "super_planner/src/traj_opt/backup_traj_optimizer_s4.cpp": "61cc9eaf29c104fe83a9a57a72950c84c6bdfc7c07e06266fd1ec28550228b1d",
+      "super_planner/src/traj_opt/yaw_traj_opt.cpp": "5a4598491cde57de079bf04fdf6e0fb1ed841304965563c35246c502f0d32d98",
+      "super_planner/config/static_dense.yaml": "be84ea89135215ca8f20fc02ca1892cb90b8935d044a13ddcea8e3f657a01ae9",
+      "super_planner/include/ros_interface/ros2/fsm_ros2.hpp": "336736c2673555a5bb627b7e2cc81d9e6fb67b86d78f9b656ec2b438e06cb636"
+    }
   }
 }

@@ -1,5 +1,6 @@
 """Flight metrics from recorded states, independent of the planning objective."""
 import numpy as np
+from collections import Counter
 from scipy.spatial.transform import Rotation
 
 
@@ -68,7 +69,7 @@ def summarize(scene, times, states, references, substeps, contact_force, motor_s
     collision = bool(collisions.any() or (max_contact_force is not None and max_contact_force > 1e-6))
     valid_positions = np.isfinite(physics_states[:, :3]).all(axis=1)
     outside = valid_positions & np.any((physics_states[:, :3] < scene.lower) | (physics_states[:, :3] > scene.upper), axis=1)
-    durations = np.asarray([p["timings"]["total"] for p in plans]) if plans else np.empty(0)
+    durations = np.asarray([p["timings"]["total_s"] for p in plans]) if plans else np.empty(0)
     return {
         "scene": scene.name, "scene_provenance": scene.provenance,
         "arrived": arrived, "collision": collision, "collision_free_arrival": arrived and not collision,
@@ -92,12 +93,83 @@ def summarize(scene, times, states, references, substeps, contact_force, motor_s
         "planning_attempts": len(plans), "planning_successes": sum(p["success"] for p in plans),
         "planning_failures": sum(not p["success"] for p in plans),
         "trajectory_handoffs": sum(p["handoff"]["accepted"] for p in plans),
-        "trajectory_rejections": sum(p["success"] and not p["handoff"]["accepted"] for p in plans),
+        "cold_start_commits": sum(p["handoff"]["accepted"] and p["operation"] == "plan_from_rest" for p in plans),
+        "replan_commits": sum(p["handoff"]["accepted"] and p["operation"] == "replan_once" for p in plans),
+        "plans_without_commit": sum(not p["handoff"]["accepted"] for p in plans),
         "planning_p50_s": float(np.median(durations)) if len(durations) else None,
         "planning_p95_s": float(np.quantile(durations, .95)) if len(durations) else None,
         "planning_max_s": float(durations.max()) if len(durations) else None,
-        "planning_cycles_over_0_5s": int((durations > .5).sum()),
-        "physics_hz": 400, "tracking_hz": 100, "replan_period_s": .5,
-        "time_contract": "synchronous planning between Newton steps; wall latency measured separately",
+        "physics_hz": 400, "tracking_hz": 100,
         "finite": bool(finite),
+    }
+
+
+def _intervals(mask, times):
+    indices = np.flatnonzero(np.diff(np.r_[False, mask, False].astype(np.int8)))
+    dt = float(np.median(np.diff(times))) if len(times) > 1 else .01
+    return [(int(start), int(end), float(times[start] - dt), float(times[end - 1]))
+            for start, end in indices.reshape(-1, 2)]
+
+
+def summarize_timeline(arrays, plans, goal):
+    """Locate intermediate slowdowns without using them as trajectory acceptance gates."""
+    times, states, references = arrays["time"], arrays["states"], arrays["references"]
+    actual_speed = np.linalg.norm(states[:, 7:10], axis=1)
+    reference_speed = np.linalg.norm(references[:, :, 1], axis=1)
+    goal_distance = np.linalg.norm(states[:, :3] - goal, axis=1)
+    moved = np.flatnonzero(actual_speed > .5)
+    first_motion = float(times[moved[0]]) if len(moved) else None
+    intermediate = ((goal_distance > 1.) & (times > first_motion)) if len(moved) else np.zeros(len(times), bool)
+    episodes = []
+    for start, end, t0, t1 in _intervals(intermediate & (actual_speed < .2), times):
+        if t1 - t0 < .2 - 1e-9:
+            continue
+        concurrent = [p for p in plans if p["t"] <= t1 and p["result_t"] >= t0]
+        prior = [p for p in plans if p["handoff"]["accepted"] and p["activation_t"] <= t0]
+        episodes.append({
+            "start_s": t0, "end_s": t1, "duration_s": t1 - t0,
+            "actual_speed_mean_m_s": float(np.mean(actual_speed[start:end])),
+            "reference_speed_mean_m_s": float(np.mean(reference_speed[start:end])),
+            "reference_speed_max_m_s": float(np.max(reference_speed[start:end])),
+            "goal_distance_min_m": float(np.min(goal_distance[start:end])),
+            "on_backup_samples": int(np.count_nonzero(arrays["on_backup"][start:end])),
+            "fsm_states": np.unique(arrays["fsm_state"][start:end]).tolist(),
+            "last_committed_plan": prior[-1]["id"] if prior else None,
+            "concurrent_plans": [{"id": p["id"], "status": p["status"], "t": p["t"],
+                                  "result_t": p["result_t"], "worker_s": p["worker_s"]}
+                                 for p in concurrent],
+        })
+    backup_intervals = [{"start_s": t0, "end_s": t1, "duration_s": t1 - t0,
+                         "start_position_m": states[start, :3].tolist(),
+                         "end_position_m": states[end - 1, :3].tolist()}
+                        for start, end, t0, t1 in _intervals(arrays["on_backup"], times)]
+    modules = {}
+    for key in sorted({key for plan in plans for key in plan["timings"]}):
+        values = np.asarray([p["timings"][key] for p in plans if key in p["timings"]])
+        modules[key] = {"count": len(values), "p50_s": float(np.median(values)),
+                        "p95_s": float(np.quantile(values, .95)), "max_s": float(np.max(values))}
+    jumps = np.asarray([p["handoff"]["reference_jump"] for p in plans if p["handoff"]["accepted"]])
+    replan_jumps = np.asarray([p["handoff"]["reference_jump"] for p in plans
+                              if p["handoff"]["accepted"] and p["operation"] == "replan_once"])
+    motion_mask = times >= first_motion if first_motion is not None else np.zeros(len(times), bool)
+    return {
+        "diagnostic_definition": {"slow_speed_m_s": .2, "minimum_interval_s": .2,
+                                  "minimum_goal_distance_m": 1., "motion_onset_speed_m_s": .5},
+        "first_motion_s": first_motion, "intermediate_slow_intervals": episodes,
+        "intermediate_slow_total_s": sum(item["duration_s"] for item in episodes),
+        "backup_entries": len(backup_intervals), "backup_intervals": backup_intervals,
+        "committed_with_backup": sum(p["handoff"].get("backup_available", False) for p in plans),
+        "backup_status_counts": dict(Counter(p["backup_status"] for p in plans)),
+        "planning_status_counts": dict(Counter(p["status"] for p in plans)),
+        "module_timings": modules,
+        "reference_jump_max_pvaj": jumps.max(axis=0).tolist() if len(jumps) else None,
+        "replan_reference_jump_max_pvaj": replan_jumps.max(axis=0).tolist() if len(replan_jumps) else None,
+        "actual_speed_p50_m_s": float(np.median(actual_speed)),
+        "actual_speed_p95_m_s": float(np.quantile(actual_speed, .95)),
+        "reference_speed_p50_m_s": float(np.median(reference_speed)),
+        "reference_speed_p95_m_s": float(np.quantile(reference_speed, .95)),
+        "motion_to_end_actual_speed_p50_m_s": float(np.median(actual_speed[motion_mask])) if motion_mask.any() else None,
+        "motion_to_end_actual_speed_p95_m_s": float(np.quantile(actual_speed[motion_mask], .95)) if motion_mask.any() else None,
+        "motion_to_end_reference_speed_p50_m_s": float(np.median(reference_speed[motion_mask])) if motion_mask.any() else None,
+        "motion_to_end_reference_speed_p95_m_s": float(np.quantile(reference_speed[motion_mask], .95)) if motion_mask.any() else None,
     }

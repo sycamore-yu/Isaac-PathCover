@@ -1,12 +1,8 @@
-"""The active PathCover SE(3) controller and trajectory-server yaw rule."""
+"""Existing Newton geometric controller, driven by SUPER position and yaw."""
 from __future__ import annotations
 
 import numpy as np
 from scipy.spatial.transform import Rotation
-
-
-def wrap_angle(angle):
-    return (angle + np.pi) % (2 * np.pi) - np.pi
 
 
 class GeometricTracker:
@@ -21,28 +17,9 @@ class GeometricTracker:
         self.mass, self.gravity = mass, gravity
         self.inertia = np.diag(inertia)
         self.kp, self.kd, self.kr, self.kw = map(np.asarray, (kp, kd, kr, kw))
-        self.yaw = 0.
-        self.yaw_rate = 0.
 
-    def reset(self, yaw=0.):
-        self.yaw, self.yaw_rate = yaw, 0.
-
-    def update_yaw(self, velocity, dt):
-        target = self.yaw if np.linalg.norm(velocity[:2]) < .1 else np.arctan2(velocity[1], velocity[0])
-        diff = wrap_angle(target - self.yaw)
-        max_change = (np.pi / 2) * dt if dt > 1e-6 else 0.
-        change = np.clip(diff, -max_change, max_change)
-        yaw = wrap_angle(self.yaw + change)
-        rate = change / dt if dt > 1e-6 else 0.
-        if abs(diff) <= max_change:
-            yaw = .5 * self.yaw + .5 * yaw
-        rate = .5 * self.yaw_rate + .5 * rate
-        self.yaw, self.yaw_rate = yaw, rate
-        return yaw, rate
-
-    def command(self, state, position, velocity, acceleration, dt):
+    def command(self, state, position, velocity, acceleration, *, yaw, yaw_rate):
         """State is p(3), quaternion wxyz(4), world v(3), body omega(3)."""
-        yaw, yaw_rate = self.update_yaw(velocity, dt)
         rotation = Rotation.from_quat(np.asarray(state)[[4, 5, 6, 3]]).as_matrix()
         force = -self.kp * (state[:3] - position) - self.kd * (state[7:10] - velocity)
         force = force + self.mass * (acceleration + np.array([0., 0., self.gravity]))

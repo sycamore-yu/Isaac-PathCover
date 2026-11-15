@@ -1,0 +1,1708 @@
+{
+  "scene": "dense",
+  "seed": 1,
+  "input_directory": "results/super_risp_validation_20261115/dense/seed001",
+  "super_commit": "2ad3419c127a617c6d7df6925e81a14175a9c096",
+  "input_sha256": {
+    "flight.npz": "afa77a4a9ea7e5e55e9c61bdda5827f41e9084521dba8634df22c685714274ea",
+    "planning.json": "961f86ce38f544f4227fc1090eb4787a4c68018f8a6edbe9cfa4c136341e7360",
+    "fsm.json": "efecd2d278b3c716d533d008b87da92dd2caadc6cac4422635ef6d5a5581494e",
+    "result.json": "ba4d2c6a52e9152635423d1b0e38ea53bea112b38217d183dc73b4d19382659d",
+    "source_hashes.json": "60a0b59d791db34cb84f95c7db70be6dcec2fa5d02bc917349c29054b12d8635"
+  },
+  "time_contract": {
+    "control": "row i reference/requested wrench applied over [i*0.01,(i+1)*0.01]; flight.time is its end; command_time is last published simulation time.",
+    "physics": "physics_states[j] is pre-integration state at j*0.0025 s.",
+    "slow_interval": "Existing metric applies speed threshold to post-step state; 26.58 denotes beginning of first qualifying control interval."
+  },
+  "outcome": {
+    "arrived": false,
+    "collision": true,
+    "out_of_bounds": false,
+    "duration_sim_s": 90.0,
+    "goal_error_m": 3.0947906888933474,
+    "resolved_goal_error_m": 3.1075807192451923,
+    "trajectory_handoffs": 43,
+    "cold_start_commits": 8,
+    "replan_commits": 35,
+    "planning_attempts": 842,
+    "planning_successes": 45,
+    "planning_failures": 797,
+    "planner_ready_sim_s": 10.8
+  },
+  "first_collision": {
+    "time_s": 16.935,
+    "physics_index": 6774,
+    "position_m": [
+      3.7629024982452393,
+      4.58494234085083,
+      1.898248314857483
+    ],
+    "velocity_m_s": [
+      3.377690553665161,
+      1.1589326858520508,
+      2.1033506393432617
+    ],
+    "quaternion_wxyz": [
+      0.7345153093338013,
+      -0.5110400319099426,
+      0.4049742817878723,
+      0.18793976306915283
+    ],
+    "body_omega_rad_s": [
+      -5.621805191040039,
+      -0.6588712930679321,
+      -0.8860979080200195
+    ],
+    "actual_speed_m_s": 4.144394088245086,
+    "held_reference_pvaj": [
+      [
+        3.76014703932116,
+        1.103206088173602,
+        -11.45732600285906,
+        -20.329229640950743
+      ],
+      [
+        4.592787942615541,
+        0.24461035024197664,
+        -7.680262974021379,
+        77.04635840280055
+      ],
+      [
+        1.6900363301004497,
+        0.8367597370252303,
+        -5.7479710235566515,
+        -47.14767873920013
+      ]
+    ],
+    "published_time_s": 16.93,
+    "position_error_m": 0.2083779657674864,
+    "on_backup": true,
+    "fsm_state": 4,
+    "active_plan_id": 86,
+    "hit_boxes": [
+      {
+        "id": 904,
+        "lower_m": [
+          3.6999999999999993,
+          4.300000000000001,
+          1.99
+        ],
+        "upper_m": [
+          3.8000000000000007,
+          4.700000000000001,
+          2.0900000000000003
+        ]
+      }
+    ],
+    "reference_point_distance_to_hit_boxes_m": [
+      0.29996366989955026
+    ],
+    "body_size_m": [
+      0.11849287583000463,
+      0.15799050110667284,
+      0.03159810022133457
+    ],
+    "first_newton_contact_interval_s": [
+      16.93,
+      16.94
+    ],
+    "first_newton_contact_N": 221.50546264648438
+  },
+  "precollision": {
+    "cold_plan": {
+      "id": 86,
+      "operation": "plan_from_rest",
+      "t": 16.12,
+      "plan_start_t": 16.12,
+      "plan_end_t": 16.240000000000002,
+      "result_t": 16.240000000000002,
+      "activation_t": 16.240000000000002,
+      "status": "SUCCESS_WITH_BACKUP",
+      "success": true,
+      "exp_status": "SUCCESS",
+      "backup_status": "SUCCESS",
+      "search": {
+        "status": "REACH_HORIZON",
+        "expanded": 71771,
+        "cost_m": 7.016598621332472,
+        "elapsed_sim_s": 0.05999999999999872
+      },
+      "command_duration": 0.9535908121211384,
+      "handoff": {
+        "accepted": true,
+        "start_time": 16.12,
+        "installed_time": 16.240000000000002,
+        "backup_available": true,
+        "backup_start_tt": 0.6068043188912638,
+        "reference_jump": [
+          0.2019386797440472,
+          0.21130665495460252,
+          4.408042049560654,
+          47.896937172114555
+        ]
+      },
+      "wall_total_s": 0.1950174029916525,
+      "events": {
+        "planning_start_sim": 16.12,
+        "backup_interval": {
+          "t0": 0.10999999999999786,
+          "te": 0.7624999999999962,
+          "heuristic_ts": 0.4882161324826864
+        },
+        "planning_end_sim": 16.240000000000002,
+        "resolved_goal": [
+          6.825,
+          5.2250000000000005,
+          0.675
+        ]
+      }
+    },
+    "cold_initial_actual_speed_m_s": 1.2445233482789075,
+    "active_command_end_s": 17.07359081212114,
+    "scheduled_backup_start_s": 16.726804318891265,
+    "first_published_backup_s": 16.73,
+    "replan_attempts_since_cold_commit": [
+      {
+        "id": 87,
+        "t": 16.27,
+        "result_t": 16.39,
+        "status": "REPLAN_OVERTIME",
+        "exp_status": "SUCCESS",
+        "backup_status": "SUCCESS",
+        "total_wall_s": 0.2102445310447365
+      },
+      {
+        "id": 88,
+        "t": 16.39,
+        "result_t": 16.48,
+        "status": "REPLAN_OVERTIME",
+        "exp_status": "SUCCESS",
+        "backup_status": "SUCCESS",
+        "total_wall_s": 0.12781931599602103
+      },
+      {
+        "id": 89,
+        "t": 16.48,
+        "result_t": 16.54,
+        "status": "REPLAN_OVERTIME",
+        "exp_status": "SUCCESS",
+        "backup_status": "SUCCESS",
+        "total_wall_s": 0.17470476892776787
+      },
+      {
+        "id": 90,
+        "t": 16.54,
+        "result_t": 16.69,
+        "status": "EXP_SIM_OVERTIME",
+        "exp_status": "FAILED",
+        "backup_status": "NO_NEED",
+        "total_wall_s": 0.2855839740950614
+      },
+      {
+        "id": 91,
+        "t": 16.69,
+        "result_t": 16.830000000000002,
+        "status": "REPLAN_OVERTIME",
+        "exp_status": "SUCCESS",
+        "backup_status": "SUCCESS",
+        "total_wall_s": 0.18990418687462807
+      },
+      {
+        "id": 92,
+        "t": 16.830000000000002,
+        "result_t": 16.95,
+        "status": "EXP_SIM_OVERTIME",
+        "exp_status": "FAILED",
+        "backup_status": "NO_NEED",
+        "total_wall_s": 0.18341134395450354
+      }
+    ],
+    "reference_acceleration_z_below_minus_g": [
+      {
+        "start_s": 16.77,
+        "end_s": 16.86,
+        "samples": 9
+      }
+    ],
+    "minimum_backup_reference_acceleration_z": {
+      "time_s": 16.81,
+      "value_m_s2": -13.592550320247067
+    },
+    "negative_requested_thrust_before_collision": [
+      {
+        "start_s": 14.57,
+        "end_s": 14.6,
+        "samples": 3
+      },
+      {
+        "start_s": 16.8,
+        "end_s": 16.94,
+        "samples": 14
+      }
+    ],
+    "actual_tilt_over_90_before_collision": [
+      {
+        "start_s": 11.42,
+        "end_s": 11.49,
+        "samples": 7
+      }
+    ]
+  },
+  "published_backup_intervals": [
+    {
+      "start_s": 11.65,
+      "end_s": 11.74,
+      "duration_s": 0.08999999999999986,
+      "start_position_m": [
+        -11.438496589660645,
+        -5.580111980438232,
+        0.6818870306015015
+      ],
+      "end_position_m": [
+        -11.085841178894043,
+        -5.129580974578857,
+        0.5900014638900757
+      ]
+    },
+    {
+      "start_s": 13.96,
+      "end_s": 14.31,
+      "duration_s": 0.34999999999999964,
+      "start_position_m": [
+        -2.7534563541412354,
+        0.4822154641151428,
+        0.7108666896820068
+      ],
+      "end_position_m": [
+        -1.1024430990219116,
+        1.533179521560669,
+        1.0026788711547852
+      ]
+    },
+    {
+      "start_s": 15.46,
+      "end_s": 16.240000000000002,
+      "duration_s": 0.7800000000000011,
+      "start_position_m": [
+        1.111179232597351,
+        3.7312490940093994,
+        0.5310525894165039
+      ],
+      "end_position_m": [
+        3.2135210037231445,
+        4.467111587524414,
+        0.4423271119594574
+      ]
+    },
+    {
+      "start_s": 16.730000000000004,
+      "end_s": 17.290000000000003,
+      "duration_s": 0.5599999999999987,
+      "start_position_m": [
+        3.202263593673706,
+        4.4398322105407715,
+        1.3443175554275513
+      ],
+      "end_position_m": [
+        4.468889236450195,
+        5.303238391876221,
+        1.7702370882034302
+      ]
+    },
+    {
+      "start_s": 18.240000000000002,
+      "end_s": 18.89,
+      "duration_s": 0.6499999999999986,
+      "start_position_m": [
+        8.721900939941406,
+        4.942746162414551,
+        1.8996690511703491
+      ],
+      "end_position_m": [
+        9.989595413208008,
+        5.016073226928711,
+        1.6397520303726196
+      ]
+    },
+    {
+      "start_s": 19.410000000000004,
+      "end_s": 20.110000000000003,
+      "duration_s": 0.6999999999999993,
+      "start_position_m": [
+        8.601040840148926,
+        4.606909275054932,
+        1.4468204975128174
+      ],
+      "end_position_m": [
+        8.04908275604248,
+        3.227825164794922,
+        1.2402929067611694
+      ]
+    },
+    {
+      "start_s": 22.620000000000005,
+      "end_s": 23.03,
+      "duration_s": 0.4099999999999966,
+      "start_position_m": [
+        8.709369659423828,
+        2.6466119289398193,
+        1.4256337881088257
+      ],
+      "end_position_m": [
+        9.110689163208008,
+        2.8266351222991943,
+        1.4819614887237549
+      ]
+    },
+    {
+      "start_s": 23.370000000000005,
+      "end_s": 24.270000000000003,
+      "duration_s": 0.8999999999999986,
+      "start_position_m": [
+        8.50810718536377,
+        2.8812673091888428,
+        1.466554045677185
+      ],
+      "end_position_m": [
+        7.237766742706299,
+        4.246186256408691,
+        0.9546319842338562
+      ]
+    },
+    {
+      "start_s": 24.72,
+      "end_s": 90.0,
+      "duration_s": 65.28,
+      "start_position_m": [
+        8.266757011413574,
+        4.3330979347229,
+        1.2146830558776855
+      ],
+      "end_position_m": [
+        9.675926208496094,
+        4.11521053314209,
+        0.12943147122859955
+      ]
+    }
+  ],
+  "postcollision_stall": {
+    "source_metric_interval": {
+      "start_s": 26.580000000000005,
+      "end_s": 90.0,
+      "duration_s": 63.419999999999995,
+      "actual_speed_mean_m_s": 0.0143610697171693,
+      "reference_speed_mean_m_s": 8.164786047272455e-15,
+      "reference_speed_max_m_s": 8.164786047272452e-15,
+      "goal_distance_min_m": 3.0740406760354637,
+      "on_backup_samples": 6342,
+      "fsm_states": [
+        3
+      ],
+      "last_committed_plan": 180
+    },
+    "last_commit": {
+      "id": 180,
+      "operation": "plan_from_rest",
+      "t": 24.17,
+      "plan_start_t": 24.17,
+      "plan_end_t": 24.26,
+      "result_t": 24.27,
+      "activation_t": 24.27,
+      "status": "SUCCESS_WITH_BACKUP",
+      "success": true,
+      "exp_status": "SUCCESS",
+      "backup_status": "SUCCESS",
+      "search": {
+        "status": "REACH_HORIZON",
+        "expanded": 95733,
+        "cost_m": 7.0995142295929945,
+        "elapsed_sim_s": 0.04999999999999716
+      },
+      "command_duration": 1.1911122923836048,
+      "handoff": {
+        "accepted": true,
+        "start_time": 24.17,
+        "installed_time": 24.27,
+        "backup_available": true,
+        "backup_start_tt": 0.5481247757372563,
+        "reference_jump": [
+          0.9190397290550186,
+          0.16428236053047454,
+          4.403739852344271,
+          68.5735868376814
+        ]
+      },
+      "wall_total_s": 0.20496237906627357,
+      "events": {
+        "planning_start_sim": 24.17,
+        "backup_interval": {
+          "t0": 0.09999999999999985,
+          "te": 0.8674999999999963,
+          "heuristic_ts": 0.48374999999999807
+        },
+        "planning_end_sim": 24.26,
+        "resolved_goal": [
+          6.825,
+          5.2250000000000005,
+          0.675
+        ]
+      }
+    },
+    "last_command_mathematical_end_s": 25.361112292383606,
+    "last_published_time_s": 25.37,
+    "held_reference_pvaj": [
+      [
+        10.060882407959804,
+        -7.581922623402447e-15,
+        1.9178690033717022e-14,
+        -4.637571358647092e-13
+      ],
+      [
+        4.296199356338223,
+        3.018837767769184e-15,
+        -6.462075122749048e-16,
+        3.1208445620103415e-13
+      ],
+      [
+        1.0599513390352973,
+        -2.545565995283217e-16,
+        2.8786709128232335e-15,
+        -2.77606586751578e-14
+      ]
+    ],
+    "held_reference_is_bitwise_constant": true,
+    "command_time_unique_after_finish": [
+      25.37
+    ],
+    "fsm_states_after_finish": [
+      3
+    ],
+    "backup_flag_interpretation": "The 24.72-90.00 published flag interval includes executing backup until 25.37, then holding its finished endpoint in GENERATE; it is not 65.28 seconds of moving backup trajectory.",
+    "collision_physics_samples_during_stall": 25369,
+    "total_physics_samples_during_stall": 25369,
+    "contact_control_steps_during_stall": 6342,
+    "total_control_steps_during_stall": 6342,
+    "contact_force_min_median_max_N": [
+      7.757566452026367,
+      14.17630386352539,
+      28.232654571533203
+    ],
+    "first_backup_corridor_failure": {
+      "id": 199,
+      "operation": "plan_from_rest",
+      "t": 25.67,
+      "plan_start_t": 25.67,
+      "plan_end_t": 25.76,
+      "result_t": 25.77,
+      "activation_t": null,
+      "status": "BACKUP_CORRIDOR_FAILED",
+      "success": false,
+      "exp_status": "SUCCESS",
+      "backup_status": "FAILED",
+      "search": {
+        "status": "REACH_HORIZON",
+        "expanded": 72679,
+        "cost_m": 7.033828804643756,
+        "elapsed_sim_s": 0.03999999999999915
+      },
+      "handoff": {
+        "accepted": false,
+        "retained_previous": true
+      },
+      "wall_total_s": 0.1854002878535539,
+      "events": {
+        "planning_start_sim": 25.67,
+        "backup_corridor_error": "RISP seed intersects an occupied robot-radius ball",
+        "planning_end_sim": 25.76,
+        "resolved_goal": [
+          6.825,
+          5.2250000000000005,
+          0.675
+        ]
+      }
+    },
+    "first_long_continuous_body_contact_s": 26.43,
+    "hit_boxes_at_30_s": [
+      {
+        "id": 1154,
+        "lower_m": [
+          9.5,
+          4.0,
+          -0.01
+        ],
+        "upper_m": [
+          9.700000000000003,
+          4.100000000000001,
+          2.99
+        ]
+      }
+    ],
+    "hit_boxes_final": [
+      {
+        "id": 1154,
+        "lower_m": [
+          9.5,
+          4.0,
+          -0.01
+        ],
+        "upper_m": [
+          9.700000000000003,
+          4.100000000000001,
+          2.99
+        ]
+      }
+    ]
+  },
+  "plan_stage_statistics": [
+    {
+      "start_s": 0,
+      "end_s": 16.935,
+      "attempts": 92,
+      "operation_counts": {
+        "plan_from_rest": 2,
+        "replan_once": 90
+      },
+      "status_counts": {
+        "SUCCESS_WITH_BACKUP": 34,
+        "REPLAN_OVERTIME": 51,
+        "EXP_OPT_FAILED": 2,
+        "EXP_SIM_OVERTIME": 3,
+        "ON_BACKUP_WAIT_FOR_REST": 2
+      },
+      "search_status_counts": {
+        "REACH_HORIZON": 90,
+        "NO_RECORD": 2
+      },
+      "backup_error_counts": {
+        "NO_ERROR": 91,
+        "RISP seed intersects an occupied robot-radius ball": 1
+      },
+      "search_wall_p50_s": 0.005783576983958483,
+      "search_wall_p95_s": 0.07941135911969467
+    },
+    {
+      "start_s": 16.935,
+      "end_s": 26.58,
+      "attempts": 114,
+      "operation_counts": {
+        "replan_once": 95,
+        "plan_from_rest": 19
+      },
+      "status_counts": {
+        "REPLAN_OVERTIME": 39,
+        "ON_BACKUP_WAIT_FOR_REST": 14,
+        "EXP_SIM_OVERTIME": 20,
+        "SUCCESS_WITH_BACKUP": 7,
+        "EXP_OPT_FAILED": 26,
+        "SUCCESS_NO_BACKUP": 2,
+        "SUCCESS_NO_BACKUP_RETAINED_COMMAND": 2,
+        "BACKUP_CORRIDOR_FAILED": 4
+      },
+      "search_status_counts": {
+        "REACH_HORIZON": 98,
+        "NO_RECORD": 16
+      },
+      "backup_error_counts": {
+        "NO_ERROR": 108,
+        "RISP seed intersects an occupied robot-radius ball": 6
+      },
+      "search_wall_p50_s": 0.07598950550891459,
+      "search_wall_p95_s": 0.1032196816871874
+    },
+    {
+      "start_s": 26.58,
+      "end_s": 90.0,
+      "attempts": 636,
+      "operation_counts": {
+        "plan_from_rest": 636
+      },
+      "status_counts": {
+        "EXP_SIM_OVERTIME": 182,
+        "BACKUP_CORRIDOR_FAILED": 454
+      },
+      "search_status_counts": {
+        "REACH_HORIZON": 636
+      },
+      "backup_error_counts": {
+        "NO_ERROR": 182,
+        "RISP seed intersects an occupied robot-radius ball": 454
+      },
+      "search_wall_p50_s": 0.07242608244996518,
+      "search_wall_p95_s": 0.0911994788912125
+    },
+    {
+      "start_s": 25.37,
+      "end_s": 90.0,
+      "attempts": 647,
+      "operation_counts": {
+        "replan_once": 1,
+        "plan_from_rest": 646
+      },
+      "status_counts": {
+        "ON_BACKUP_WAIT_FOR_REST": 1,
+        "EXP_SIM_OVERTIME": 188,
+        "BACKUP_CORRIDOR_FAILED": 458
+      },
+      "search_status_counts": {
+        "NO_RECORD": 1,
+        "REACH_HORIZON": 646
+      },
+      "backup_error_counts": {
+        "NO_ERROR": 189,
+        "RISP seed intersects an occupied robot-radius ball": 458
+      },
+      "search_wall_p50_s": 0.07245469593908638,
+      "search_wall_p95_s": 0.09105127793736756
+    }
+  ],
+  "search_path_evidence": {
+    "limitation": "REACH_HORIZON proves successful local search to the 7 m horizon; it does not prove a complete collision-free route to the global goal.",
+    "cases": [
+      {
+        "plan_id": 199,
+        "status": "BACKUP_CORRIDOR_FAILED",
+        "search": {
+          "status": "REACH_HORIZON",
+          "expanded": 72679,
+          "cost_m": 7.033828804643756,
+          "elapsed_sim_s": 0.03999999999999915
+        },
+        "guide_path": "results/super_risp_validation_20261115/dense/seed001/plans/0198/guide.npz",
+        "guide_points": 70,
+        "first_m": [
+          9.325000000000001,
+          4.175,
+          0.5750000000000001
+        ],
+        "last_m": [
+          3.6500000000000004,
+          3.95,
+          0.75
+        ]
+      },
+      {
+        "plan_id": 208,
+        "status": "BACKUP_CORRIDOR_FAILED",
+        "search": {
+          "status": "REACH_HORIZON",
+          "expanded": 68959,
+          "cost_m": 7.018789493028456,
+          "elapsed_sim_s": 0.030000000000001137
+        },
+        "guide_path": "results/super_risp_validation_20261115/dense/seed001/plans/0207/guide.npz",
+        "guide_points": 69,
+        "first_m": [
+          9.675,
+          4.125,
+          0.875
+        ],
+        "last_m": [
+          5.65,
+          2.35,
+          0.9500000000000001
+        ]
+      },
+      {
+        "plan_id": 500,
+        "status": "BACKUP_CORRIDOR_FAILED",
+        "search": {
+          "status": "REACH_HORIZON",
+          "expanded": 68179,
+          "cost_m": 7.009151861310724,
+          "elapsed_sim_s": 0.02999999999999403
+        },
+        "guide_path": "results/super_risp_validation_20261115/dense/seed001/plans/0499/guide.npz",
+        "guide_points": 69,
+        "first_m": [
+          9.675,
+          4.125,
+          0.47500000000000003
+        ],
+        "last_m": [
+          5.550000000000001,
+          2.35,
+          0.8500000000000001
+        ]
+      },
+      {
+        "plan_id": 842,
+        "status": "EXP_SIM_OVERTIME",
+        "search": {
+          "status": "REACH_HORIZON",
+          "expanded": 68179,
+          "cost_m": 7.009151861310724,
+          "elapsed_sim_s": 0.06999999999999318
+        },
+        "guide_path": "results/super_risp_validation_20261115/dense/seed001/plans/0841/guide.npz",
+        "guide_points": 72,
+        "first_m": [
+          9.675,
+          4.125,
+          0.325
+        ],
+        "last_m": [
+          5.550000000000001,
+          2.35,
+          0.8500000000000001
+        ]
+      }
+    ]
+  },
+  "verification": {
+    "committed_reference_rows_checked": 7907,
+    "max_abs_pvaj_reference_reconstruction_error": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "replan_reference_jump_max_pvaj": [
+      3.978256139440565e-15,
+      1.9897892672707393e-15,
+      7.283604593613869e-15,
+      5.989774116730248e-14
+    ],
+    "runtimes_modified": false
+  },
+  "selected_control_frames": [
+    {
+      "applied_interval_s": [
+        16.12,
+        16.13
+      ],
+      "published_sim_time_s": 16.11,
+      "active_plan_id": 74,
+      "actual_position_m": [
+        3.3529372215270996,
+        4.495577812194824,
+        0.5058879256248474
+      ],
+      "actual_velocity_m_s": [
+        -1.0965089797973633,
+        -0.2657639682292938,
+        -0.5252389311790466
+      ],
+      "actual_tilt_rad": 0.38316466697071294,
+      "reference_pvaj": [
+        [
+          3.182653558523269,
+          1.9815245660201035e-15,
+          6.490306628310445e-14,
+          3.5468738233559083e-13
+        ],
+        [
+          4.487497447222325,
+          4.479143601110255e-16,
+          3.5045191661092443e-16,
+          7.058148961974915e-14
+        ],
+        [
+          0.4553564348681301,
+          1.8306168305276154e-16,
+          2.9162418689199034e-15,
+          4.254050325580803e-15
+        ]
+      ],
+      "position_error_m": 0.17780677642369846,
+      "actual_speed_m_s": 1.2445233482789075,
+      "reference_speed_m_s": 2.039749607068706e-15,
+      "requested_wrench": [
+        7.5156952349172155,
+        -0.0325097056899671,
+        -0.3608484169281922,
+        0.020869165592145467
+      ],
+      "allocated_wrench": [
+        7.515695095062256,
+        -0.03250974416732788,
+        -0.36084842681884766,
+        0.02086915820837021
+      ],
+      "feedback_world_force_N": [
+        3.890638969269225,
+        1.4242657236286718,
+        9.688242384866072
+      ],
+      "contact_at_interval_end_N": 0.0,
+      "on_backup_published_flag": true,
+      "fsm_state": 3
+    },
+    {
+      "applied_interval_s": [
+        16.240000000000002,
+        16.25
+      ],
+      "published_sim_time_s": 16.240000000000002,
+      "active_plan_id": 86,
+      "actual_position_m": [
+        3.2135210037231445,
+        4.467111587524414,
+        0.4423271119594574
+      ],
+      "actual_velocity_m_s": [
+        -1.110087275505066,
+        -0.18101352453231812,
+        -0.4009295105934143
+      ],
+      "actual_tilt_rad": 0.25776089368403016,
+      "reference_pvaj": [
+        [
+          3.3699133955357183,
+          -0.1488308237902007,
+          -2.9113339692535836,
+          -24.16932734328685
+        ],
+        [
+          4.4740447771645915,
+          -0.02880652798310481,
+          -0.5990759523524927,
+          -6.211177264610207
+        ],
+        [
+          0.5297339145723898,
+          0.1472075822218126,
+          3.255161629393795,
+          40.8825327399136
+        ]
+      ],
+      "position_error_m": 0.17929472518303596,
+      "actual_speed_m_s": 1.1940704031867413,
+      "reference_speed_m_s": 0.21130665495460121,
+      "requested_wrench": [
+        15.16996197395257,
+        -0.004121575629066237,
+        -0.6796269867021597,
+        0.1613663386839456
+      ],
+      "allocated_wrench": [
+        15.486907005310059,
+        0.027572929859161377,
+        -0.6558561325073242,
+        0.15439355373382568
+      ],
+      "feedback_world_force_N": [
+        5.653653956349843,
+        0.5328267135989352,
+        14.26903852151997
+      ],
+      "contact_at_interval_end_N": 0.0,
+      "on_backup_published_flag": false,
+      "fsm_state": 4
+    },
+    {
+      "applied_interval_s": [
+        16.73,
+        16.740000000000002
+      ],
+      "published_sim_time_s": 16.73,
+      "active_plan_id": 86,
+      "actual_position_m": [
+        3.184100389480591,
+        4.437705993652344,
+        1.3103083372116089
+      ],
+      "actual_velocity_m_s": [
+        1.7288610935211182,
+        0.18441766500473022,
+        3.4079463481903076
+      ],
+      "actual_tilt_rad": 1.022743340414879,
+      "reference_pvaj": [
+        [
+          3.3728768155432514,
+          1.928310245705738,
+          12.822669644804906,
+          -54.16011615735794
+        ],
+        [
+          4.456110758265625,
+          0.48694276964158184,
+          5.199463893842207,
+          21.48699493986654
+        ],
+        [
+          1.3529083689404302,
+          2.6359263540790354,
+          -3.3398937597661655,
+          -92.38763418652356
+        ]
+      ],
+      "position_error_m": 0.19439659745159643,
+      "actual_speed_m_s": 3.8258422429578154,
+      "reference_speed_m_s": 3.30206017642446,
+      "requested_wrench": [
+        13.067624821872752,
+        -0.3484061064825551,
+        -0.38450244032609976,
+        -0.8610589786905792
+      ],
+      "allocated_wrench": [
+        17.0,
+        -1.1175870895385742e-08,
+        -2.2351741790771484e-08,
+        -0.37400001287460327
+      ],
+      "feedback_world_force_N": [
+        13.536710833472661,
+        5.931511541955659,
+        1.0029475868783742
+      ],
+      "contact_at_interval_end_N": 0.0,
+      "on_backup_published_flag": true,
+      "fsm_state": 4
+    },
+    {
+      "applied_interval_s": [
+        16.77,
+        16.78
+      ],
+      "published_sim_time_s": 16.77,
+      "active_plan_id": 86,
+      "actual_position_m": [
+        3.265878200531006,
+        4.449361801147461,
+        1.4451582431793213
+      ],
+      "actual_velocity_m_s": [
+        2.3252081871032715,
+        0.3918606638908386,
+        3.3146162033081055
+      ],
+      "actual_tilt_rad": 1.2443028666700935,
+      "reference_pvaj": [
+        [
+          3.4586624593611397,
+          2.30304393723343,
+          4.475663705765208,
+          -277.44421781832756
+        ],
+        [
+          4.479973916144646,
+          0.7091352701755652,
+          5.534063426156508,
+          -30.746278052967117
+        ],
+        [
+          1.4540702643827121,
+          2.374312239246698,
+          -10.196189650600807,
+          -169.6371352952521
+        ]
+      ],
+      "position_error_m": 0.19540290724350698,
+      "actual_speed_m_s": 4.067779304302249,
+      "reference_speed_m_s": 3.3829340545850584,
+      "requested_wrench": [
+        5.711285182892844,
+        -0.3316440075059269,
+        -1.0462181433293458,
+        0.07317255952817325
+      ],
+      "allocated_wrench": [
+        9.83043098449707,
+        0.00047916173934936523,
+        -0.7372822761535645,
+        0.00010541826486587524
+      ],
+      "feedback_world_force_N": [
+        6.0325182105272965,
+        6.445684080380287,
+        -5.6175101013588025
+      ],
+      "contact_at_interval_end_N": 0.0,
+      "on_backup_published_flag": true,
+      "fsm_state": 4
+    },
+    {
+      "applied_interval_s": [
+        16.8,
+        16.81
+      ],
+      "published_sim_time_s": 16.8,
+      "active_plan_id": 86,
+      "actual_position_m": [
+        3.3410370349884033,
+        4.463326454162598,
+        1.5416311025619507
+      ],
+      "actual_velocity_m_s": [
+        2.6284985542297363,
+        0.5211778879165649,
+        3.1198768615722656
+      ],
+      "actual_tilt_rad": 1.2999839121338783,
+      "reference_pvaj": [
+        [
+          3.528550422061171,
+          2.3175358550995164,
+          -3.1972567570256327,
+          -217.14685450687026
+        ],
+        [
+          4.503504548119092,
+          0.8486121653754811,
+          3.3480577305368655,
+          -112.94077875819268
+        ],
+        [
+          1.5200748091784104,
+          2.0095895532650285,
+          -13.449781650994595,
+          -38.30533115215118
+        ]
+      ],
+      "position_error_m": 0.19297726122503586,
+      "actual_speed_m_s": 4.1126953050055866,
+      "reference_speed_m_s": 3.182697789531241,
+      "requested_wrench": [
+        -1.615155734974468,
+        -0.06312877752878954,
+        -0.12576905188011406,
+        0.5677984722046461
+      ],
+      "allocated_wrench": [
+        12.096933364868164,
+        0.052281662821769714,
+        -0.03921124339103699,
+        0.26613253355026245
+      ],
+      "feedback_world_force_N": [
+        -1.4889766236834199,
+        4.999440584994602,
+        -9.491905243791244
+      ],
+      "contact_at_interval_end_N": 0.0,
+      "on_backup_published_flag": true,
+      "fsm_state": 4
+    },
+    {
+      "applied_interval_s": [
+        16.830000000000002,
+        16.84
+      ],
+      "published_sim_time_s": 16.830000000000002,
+      "active_plan_id": 86,
+      "actual_position_m": [
+        3.423755407333374,
+        4.481155872344971,
+        1.6317145824432373
+      ],
+      "actual_velocity_m_s": [
+        2.872833251953125,
+        0.6666963696479797,
+        2.908512830734253
+      ],
+      "actual_tilt_rad": 1.2660287550941574,
+      "reference_pvaj": [
+        [
+          3.5957797989750833,
+          2.1398846979141433,
+          -8.105868594569348,
+          -110.37497363162389
+        ],
+        [
+          4.529892213881376,
+          0.8894227865790829,
+          -0.8509143364602493,
+          -157.17264089602423
+        ],
+        [
+          1.574295919841924,
+          1.6096126220315998,
+          -12.587038530298392,
+          86.05302888229826
+        ]
+      ],
+      "position_error_m": 0.18778851168529126,
+      "actual_speed_m_s": 4.1421132081795085,
+      "reference_speed_m_s": 2.821530117977947,
+      "requested_wrench": [
+        -8.564845597491358,
+        -0.31010979766171803,
+        0.3084777777247938,
+        0.674728678233581
+      ],
+      "allocated_wrench": [
+        11.052318572998047,
+        -0.3607066869735718,
+        0.27053001523017883,
+        0.2431510090827942
+      ],
+      "feedback_world_force_N": [
+        -7.852361117737459,
+        1.3586025894601672,
+        -10.45708159297882
+      ],
+      "contact_at_interval_end_N": 0.0,
+      "on_backup_published_flag": true,
+      "fsm_state": 4
+    },
+    {
+      "applied_interval_s": [
+        16.93,
+        16.94
+      ],
+      "published_sim_time_s": 16.93,
+      "active_plan_id": 86,
+      "actual_position_m": [
+        3.7460153102874756,
+        4.579150676727295,
+        1.887670874595642
+      ],
+      "actual_velocity_m_s": [
+        3.3764615058898926,
+        1.1563128232955933,
+        2.1519129276275635
+      ],
+      "actual_tilt_rad": 1.4062731818276482,
+      "reference_pvaj": [
+        [
+          3.76014703932116,
+          1.103206088173602,
+          -11.45732600285906,
+          -20.329229640950743
+        ],
+        [
+          4.592787942615541,
+          0.24461035024197664,
+          -7.680262974021379,
+          77.04635840280055
+        ],
+        [
+          1.6900363301004497,
+          0.8367597370252303,
+          -5.7479710235566515,
+          -47.14767873920013
+        ]
+      ],
+      "position_error_m": 0.19860788998478976,
+      "actual_speed_m_s": 4.167526951822231,
+      "reference_speed_m_s": 1.406081346841404,
+      "requested_wrench": [
+        -20.05532278228301,
+        -0.06351860416419557,
+        0.10759949681795808,
+        0.36856662314832006
+      ],
+      "allocated_wrench": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "feedback_world_force_N": [
+        -21.595880505916078,
+        -10.865691744795491,
+        -7.4415004103884215
+      ],
+      "contact_at_interval_end_N": 221.50546264648438,
+      "on_backup_published_flag": true,
+      "fsm_state": 4
+    },
+    {
+      "applied_interval_s": [
+        25.11,
+        25.12
+      ],
+      "published_sim_time_s": 25.11,
+      "active_plan_id": 180,
+      "actual_position_m": [
+        10.03179931640625,
+        4.654106616973877,
+        1.2335723638534546
+      ],
+      "actual_velocity_m_s": [
+        2.5434486865997314,
+        -0.6924716234207153,
+        -0.21738314628601074
+      ],
+      "actual_tilt_rad": 0.9995556489980719,
+      "reference_pvaj": [
+        [
+          9.831896858563425,
+          2.3274661176175044,
+          -9.35215347199046,
+          -61.29155886815229
+        ],
+        [
+          4.396537553561063,
+          -0.9827575270988803,
+          2.8917524507025862,
+          48.43466508273572
+        ],
+        [
+          1.0600700584100415,
+          -0.02275545932861702,
+          0.4254654073128807,
+          -0.7870777338678561
+        ]
+      ],
+      "position_error_m": 0.3693316464549658,
+      "actual_speed_m_s": 2.6449770514879756,
+      "reference_speed_m_s": 2.5265448139022317,
+      "requested_wrench": [
+        13.20366098926074,
+        -0.3486152867138495,
+        -0.014940739158914022,
+        -0.37130596250491027
+      ],
+      "allocated_wrench": [
+        15.04060173034668,
+        -0.18426814675331116,
+        -0.13820110261440277,
+        -0.33089324831962585
+      ],
+      "feedback_world_force_N": [
+        -11.184103949754702,
+        -3.2438118178908124,
+        6.3075703417226805
+      ],
+      "contact_at_interval_end_N": 143.28671264648438,
+      "on_backup_published_flag": true,
+      "fsm_state": 4
+    },
+    {
+      "applied_interval_s": [
+        25.37,
+        25.38
+      ],
+      "published_sim_time_s": 25.37,
+      "active_plan_id": 180,
+      "actual_position_m": [
+        9.707748413085938,
+        4.49349308013916,
+        0.7918516993522644
+      ],
+      "actual_velocity_m_s": [
+        -2.291552782058716,
+        -0.8657125234603882,
+        -2.8239994049072266
+      ],
+      "actual_tilt_rad": 0.6730713788902954,
+      "reference_pvaj": [
+        [
+          10.060882407959804,
+          -7.581922623402447e-15,
+          1.9178690033717022e-14,
+          -4.637571358647092e-13
+        ],
+        [
+          4.296199356338223,
+          3.018837767769184e-15,
+          -6.462075122749048e-16,
+          3.1208445620103415e-13
+        ],
+        [
+          1.0599513390352973,
+          -2.545565995283217e-16,
+          2.8786709128232335e-15,
+          -2.77606586751578e-14
+        ]
+      ],
+      "position_error_m": 0.48528944825226594,
+      "actual_speed_m_s": 3.738401391658414,
+      "reference_speed_m_s": 8.164786047272452e-15,
+      "requested_wrench": [
+        12.656162615496607,
+        0.19476620296766317,
+        -0.15971883805664003,
+        0.008015536859993122
+      ],
+      "allocated_wrench": [
+        12.65616226196289,
+        0.19476620852947235,
+        -0.1597188413143158,
+        0.008015528321266174
+      ],
+      "feedback_world_force_N": [
+        18.411449061611588,
+        2.160373640956674,
+        27.641204523865895
+      ],
+      "contact_at_interval_end_N": 0.0,
+      "on_backup_published_flag": true,
+      "fsm_state": 3
+    },
+    {
+      "applied_interval_s": [
+        26.59,
+        26.6
+      ],
+      "published_sim_time_s": 25.37,
+      "active_plan_id": 180,
+      "actual_position_m": [
+        9.696722984313965,
+        4.117151737213135,
+        0.9017613530158997
+      ],
+      "actual_velocity_m_s": [
+        0.09448067098855972,
+        -0.04466544836759567,
+        -0.1309359073638916
+      ],
+      "actual_tilt_rad": 1.5340824323558901,
+      "reference_pvaj": [
+        [
+          10.060882407959804,
+          -7.581922623402447e-15,
+          1.9178690033717022e-14,
+          -4.637571358647092e-13
+        ],
+        [
+          4.296199356338223,
+          3.018837767769184e-15,
+          -6.462075122749048e-16,
+          3.1208445620103415e-13
+        ],
+        [
+          1.0599513390352973,
+          -2.545565995283217e-16,
+          2.8786709128232335e-15,
+          -2.77606586751578e-14
+        ]
+      ],
+      "position_error_m": 0.4355389849614492,
+      "actual_speed_m_s": 0.16752853877931495,
+      "reference_speed_m_s": 8.164786047272452e-15,
+      "requested_wrench": [
+        -2.6530316513973524,
+        -2.297875118700715,
+        -1.2568548650321016,
+        0.6463858283667131
+      ],
+      "allocated_wrench": [
+        15.289724349975586,
+        -0.5035997629165649,
+        0.08885177969932556,
+        0.25164517760276794
+      ],
+      "feedback_world_force_N": [
+        4.732323751130992,
+        2.855250077845845,
+        10.427746259991839
+      ],
+      "contact_at_interval_end_N": 16.998977661132812,
+      "on_backup_published_flag": true,
+      "fsm_state": 3
+    },
+    {
+      "applied_interval_s": [
+        30.0,
+        30.01
+      ],
+      "published_sim_time_s": 25.37,
+      "active_plan_id": 180,
+      "actual_position_m": [
+        9.704700469970703,
+        4.115544319152832,
+        0.8309555649757385
+      ],
+      "actual_velocity_m_s": [
+        0.000863197143189609,
+        0.002356518292799592,
+        -0.016175853088498116
+      ],
+      "actual_tilt_rad": 1.5693283992233897,
+      "reference_pvaj": [
+        [
+          10.060882407959804,
+          -7.581922623402447e-15,
+          1.9178690033717022e-14,
+          -4.637571358647092e-13
+        ],
+        [
+          4.296199356338223,
+          3.018837767769184e-15,
+          -6.462075122749048e-16,
+          3.1208445620103415e-13
+        ],
+        [
+          1.0599513390352973,
+          -2.545565995283217e-16,
+          2.8786709128232335e-15,
+          -2.77606586751578e-14
+        ]
+      ],
+      "position_error_m": 0.460370372577627,
+      "actual_speed_m_s": 0.01636937723045638,
+      "reference_speed_m_s": 8.164786047272452e-15,
+      "requested_wrench": [
+        -2.5977067106524885,
+        -1.5071357514645916,
+        -1.3688039591985677,
+        0.4031834843567579
+      ],
+      "allocated_wrench": [
+        10.96387004852295,
+        -0.1509782075881958,
+        -0.3516857624053955,
+        0.10482878983020782
+      ],
+      "feedback_world_force_N": [
+        5.1596315574114335,
+        2.6058302330899425,
+        10.788821871776893
+      ],
+      "contact_at_interval_end_N": 14.174805641174316,
+      "on_backup_published_flag": true,
+      "fsm_state": 3
+    },
+    {
+      "applied_interval_s": [
+        89.99,
+        90.0
+      ],
+      "published_sim_time_s": 25.37,
+      "active_plan_id": 180,
+      "actual_position_m": [
+        9.675909042358398,
+        4.115302085876465,
+        0.12957927584648132
+      ],
+      "actual_velocity_m_s": [
+        -0.0034266505390405655,
+        -0.00799606554210186,
+        -0.014814823865890503
+      ],
+      "actual_tilt_rad": 1.5693556266260655,
+      "reference_pvaj": [
+        [
+          10.060882407959804,
+          -7.581922623402447e-15,
+          1.9178690033717022e-14,
+          -4.637571358647092e-13
+        ],
+        [
+          4.296199356338223,
+          3.018837767769184e-15,
+          -6.462075122749048e-16,
+          3.1208445620103415e-13
+        ],
+        [
+          1.0599513390352973,
+          -2.545565995283217e-16,
+          2.8786709128232335e-15,
+          -2.77606586751578e-14
+        ]
+      ],
+      "position_error_m": 1.0229958409716053,
+      "actual_speed_m_s": 0.01718016310305739,
+      "reference_speed_m_s": 8.164786047272452e-15,
+      "requested_wrench": [
+        -2.63341393740792,
+        -1.585834206326904,
+        -1.2964060692864265,
+        0.4442908162827597
+      ],
+      "allocated_wrench": [
+        11.359638214111328,
+        -0.18652912974357605,
+        -0.2469271719455719,
+        0.13644365966320038
+      ],
+      "feedback_world_force_N": [
+        5.601988374346787,
+        2.669387601839695,
+        20.950884094659997
+      ],
+      "contact_at_interval_end_N": 16.6440486907959,
+      "on_backup_published_flag": true,
+      "fsm_state": 3
+    }
+  ],
+  "fsm_transitions": [
+    {
+      "time": 10.81,
+      "from": "INIT",
+      "to": "WAIT_GOAL",
+      "callback": "MainFsmCallback"
+    },
+    {
+      "time": 10.82,
+      "from": "WAIT_GOAL",
+      "to": "GENERATE_TRAJ",
+      "callback": "MainFsmCallback"
+    },
+    {
+      "time": 10.93,
+      "from": "GENERATE_TRAJ",
+      "to": "FOLLOW_TRAJ",
+      "callback": "MainFsmCallback"
+    },
+    {
+      "time": 16.11,
+      "from": "FOLLOW_TRAJ",
+      "to": "GENERATE_TRAJ",
+      "callback": "PubCmdCallback"
+    },
+    {
+      "time": 16.240000000000002,
+      "from": "GENERATE_TRAJ",
+      "to": "FOLLOW_TRAJ",
+      "callback": "MainFsmCallback"
+    },
+    {
+      "time": 17.080000000000002,
+      "from": "FOLLOW_TRAJ",
+      "to": "GENERATE_TRAJ",
+      "callback": "PubCmdCallback"
+    },
+    {
+      "time": 17.29,
+      "from": "GENERATE_TRAJ",
+      "to": "FOLLOW_TRAJ",
+      "callback": "MainFsmCallback"
+    },
+    {
+      "time": 18.78,
+      "from": "FOLLOW_TRAJ",
+      "to": "GENERATE_TRAJ",
+      "callback": "PubCmdCallback"
+    },
+    {
+      "time": 18.89,
+      "from": "GENERATE_TRAJ",
+      "to": "FOLLOW_TRAJ",
+      "callback": "MainFsmCallback"
+    },
+    {
+      "time": 19.94,
+      "from": "FOLLOW_TRAJ",
+      "to": "GENERATE_TRAJ",
+      "callback": "PubCmdCallback"
+    },
+    {
+      "time": 20.11,
+      "from": "GENERATE_TRAJ",
+      "to": "FOLLOW_TRAJ",
+      "callback": "MainFsmCallback"
+    },
+    {
+      "time": 21.400000000000002,
+      "from": "FOLLOW_TRAJ",
+      "to": "GENERATE_TRAJ",
+      "callback": "PubCmdCallback"
+    },
+    {
+      "time": 21.52,
+      "from": "GENERATE_TRAJ",
+      "to": "FOLLOW_TRAJ",
+      "callback": "MainFsmCallback"
+    },
+    {
+      "time": 22.92,
+      "from": "FOLLOW_TRAJ",
+      "to": "GENERATE_TRAJ",
+      "callback": "PubCmdCallback"
+    },
+    {
+      "time": 23.03,
+      "from": "GENERATE_TRAJ",
+      "to": "FOLLOW_TRAJ",
+      "callback": "MainFsmCallback"
+    },
+    {
+      "time": 23.86,
+      "from": "FOLLOW_TRAJ",
+      "to": "GENERATE_TRAJ",
+      "callback": "PubCmdCallback"
+    },
+    {
+      "time": 24.27,
+      "from": "GENERATE_TRAJ",
+      "to": "FOLLOW_TRAJ",
+      "callback": "MainFsmCallback"
+    },
+    {
+      "time": 25.37,
+      "from": "FOLLOW_TRAJ",
+      "to": "GENERATE_TRAJ",
+      "callback": "PubCmdCallback"
+    }
+  ],
+  "source_execution_branches": [
+    {
+      "source": "/home/tong/tongworkspace/reference_repos/SUPER/super_planner/src/super_core/super_planner.cpp",
+      "lines": "233-237",
+      "branch": "ReplanOnce rejects when wall elapsed > replan_forward_dt * 0.9 (0.09 s in source default).",
+      "python": "src/isaac_pathcover/planning/pipeline.py:231-233",
+      "observed_plan_ids": [
+        87,
+        88,
+        89,
+        91
+      ]
+    },
+    {
+      "source": "/home/tong/tongworkspace/reference_repos/SUPER/super_planner/src/super_core/super_planner.cpp",
+      "lines": "757-760",
+      "branch": "generateExpTraj rejects when simulation elapsed > replan_forward_dt (0.1 s in source default).",
+      "python": "src/isaac_pathcover/planning/pipeline.py:424-426",
+      "observed_plan_ids": [
+        90,
+        92
+      ]
+    },
+    {
+      "source": "/home/tong/tongworkspace/reference_repos/SUPER/super_planner/src/super_core/super_planner.cpp",
+      "lines": "425-441",
+      "branch": "When predicted time reaches CmdTraj end and last published command is on backup, return FAILED and wait for PlanFromRest.",
+      "python": "src/isaac_pathcover/planning/pipeline.py:307-318",
+      "observed_examples": [
+        85,
+        94,
+        95,
+        96,
+        196
+      ]
+    },
+    {
+      "source": "/home/tong/tongworkspace/reference_repos/SUPER/super_planner/src/super_core/super_planner.cpp",
+      "lines": "322-341",
+      "branch": "getOneCommandFromTraj clamps completed command to its final polynomial state and retains isTTOnBackupTraj at that time.",
+      "python": "src/isaac_pathcover/control/execution.py:114-127",
+      "observed_time_s": 25.37
+    },
+    {
+      "source": "/home/tong/tongworkspace/reference_repos/SUPER/super_planner/include/ros_interface/ros2/fsm_ros2.hpp",
+      "lines": "367-388",
+      "branch": "PubCmd publishes only in FOLLOW/EMER; when command finishes outside goal radius it changes to GENERATE. Subsequent GENERATE callbacks leave last published command held.",
+      "python": "src/isaac_pathcover/control/execution.py:255-263; src/isaac_pathcover/demo.py:129-138",
+      "observed_time_s": 25.37
+    },
+    {
+      "source": "/home/tong/tongworkspace/reference_repos/SUPER/super_planner/src/super_core/fsm.cpp",
+      "lines": "132-161",
+      "branch": "GENERATE retries PlanFromRest; failed return leaves state unchanged.",
+      "python": "src/isaac_pathcover/control/execution.py:216-222,236-246",
+      "observed_time_s": [
+        25.38,
+        90.0
+      ]
+    },
+    {
+      "source": "/home/tong/tongworkspace/reference_repos/SUPER/super_planner/src/super_core/super_planner.cpp",
+      "lines": "895-931",
+      "branch": "After first invisible trajectory sample, backtrack by robot_r, form robot-to-seed line, and return FAILED if corridor generation fails. Python records RISP geometric replacement error.",
+      "python": "src/isaac_pathcover/planning/pipeline.py:538-565; src/isaac_pathcover/planning/risp.py:83-91",
+      "observed_plan_id": 199
+    },
+    {
+      "source": "/home/tong/tongworkspace/reference_repos/SUPER/super_planner/src/super_core/super_planner.cpp",
+      "lines": "118-160",
+      "branch": "PlanFromRest commits only backup SUCCESS, FINISH or NO_NEED; other backup returns fail without a new command.",
+      "python": "src/isaac_pathcover/planning/pipeline.py:209-217",
+      "observed_plan_id": 199
+    }
+  ],
+  "conclusions": [
+    "First contact occurs during backup plan 86, after reference braking and negative requested thrust; there was no previous obstacle contact.",
+    "At first contact the held reference point is about 0.30 m below the hit solid, whereas the actual body is about 0.21 m above the reference and touches that solid.",
+    "No new command replaced cold plan 86 before contact: four replans hit the source wall-time gate, and two hit the source simulation-time gate (the second result arrived after contact).",
+    "The 63.42-second slow interval is entirely in physical contact, after the last backup command has finished. Its reference is a held zero-speed endpoint, not a moving search reference.",
+    "All 636 searches requested during the slow interval return REACH_HORIZON. 454 attempts fail in RISP backup-corridor geometry; 182 fail the source Exp simulation-time gate. No new command is committed.",
+    "The exact failed RISP seed endpoints and contemporaneous ROG occupancy are not serialized for failed corridors; the saved error proves the precise rejection branch, not a reconstructed full-map seed-clearance value.",
+    "These observations identify the execution chain; they do not prove that an individual controller parameter, RISP geometry choice, or planner delay alone caused the first collision."
+  ]
+}

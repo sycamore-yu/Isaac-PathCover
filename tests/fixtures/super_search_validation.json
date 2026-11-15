@@ -1,0 +1,11 @@
+{
+  "source_commit": "2ad3419c127a617c6d7df6925e81a14175a9c096",
+  "tests": "20 passed",
+  "path_status_cases": 18,
+  "nearest_cases": 4,
+  "path_points": 199,
+  "absolute_path_tolerance_m": 2e-15,
+  "absolute_nearest_tolerance_m": 2e-15,
+  "line_neighbor_cases": 44,
+  "absolute_local_goal_tolerance_m": 2e-15
+}

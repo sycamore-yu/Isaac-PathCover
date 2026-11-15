@@ -1,37 +1,55 @@
-# Rerun flight recording
+# SUPER + RISP 的 Rerun 录制
 
-Convert saved Newton flight data into an interactive Rerun recording without rerunning the physics simulator.
+录制直接读取 Newton 飞行数据，不重新运行物理仿真。
+每条录制使用同一批 `flight.npz`、`planning.json`、`fsm.json` 和轨迹多项式。
 
-## Produce recordings
+当前包含 medium seeds 0–2、dense seeds 0–5，共 9 条录制。
+到达、碰撞和越界状态分别保留。9 个文件均通过 `rrd verify`。
 
-Requires Python 3.12, NumPy and `rerun-sdk` (validated with Rerun 0.38.1). Use a Python environment containing the SDK; this dependency is deliberately separate from the Isaac Lab simulation environment.
+- [工作机 Rerun 回放](http://100.92.244.71:9114?url=rerun%2Bhttp%3A%2F%2F100%2E92%2E244%2E71%3A9896%2Fproxy)
+- [录制文件与汇总](http://100.92.244.71:9115/)
+
+## 生成与检查
+
+本机的独立 SDK 环境使用 Rerun 0.38.1。
 
 ```bash
-python scripts/record_rerun.py --scene both --seed 0 \
-  --source results/replan_policy_validation_20261115 \
-  --output results/rerun_20261115 --fps 12
-rerun rrd verify results/rerun_20261115/medium_seed000.rrd
-rerun rrd verify results/rerun_20261115/dense_seed000.rrd
-rerun results/rerun_20261115/medium_seed000.rrd \
-      results/rerun_20261115/dense_seed000.rrd
+/home/tong/.local/share/pipx/venvs/rerun-sdk/bin/python scripts/record_rerun.py \
+  --scene both --source results/super_risp_validation_20261115 \
+  --output results/rerun_super_risp_20261115 --fps 12
+/home/tong/.local/bin/rerun rrd verify results/rerun_super_risp_20261115/*.rrd
+/home/tong/.local/bin/rerun results/rerun_super_risp_20261115/*.rrd
 ```
 
-The current server already has a standalone `rerun-sdk` pipx environment. Its Python interpreter is `/home/tong/.local/share/pipx/venvs/rerun-sdk/bin/python`; the CLI is `/home/tong/.local/bin/rerun`.
+其他机器可使用装有 NumPy 和 `rerun-sdk` 的 Python 环境执行录制脚本。
+SDK 与 Isaac Lab 环境独立。
+默认转换各场景下全部已保存的飞行。`--seeds` 可指定种子列表。
 
-Recordings include:
+## 回放内容
 
-- Original obstacle boxes, start and goal, a body-oriented quadrotor and four rotor markers.
-- Orange executed trajectory, blue reference trajectory, and purple currently accepted MINCO plan.
-- Time-aligned commanded target, true/desired speed, positional tracking error and measured contact force.
-- Quaternion conversion from Newton state `[w,x,y,z]` to Rerun `[x,y,z,w]`.
+| 内容 | 表示 |
+|---|---|
+| 场景 | 原障碍实体、原始起终点、SUPER 最近非占据格点调整后的目标 |
+| 无人机 | Newton 实际位置、姿态、机体与旋翼位置 |
+| 橙色路径 | 实际飞行路径 |
+| 蓝色路径 | 控制器实际使用的参考位置 |
+| 紫色轨迹 | 当时已提交的完整 CmdTraj |
+| 黄色轨迹 | 同次提交的备用轨迹 |
+| 速度与误差 | 实际速度、实际使用的参考速度、位置误差 |
+| 规划 | 各次完整规划耗时、含传感器更新的工作进程耗时 |
+| 执行 | 备用标志、FSM 状态和接触力 |
+| 事件日志 | 规划状态、备用生成状态、FSM 切换与来源回调 |
 
-`results/rerun_20261115/summary.json` holds source-derived status and recorder metadata. `.rrd` and screenshots are generated assets, excluded from Git together with flight data.
+轨迹按原始仿真时间显示。控制器保持最后发布的命令。
+`flight.npz` 的 `command_time` 保存命令采样的仿真时间。
+物理状态记录在该控制步结束时。
+四元数从 Newton 的 `[w,x,y,z]` 转换为 Rerun 的 `[x,y,z,w]`。
 
-## Recorded examples
+12 帧/s 仅控制三维动画的抽样密度。
+速度、误差、备用标志、状态机和接触力曲线保留全部 100 Hz 控制样本。
+原始 100 Hz 控制记录和 400 Hz 物理记录仍保存在飞行数据中。
+规划和状态机事件不按回放帧率丢弃。
 
-| Recording | Simulated flight duration | Frames | Collisions | Destination reached |
-| --- | ---: | ---: | ---: | --- |
-| `medium_seed000.rrd` | 21.72 s | 273 | 0 | yes |
-| `dense_seed000.rrd` | 19.09 s | 240 | 0 | yes |
-
-Both recordings were replaced using the 2026-11-15 five-seed Newton retest **after removing the fixed wall-clock rejection rules**. The existing Web Viewer at `http://100.92.244.71:9114` was restarted with these files. Select either recording under **Sources** and play its `sim_time` timeline. Preview screenshots were regenerated from the revised recordings at 8 s and 9.5 s respectively.
+`summary.json` 保存每条录制的源结果、帧数、字节数和轨迹提交数量。
+`.rrd` 和原始飞行数据保存在 `results/`。
+当前运行结果见 [SUPER 验收报告](super_validation.md)。

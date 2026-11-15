@@ -59,3 +59,42 @@ def risp(points, seed, bounds, *, rng=None, alpha=0.01):
     b = np.concatenate((np.asarray(offsets), b_bound))
     A, b = remove_redundant(A, b, seed)
     return RISPResult(A, b, remaining)
+
+
+def risp_segment(points, start, end, bounds, *, rng=None, alpha=0.01, robot_radius=0.0):
+    """RISP with a line seed and the robot sphere used by SUPER's CIRI.
+
+    Projection onto the seed segment supplies the separator's support point.
+    The radius is included while constructing and pruning each separator;
+    no post-generation shrink or acceptance check is applied.
+    """
+    start, end = np.asarray(start, float), np.asarray(end, float)
+    if np.array_equal(start, end) and robot_radius == 0:
+        return risp(points, start, bounds, rng=rng, alpha=alpha)
+    work = np.asarray(points, float).reshape(-1, 3).copy()
+    A_bound, b_bound = map(lambda x: np.asarray(x, float), bounds)
+    seed = (start + end) / 2
+    if np.any(b_bound - A_bound @ seed <= 1e-8):
+        raise GeometryError("RISP segment seed is outside its bounding box")
+    rng = np.random.default_rng(0) if rng is None else rng
+    direction = end - start
+    length_sq = float(direction @ direction)
+    normals, offsets, remaining = [], [], [len(work)]
+    while len(work):
+        point = work[int(rng.integers(len(work)))]
+        fraction = np.clip((point - start) @ direction / length_sq, 0.0, 1.0) if length_sq else 0.0
+        support = start + fraction * direction
+        normal = point - support
+        norm = float(np.linalg.norm(normal))
+        offset = float(normal @ support + (1.0 - alpha) * norm * norm - robot_radius * norm)
+        if offset <= max(float(normal @ start), float(normal @ end)):
+            raise GeometryError("RISP seed intersects an occupied robot-radius ball")
+        normals.append(normal)
+        offsets.append(offset)
+        work = np.compress(work @ normal <= offset + robot_radius * norm, work, axis=0)
+        remaining.append(len(work))
+    A = np.concatenate((np.asarray(normals).reshape(-1, 3), A_bound))
+    b = np.concatenate((np.asarray(offsets), b_bound))
+    A, b = remove_redundant(A, b, seed)
+    norms = np.linalg.norm(A, axis=1)
+    return RISPResult(A / norms[:, None], b / norms, remaining)

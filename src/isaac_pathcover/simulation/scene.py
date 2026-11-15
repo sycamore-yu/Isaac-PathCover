@@ -8,6 +8,8 @@ import numpy as np
 from scipy.ndimage import binary_erosion
 from scipy.spatial.transform import Rotation
 
+from .lidar import cast_voxels
+
 
 class Scene:
     def __init__(self, name="medium"):
@@ -62,29 +64,9 @@ class Scene:
         delta = np.abs(self.resolution * inv)
         boundary = self.lower + (indices + (step > 0)) * self.resolution
         tmax = np.multiply(boundary - origin, inv, out=np.full_like(inv, np.inf), where=np.isfinite(inv))
-        distance = np.zeros(len(direction))
-        alive = np.ones(len(direction), dtype=bool)
-        hits = np.zeros(len(direction), dtype=bool)
-        shape = np.asarray(self.occupied.shape)
-        for _ in range(int(np.ceil(max_range / self.resolution) * 3) + 3):
-            ids = np.flatnonzero(alive)
-            if not len(ids):
-                break
-            cells = indices[ids]
-            inside = ((cells >= 0) & (cells < shape)).all(axis=1)
-            alive[ids[~inside]] = False
-            ids = ids[inside]
-            if not len(ids):
-                continue
-            occupied = self.occupied[tuple(indices[ids].T)]
-            hits[ids[occupied]] = True
-            alive[ids[occupied]] = False
-            ids = ids[~occupied]
-            axes = np.argmin(tmax[ids], axis=1)
-            distance[ids] = tmax[ids, axes]
-            tmax[ids, axes] += delta[ids, axes]
-            indices[ids, axes] += step[ids, axes]
-            alive[ids[distance[ids] >= max_range]] = False
+        hits, distance = cast_voxels(
+            self.occupied, indices, step, delta, tmax, max_range,
+            int(np.ceil(max_range / self.resolution) * 3) + 3)
         hits &= distance >= min_range
         return origin, origin + direction[hits] * (distance[hits, None] + 1e-7)
 

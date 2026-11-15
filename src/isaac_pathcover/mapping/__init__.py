@@ -1,6 +1,5 @@
-"""Sparse log-odds mapping and exact voxel-lattice obstacle inflation."""
+"""ROG-Map occupancy and incremental counter inflation."""
 
-from .nanovox import NanoVoxMap
-from .inflation import OccupancyInflation
+from .rog_map import GridType, ROGMap, ROGMapConfig, ray_indices, spherical_neighbors
 
-__all__ = ["NanoVoxMap", "OccupancyInflation"]
+__all__ = ["GridType", "ROGMap", "ROGMapConfig", "ray_indices", "spherical_neighbors"]

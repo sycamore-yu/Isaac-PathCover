@@ -5,7 +5,7 @@ Copyright (c) 2021 Zhepei Wang. Distributed under the upstream MIT license.
 """
 from dataclasses import dataclass
 from functools import lru_cache
-from math import factorial
+from math import factorial, comb
 import numpy as np
 from scipy.linalg.lapack import dgbtrf, dgbtrs
 
@@ -45,11 +45,58 @@ class PiecewisePolynomial:
         return float(self.knots[-1])
 
     def evaluate(self, t, derivative=0):
-        t = np.clip(np.asarray(t, dtype=np.float64), 0.0, self.duration)
+        t = np.asarray(t, dtype=np.float64)
         index = np.minimum(np.searchsorted(self.knots[1:], t, side="left"), len(self.durations) - 1)
         local = t - self.knots[index]
         basis = derivative_basis(local, self.coefficients.shape[1] - 1, derivative)
         return np.einsum("...k,...kd->...d", basis, self.coefficients[index])
+
+    def state(self, t, first_derivative=0):
+        t = np.asarray(t,dtype=float)
+        index = np.minimum(np.searchsorted(self.knots[1:],t,side="left"),len(self.durations)-1)
+        bases = derivative_bases(t-self.knots[index],self.coefficients.shape[1]-1,
+                                  range(first_derivative,first_derivative+4))
+        return np.swapaxes(bases @ self.coefficients[index],-1,-2)
+
+    def cut(self, start, end):
+        """Translate polynomial origins and retain the exact requested interval."""
+        if not 0 <= start <= end <= self.duration + 1e-8:
+            raise ValueError("trajectory interval is outside its duration")
+        durations, coefficients = [], []
+        for i, (left, right) in enumerate(zip(self.knots[:-1], self.knots[1:])):
+            a, b = max(float(start), left), min(float(end), right)
+            if b <= a:
+                continue
+            offset = a - left
+            c = self.coefficients[i]
+            shifted = np.zeros_like(c)
+            for k in range(len(c)):
+                for j in range(k + 1):
+                    shifted[j] += comb(k, j) * offset ** (k-j) * c[k]
+            durations.append(b-a)
+            coefficients.append(shifted)
+        return PiecewisePolynomial(np.array(durations), np.array(coefficients).reshape(
+            -1, *self.coefficients.shape[1:]))
+
+    def concatenate(self, other):
+        width = max(self.coefficients.shape[1], other.coefficients.shape[1])
+        a = np.pad(self.coefficients, ((0,0),(0,width-self.coefficients.shape[1]),(0,0)))
+        b = np.pad(other.coefficients, ((0,0),(0,width-other.coefficients.shape[1]),(0,0)))
+        return PiecewisePolynomial(np.r_[self.durations, other.durations], np.concatenate([a,b]))
+
+    def max_derivative_norm(self, derivative):
+        """Find extrema of squared derivative magnitude on each normalized piece."""
+        maximum = 0.0
+        for duration, coefficients in zip(self.durations, self.coefficients):
+            c = np.polynomial.polynomial.polyder(coefficients, derivative, axis=0)
+            c = c * duration ** np.arange(len(c))[:,None]
+            squared = sum((np.convolve(c[:,i], c[:,i])
+                           for i in range(c.shape[1])), start=np.zeros(2*len(c)-1))
+            roots = np.polynomial.polynomial.polyroots(np.polynomial.polynomial.polyder(squared))
+            real = roots.real[(np.abs(roots.imag) < 1e-7) & (roots.real > 0) & (roots.real < 1)]
+            maximum = max(maximum, float(np.max(np.polynomial.polynomial.polyval(
+                np.r_[0.,1.,real], squared))))
+        return np.sqrt(maximum)
 
 
 class MINCO:
@@ -59,13 +106,14 @@ class MINCO:
     Inner points have shape (N-1, 3); polynomial coefficients are ascending.
     """
     def __init__(self, start_state, end_state, pieces, order=3):
-        if order not in (3, 4) or pieces < 1:
-            raise ValueError("MINCO needs order 3/4 and at least one piece")
+        if order not in (2, 3, 4) or pieces < 1:
+            raise ValueError("MINCO needs order 2/3/4 and at least one piece")
         self.order, self.pieces, self.width = order, pieces, 2 * order
         self.start = np.asarray(start_state, dtype=np.float64).copy()
         self.end = np.asarray(end_state, dtype=np.float64).copy()
-        if self.start.shape != (3, order) or self.end.shape != (3, order):
-            raise ValueError("boundary shape must be (3, order)")
+        self.dimension = self.start.shape[0]
+        if self.start.shape != (self.dimension, order) or self.end.shape != self.start.shape:
+            raise ValueError("boundary shape must be (dimension, order)")
         m, n, s = self.width, pieces, order
         rows, cols, ti, powers, factors = [], [], [], [], []
         fixed_rows, fixed_cols, fixed_values = [], [], []
@@ -99,7 +147,11 @@ class MINCO:
         self._fixed_rows, self._fixed_cols = np.array(fixed_rows), np.array(fixed_cols)
         self._fixed_values = np.array(fixed_values)
         self._waypoint_rows = np.arange(n - 1) * m + m - 1
-        self._rhs = np.zeros((m * n, 3))
+        self._time_grad_rows = np.concatenate(self.endpoint_rows)
+        self._time_grad_piece = np.repeat(np.arange(n),[len(r) for r in self.endpoint_rows])
+        self._time_grad_derivative = np.array(self.endpoint_derivatives*(n-1)+list(range(s)))
+        self._time_grad_offsets = np.r_[0,np.cumsum([len(r) for r in self.endpoint_rows[:-1]])].astype(int)
+        self._rhs = np.zeros((m * n, self.dimension))
         self._rhs[:s] = self.start.T
         self._rhs[-s:] = self.end.T
         ks = np.arange(s, m)
@@ -110,7 +162,7 @@ class MINCO:
         self.durations = np.asarray(durations, dtype=np.float64).copy()
         if self.durations.shape != (self.pieces,) or np.any(self.durations <= 0):
             raise ValueError("piece durations must be positive")
-        points = np.asarray(inner_points, dtype=np.float64).reshape(self.pieces - 1, 3)
+        points = np.asarray(inner_points, dtype=np.float64).reshape(self.pieces - 1, self.dimension)
         m, n = self.width, self.pieces
         # LAPACK general band layout includes m extra rows for pivot fill-in.
         band = np.zeros((3 * m + 1, m * n), order="F")
@@ -125,7 +177,7 @@ class MINCO:
         coeffs, info = dgbtrs(self._lu, m, m, rhs, self._pivots)
         if info:
             raise np.linalg.LinAlgError(f"MINCO band solve failed: {info}")
-        self.coefficients = coeffs.reshape(n, m, 3)
+        self.coefficients = coeffs.reshape(n, m, self.dimension)
         return self
 
     def energy_with_partials(self):
@@ -145,10 +197,16 @@ class MINCO:
         grad_t = np.sum(end_derivative * end_derivative, axis=1)
         return energy, grad_c, grad_t
 
-    def propagate_gradient(self, grad_coefficients, grad_durations):
+    def set_conditions(self, start_state, end_state):
+        self.start = np.asarray(start_state, dtype=np.float64).copy()
+        self.end = np.asarray(end_state, dtype=np.float64).copy()
+        self._rhs[:self.order] = self.start.T
+        self._rhs[-self.order:] = self.end.T
+
+    def propagate_gradient(self, grad_coefficients, grad_durations, boundary_gradients=False):
         m, n, s = self.width, self.pieces, self.order
         adjoint, info = dgbtrs(
-            self._lu, m, m, np.asarray(grad_coefficients).reshape(m * n, 3),
+            self._lu, m, m, np.asarray(grad_coefficients).reshape(m * n, self.dimension),
             self._pivots, trans=1)
         if info:
             raise np.linalg.LinAlgError(f"MINCO adjoint solve failed: {info}")
@@ -156,10 +214,11 @@ class MINCO:
         grad_time = np.asarray(grad_durations).copy()
         endpoint_basis = derivative_bases(self.durations, m - 1, range(1, m))
         endpoint_states = endpoint_basis @ self.coefficients
-        for i in range(n):
-            ders = self.endpoint_derivatives if i < n - 1 else list(range(s))
-            dstate = endpoint_states[i, ders]
-            grad_time[i] -= np.sum(adjoint[self.endpoint_rows[i]] * dstate)
+        state = endpoint_states[self._time_grad_piece,self._time_grad_derivative]
+        terms = np.sum(adjoint[self._time_grad_rows]*state,axis=1)
+        grad_time -= np.add.reduceat(terms,self._time_grad_offsets)
+        if boundary_gradients:
+            return grad_points, grad_time, adjoint[:s].T.copy(), adjoint[-s:].T.copy()
         return grad_points, grad_time
 
     def trajectory(self):

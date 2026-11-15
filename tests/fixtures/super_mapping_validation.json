@@ -1,0 +1,269 @@
+{
+  "source_commit": "2ad3419c127a617c6d7df6925e81a14175a9c096",
+  "test_command": "OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 .venv/bin/python -m pytest -q tests/test_super_mapping.py",
+  "tests_passed": 8,
+  "map_queries": 1020,
+  "log_odds_max_absolute_error": 0.0,
+  "raw_and_inflated_type_differences": 0,
+  "frontier_queries": 408,
+  "frontier_differences": 0,
+  "frontier_box_phases": 4,
+  "esdf_queries": 216,
+  "esdf_columns": [
+    "distance",
+    "interpolated_distance",
+    "gradient_x",
+    "gradient_y",
+    "gradient_z",
+    "second_gradient_x",
+    "second_gradient_y",
+    "second_gradient_z"
+  ],
+  "esdf_max_absolute_error_by_column": [
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+  ],
+  "esdf_max_scaled_error_by_column": [
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+  ],
+  "esdf_assertion_relative_tolerance": 3e-14,
+  "esdf_assertion_absolute_tolerance": 3e-13,
+  "fixture_sha256": "df0ee488eb10d6d0d5f902f43475dde9f84b723c0a3c49130554e4f3ca6745b5",
+  "source_note": "Preserves the source signed-distance merge indexing at esdf_map.cpp:225-236; ESDF/frontier remain disabled by default.",
+  "dense_stopped_search": {
+    "before": {
+      "input": "results/super_risp_development_20261115/search_failure/dense_stopped",
+      "input_sha256": "1f159be3ccfbaa7aeb340a7f9d71bfc7900fe77a0efcbe27e2a7460c61fbde43",
+      "kernel_sha256": "f87b8c43db5d6b10b11251f952b037b3819d06469ff7464c196c5dfc46496179",
+      "status": "REACH_HORIZON",
+      "expanded": 68765,
+      "cost": 7.001972184338276,
+      "path_points": 60,
+      "same_path_and_expansions": true,
+      "wall_s": [
+        0.2908971388824284,
+        0.2875184598378837,
+        0.28198799514211714
+      ],
+      "clock": "fixed zero float64 buffer; source timeout check remains at every expansion"
+    },
+    "closed_first": {
+      "input": "results/super_risp_development_20261115/search_failure/dense_stopped",
+      "input_sha256": "1f159be3ccfbaa7aeb340a7f9d71bfc7900fe77a0efcbe27e2a7460c61fbde43",
+      "kernel_sha256": "042de9d8fc400543725a46428e127ce2e37ca35b8512d37cefc9869e3692d807",
+      "status": "REACH_HORIZON",
+      "expanded": 68765,
+      "cost": 7.001972184338276,
+      "path_points": 60,
+      "same_path_and_expansions": true,
+      "wall_s": [
+        0.18397435685619712,
+        0.18443808588199317,
+        0.18125793896615505
+      ],
+      "clock": "fixed zero float64 buffer; source timeout check remains at every expansion"
+    },
+    "accepted_heuristic": {
+      "input": "results/super_risp_development_20261115/search_failure/dense_stopped",
+      "input_sha256": "1f159be3ccfbaa7aeb340a7f9d71bfc7900fe77a0efcbe27e2a7460c61fbde43",
+      "kernel_sha256": "f3d1d274a6227af1de47e7ca63bd30f72476c60ddf4b15e7171f90cbb6d19371",
+      "status": "REACH_HORIZON",
+      "expanded": 68765,
+      "cost": 7.001972184338276,
+      "path_points": 60,
+      "same_path_and_expansions": true,
+      "wall_s": [
+        0.07510563591495156,
+        0.07379047898575664,
+        0.07241288898512721
+      ],
+      "clock": "fixed zero float64 buffer; source timeout check remains at every expansion"
+    },
+    "replay": {
+      "scene": "dense",
+      "input_flight": "results/super_risp_validation_20261115/dense/seed000",
+      "until": 27.21,
+      "scan_replay": [
+        {
+          "t": 18.580000000000002,
+          "frame": -1,
+          "origin_error_m": 0.0,
+          "points": 2146,
+          "recorded_points": 2146,
+          "map_version": 3,
+          "recorded_map_version": 3
+        },
+        {
+          "t": 19.150000000000002,
+          "frame": -1,
+          "origin_error_m": 0.0,
+          "points": 1821,
+          "recorded_points": 1821,
+          "map_version": 4,
+          "recorded_map_version": 4
+        },
+        {
+          "t": 19.67,
+          "frame": -1,
+          "origin_error_m": 0.0,
+          "points": 1130,
+          "recorded_points": 1130,
+          "map_version": 5,
+          "recorded_map_version": 5
+        },
+        {
+          "t": 20.31,
+          "frame": -1,
+          "origin_error_m": 0.0,
+          "points": 4372,
+          "recorded_points": 4372,
+          "map_version": 6,
+          "recorded_map_version": 6
+        },
+        {
+          "t": 20.93,
+          "frame": -1,
+          "origin_error_m": 0.0,
+          "points": 2737,
+          "recorded_points": 2737,
+          "map_version": 7,
+          "recorded_map_version": 7
+        },
+        {
+          "t": 21.48,
+          "frame": -1,
+          "origin_error_m": 0.0,
+          "points": 3311,
+          "recorded_points": 3311,
+          "map_version": 8,
+          "recorded_map_version": 8
+        },
+        {
+          "t": 21.990000000000002,
+          "frame": -1,
+          "origin_error_m": 0.0,
+          "points": 3544,
+          "recorded_points": 3544,
+          "map_version": 9,
+          "recorded_map_version": 9
+        },
+        {
+          "t": 22.580000000000002,
+          "frame": -1,
+          "origin_error_m": 0.0,
+          "points": 2221,
+          "recorded_points": 2221,
+          "map_version": 10,
+          "recorded_map_version": 10
+        },
+        {
+          "t": 23.14,
+          "frame": -1,
+          "origin_error_m": 0.0,
+          "points": 2715,
+          "recorded_points": 2715,
+          "map_version": 11,
+          "recorded_map_version": 11
+        },
+        {
+          "t": 23.69,
+          "frame": -1,
+          "origin_error_m": 0.0,
+          "points": 4698,
+          "recorded_points": 4698,
+          "map_version": 12,
+          "recorded_map_version": 12
+        },
+        {
+          "t": 24.29,
+          "frame": -1,
+          "origin_error_m": 0.0,
+          "points": 2475,
+          "recorded_points": 2475,
+          "map_version": 13,
+          "recorded_map_version": 13
+        },
+        {
+          "t": 24.8,
+          "frame": -1,
+          "origin_error_m": 0.0,
+          "points": 2170,
+          "recorded_points": 2170,
+          "map_version": 14,
+          "recorded_map_version": 14
+        },
+        {
+          "t": 25.39,
+          "frame": -1,
+          "origin_error_m": 0.0,
+          "points": 3543,
+          "recorded_points": 3543,
+          "map_version": 15,
+          "recorded_map_version": 15
+        },
+        {
+          "t": 25.96,
+          "frame": -1,
+          "origin_error_m": 0.0,
+          "points": 4501,
+          "recorded_points": 4501,
+          "map_version": 16,
+          "recorded_map_version": 16
+        },
+        {
+          "t": 26.490000000000002,
+          "frame": -1,
+          "origin_error_m": 0.0,
+          "points": 4492,
+          "recorded_points": 4492,
+          "map_version": 17,
+          "recorded_map_version": 17
+        },
+        {
+          "t": 27.0,
+          "frame": -1,
+          "origin_error_m": 0.0,
+          "points": 4485,
+          "recorded_points": 4485,
+          "map_version": 18,
+          "recorded_map_version": 18
+        }
+      ],
+      "start": [
+        2.6312754154205322,
+        4.224399089813232,
+        1.4146288633346558
+      ],
+      "goal": [
+        6.825,
+        5.2250000000000005,
+        0.675
+      ],
+      "escape": {
+        "status": "REACH_HORIZON",
+        "expanded": 1,
+        "wall_s": 0.0003238460049033165
+      },
+      "search": {
+        "status": "REACH_HORIZON",
+        "expanded": 68765,
+        "wall_s": 0.30548552400432527,
+        "cost": 7.001972184338276,
+        "points": 60
+      }
+    }
+  }
+}

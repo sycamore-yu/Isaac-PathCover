@@ -1,0 +1,1054 @@
+{
+  "case": "results/super_risp_validation_20261115/medium/seed000",
+  "input_sha256": {
+    "flight.npz": "cb5a458a75796cbd5a6444213d5a1eabd8bd539183a07ea31b011f87f99188c4",
+    "planning.json": "d69be8b74cce06110752d0a69f84fa8b6a4ca0f588e2f52aa5ec1a52ba74587e",
+    "fsm.json": "76b78bdeee221b497ee69dab9d2882b0ac8a104731f718d79b7ce590018aef0f",
+    "result.json": "15c13685bfbcefda363914af11193da6af096541e958d8a0a96de8b5e52c472f"
+  },
+  "time_contract": {
+    "physics_state": "at physics_index * 0.0025, before integration",
+    "control_state": "flight.time is end of applied 0.01 s control interval; command_time is the last published trajectory timestamp",
+    "stored_plan_directory": "plans/{id-1:04d}"
+  },
+  "first_collision": null,
+  "contact_force_max_N": 0.0,
+  "first_out_of_bounds": {
+    "physics_index": 8306,
+    "sim_time_s": 20.765,
+    "position_m": [
+      13.28466510772705,
+      -3.9854934215545654,
+      -0.016006506979465485
+    ],
+    "velocity_m_s": [
+      1.6430846452713013,
+      -1.6850237846374512,
+      -5.370512008666992
+    ],
+    "tilt_rad": 2.161897422911123,
+    "active_plan_id": 132,
+    "on_backup": false,
+    "fsm_state": 4,
+    "reference_position_m": [
+      12.674969801506075,
+      -3.474949669176793,
+      1.0250704631524912
+    ]
+  },
+  "first_post_step_tracking_error_above_m": {
+    "0.1": 15.37,
+    "0.2": 15.44,
+    "0.4": 17.76,
+    "1.0": 20.71
+  },
+  "first_attitude_error_above_rad": {
+    "1.0": 15.3,
+    "2.0": 16.46
+  },
+  "negative_requested_thrust_intervals": [
+    {
+      "start_sim_s": 16.45,
+      "end_sim_s": 16.53,
+      "samples": 8
+    },
+    {
+      "start_sim_s": 17.45,
+      "end_sim_s": 17.560000000000002,
+      "samples": 11
+    },
+    {
+      "start_sim_s": 18.42,
+      "end_sim_s": 18.540000000000003,
+      "samples": 12
+    },
+    {
+      "start_sim_s": 19.89,
+      "end_sim_s": 19.970000000000002,
+      "samples": 8
+    },
+    {
+      "start_sim_s": 20.25,
+      "end_sim_s": 20.930000000000003,
+      "samples": 68
+    }
+  ],
+  "reference_downward_acceleration_exceeds_g": {
+    "intervals": [
+      {
+        "start_sim_s": 18.87,
+        "end_sim_s": 18.990000000000002,
+        "samples": 12
+      }
+    ],
+    "minimum_acc_z_m_s2": -11.417227480260633,
+    "minimum_time_step_start_s": 18.93
+  },
+  "actual_tilt_above_pi_over_2": [
+    {
+      "start_sim_s": 17.365000000000002,
+      "end_sim_s": 17.5375,
+      "samples": 70
+    },
+    {
+      "start_sim_s": 19.0575,
+      "end_sim_s": 19.240000000000002,
+      "samples": 74
+    },
+    {
+      "start_sim_s": 20.19,
+      "end_sim_s": 20.93,
+      "samples": 297
+    }
+  ],
+  "backup_intervals": [
+    {
+      "start_sim_s": 16.53,
+      "end_sim_s": 16.66,
+      "samples": 13
+    },
+    {
+      "start_sim_s": 17.41,
+      "end_sim_s": 17.67,
+      "samples": 26
+    }
+  ],
+  "cold_starts": [
+    {
+      "id": 1,
+      "start_sim_s": 15.14,
+      "install_sim_s": 15.27,
+      "actual_position_m": [
+        -11.039999961853027,
+        -2.109999895095825,
+        1.2799999713897705
+      ],
+      "actual_velocity_m_s": [
+        -6.29152694386903e-08,
+        -2.555542550908285e-07,
+        1.062118073491547e-07
+      ],
+      "actual_speed_m_s": 2.838084855037728e-07,
+      "actual_tilt_rad": 1.6858739404357632e-07,
+      "planned_initial_pvaj": [
+        [
+          -11.025,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          -2.125,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          1.2750000000000001,
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "reference_handoff_jump_pvaj_norms": [
+        0.032675139594652486,
+        0.4887122845883501,
+        9.239507521511896,
+        85.97746337143272
+      ],
+      "first_publication_sim_s": 15.27,
+      "yaw_reference_jump_at_first_publication_rad": 0.005603886175629317,
+      "first_new_reference_yaw_rad": 0.005603886175629317
+    },
+    {
+      "id": 87,
+      "start_sim_s": 19.48,
+      "install_sim_s": 19.490000000000002,
+      "actual_position_m": [
+        12.795245170593262,
+        -3.8811581134796143,
+        0.49860092997550964
+      ],
+      "actual_velocity_m_s": [
+        -1.178941249847412,
+        -1.9796565771102905,
+        -0.6497211456298828
+      ],
+      "actual_speed_m_s": 2.393967460298159,
+      "actual_tilt_rad": 0.33498328851591846,
+      "planned_initial_pvaj": [
+        [
+          12.775,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          -3.875,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.47500000000000003,
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "reference_handoff_jump_pvaj_norms": [
+        0.6873850843896728,
+        0.0005032264140788948,
+        0.14862256299083224,
+        28.793655373665057
+      ],
+      "first_publication_sim_s": 19.490000000000002,
+      "yaw_reference_jump_at_first_publication_rad": -0.19478312914116744,
+      "first_new_reference_yaw_rad": -0.14907953980984906
+    },
+    {
+      "id": 114,
+      "start_sim_s": 20.2,
+      "install_sim_s": 20.21,
+      "actual_position_m": [
+        12.50094223022461,
+        -3.2480881214141846,
+        1.3978381156921387
+      ],
+      "actual_velocity_m_s": [
+        0.05801817774772644,
+        0.4993935525417328,
+        0.6429232358932495
+      ],
+      "actual_speed_m_s": 0.8161558163248401,
+      "actual_tilt_rad": 1.6010305147940884,
+      "planned_initial_pvaj": [
+        [
+          12.525,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          -3.225,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          1.375,
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "reference_handoff_jump_pvaj_norms": [
+        0.45552041420465783,
+        0.0005006897265920715,
+        0.14761620357438138,
+        28.495891691288048
+      ],
+      "first_publication_sim_s": 20.21,
+      "yaw_reference_jump_at_first_publication_rad": -1.21228152990119,
+      "first_new_reference_yaw_rad": 0.6034934600205726
+    }
+  ],
+  "first_committed_command_ending_at_goal": {
+    "id": 49,
+    "start_sim_s": 18.27,
+    "install_sim_s": 18.32,
+    "end_sim_s": 19.545487484882784
+  },
+  "closest_actual_approach": {
+    "step_end_sim_s": 19.970000000000002,
+    "distance_m": 0.11660105266612522,
+    "speed_m_s": 2.9491295266923436,
+    "position_m": [
+      12.580564498901367,
+      -3.5384011268615723,
+      1.050652265548706
+    ]
+  },
+  "reference_verification": {
+    "pvaj_samples": 566,
+    "max_abs_p_v_a_j": [
+      5.329070518200751e-15,
+      6.049610275617526e-14,
+      2.7672449809699596e-13,
+      2.113864638886298e-12
+    ],
+    "yaw_samples_excluding_backup": 527,
+    "max_abs_yaw_and_rate": [
+      0.0,
+      0.0
+    ],
+    "wrench_replay_max_abs_error": 0.0,
+    "replan_handoff_max_p_v_a_j_norms": [
+      3.580361673049448e-15,
+      1.831026719408895e-15,
+      1.8832275663208235e-14,
+      5.775484856810238e-13
+    ],
+    "replan_yaw_handoffs_before_both_current_backup_starts": {
+      "cases": 92,
+      "max_abs_yaw_and_rate": [
+        1.3877787807814457e-17,
+        5.551115123125783e-17
+      ]
+    }
+  },
+  "selected_control_samples": [
+    {
+      "step_start_sim_s": 15.27,
+      "step_end_sim_s": 15.28,
+      "command_sim_s": 15.27,
+      "active_plan_id": 1,
+      "on_backup": false,
+      "fsm_state": 4,
+      "actual_pre_step_position_m": [
+        -11.039999961853027,
+        -2.109999895095825,
+        1.2799999713897705
+      ],
+      "actual_pre_step_velocity_m_s": [
+        -1.3688655542409833e-07,
+        -3.789775746554369e-07,
+        1.9498484959967755e-07
+      ],
+      "actual_pre_step_tilt_rad": 9.305772182939053e-08,
+      "reference_pvaj": [
+        [
+          -11.00861147608673,
+          0.4519042115643086,
+          8.552826808920313,
+          80.03133954836994
+        ],
+        [
+          -2.118448063708628,
+          0.17972305054491927,
+          3.3544338639449176,
+          29.382292192111695
+        ],
+        [
+          1.276675013736709,
+          0.04818615756452817,
+          0.9825610765283004,
+          11.126086617357675
+        ]
+      ],
+      "reference_yaw_and_rate": [
+        0.005603886175629317,
+        0.08401323786567746
+      ],
+      "attitude_error_rad": 0.8947135778873813,
+      "feedback_force_world_N": [
+        9.507904024934408,
+        3.442431712031401,
+        8.344715826542028
+      ],
+      "vertical_force_ff_p_v_N": [
+        8.113449129549283,
+        -0.0482118859693903,
+        0.2794785829621357
+      ],
+      "requested_wrench": [
+        8.344715373244716,
+        -0.6899482446228848,
+        1.5429594057195617,
+        -0.21136463344068193
+      ],
+      "allocated_wrench": [
+        15.528475761413574,
+        0.028427958488464355,
+        1.0041775703430176,
+        -0.05332188308238983
+      ]
+    },
+    {
+      "step_start_sim_s": 16.45,
+      "step_end_sim_s": 16.46,
+      "command_sim_s": 16.45,
+      "active_plan_id": 13,
+      "on_backup": false,
+      "fsm_state": 4,
+      "actual_pre_step_position_m": [
+        -3.978275775909424,
+        -2.658421277999878,
+        1.1383225917816162
+      ],
+      "actual_pre_step_velocity_m_s": [
+        7.869491100311279,
+        0.7660359740257263,
+        0.4106336832046509
+      ],
+      "actual_pre_step_tilt_rad": 0.8382953542159648,
+      "reference_pvaj": [
+        [
+          -4.051619086468027,
+          7.97638250761082,
+          0.6257820272349357,
+          -5.651672178104583
+        ],
+        [
+          -2.4598697890841685,
+          0.3722838846648625,
+          -3.472755366693672,
+          -57.25223029571465
+        ],
+        [
+          1.1393507219228867,
+          0.014631147661467095,
+          -5.288118270249388,
+          -30.03234804596477
+        ]
+      ],
+      "reference_yaw_and_rate": [
+        0.10606172003743741,
+        0.18075109729197067
+      ],
+      "attitude_error_rad": 1.9003300611560592,
+      "feedback_force_world_N": [
+        0.027080243718261787,
+        -2.016277564768865,
+        1.115991441670416
+      ],
+      "vertical_force_ff_p_v_N": [
+        3.3978982607724597,
+        0.014907887048421609,
+        -2.2968147061504656
+      ],
+      "requested_wrench": [
+        -0.7249130765240327,
+        0.724905653046247,
+        -0.2504840584659115,
+        -0.12621999459037198
+      ],
+      "allocated_wrench": [
+        3.537844181060791,
+        0.2986299395561218,
+        0.06922273337841034,
+        -0.03243932127952576
+      ]
+    },
+    {
+      "step_start_sim_s": 18.42,
+      "step_end_sim_s": 18.430000000000003,
+      "command_sim_s": 18.42,
+      "active_plan_id": 51,
+      "on_backup": false,
+      "fsm_state": 4,
+      "actual_pre_step_position_m": [
+        7.727643013000488,
+        -3.301211357116699,
+        1.015019178390503
+      ],
+      "actual_pre_step_velocity_m_s": [
+        8.57375717163086,
+        -0.604507327079773,
+        1.1296329498291016
+      ],
+      "actual_pre_step_tilt_rad": 1.5116884493395357,
+      "reference_pvaj": [
+        [
+          7.947935155385983,
+          7.950972328641695,
+          0.09426729466772837,
+          -46.323732323713976
+        ],
+        [
+          -3.3165687063608464,
+          -0.6734012400884548,
+          -4.084089227733893,
+          -53.795279623951444
+        ],
+        [
+          0.9311788314184195,
+          0.5626169642513914,
+          -2.7359421327723306,
+          46.19549145515545
+        ]
+      ],
+      "reference_yaw_and_rate": [
+        0.03717781105838183,
+        0.260153543155889
+      ],
+      "attitude_error_rad": 2.606872132564386,
+      "feedback_force_world_N": [
+        -0.3470270191573408,
+        -3.693501358746377,
+        0.8127569687092788
+      ],
+      "vertical_force_ff_p_v_N": [
+        5.317134716155207,
+        -1.2156850310952096,
+        -3.288692716350719
+      ],
+      "requested_wrench": [
+        -0.889389631851724,
+        1.138438480342138,
+        -0.5066790931684356,
+        0.7941665663327235
+      ],
+      "allocated_wrench": [
+        12.76724624633789,
+        0.4232753813266754,
+        -0.31745654344558716,
+        0.280879408121109
+      ]
+    },
+    {
+      "step_start_sim_s": 18.89,
+      "step_end_sim_s": 18.900000000000002,
+      "command_sim_s": 18.89,
+      "active_plan_id": 67,
+      "on_backup": false,
+      "fsm_state": 4,
+      "actual_pre_step_position_m": [
+        11.789810180664062,
+        -3.3597939014434814,
+        1.244716763496399
+      ],
+      "actual_pre_step_velocity_m_s": [
+        5.984208583831787,
+        0.606637179851532,
+        0.8739984631538391
+      ],
+      "actual_pre_step_tilt_rad": 1.2712502983342322,
+      "reference_pvaj": [
+        [
+          11.277198000586127,
+          5.6237034742807435,
+          -8.295676126271472,
+          -20.444289602058888
+        ],
+        [
+          -3.534450423828741,
+          0.16473682284670974,
+          0.8733352003783202,
+          -12.075082793788988
+        ],
+        [
+          1.3889407715083117,
+          0.458050195285232,
+          -10.85602494572951,
+          -30.329826936677367
+        ]
+      ],
+      "reference_yaw_and_rate": [
+        0.07138161946634224,
+        -0.029047338977850102
+      ],
+      "attitude_error_rad": 1.7323481207099996,
+      "feedback_force_world_N": [
+        -15.762154693482264,
+        -4.438793574529736,
+        -1.1104193966537776
+      ],
+      "vertical_force_ff_p_v_N": [
+        -0.7891675591885922,
+        2.0912481161727356,
+        -2.412499953637921
+      ],
+      "requested_wrench": [
+        14.847240971062606,
+        0.3117402554323152,
+        1.1718998028087817,
+        -0.32229412794607465
+      ],
+      "allocated_wrench": [
+        14.36491870880127,
+        0.2635081112384796,
+        0.6740850210189819,
+        -0.17626839876174927
+      ]
+    },
+    {
+      "step_start_sim_s": 19.47,
+      "step_end_sim_s": 19.48,
+      "command_sim_s": 19.47,
+      "active_plan_id": 85,
+      "on_backup": false,
+      "fsm_state": 3,
+      "actual_pre_step_position_m": [
+        12.80697250366211,
+        -3.8609988689422607,
+        0.5058395862579346
+      ],
+      "actual_pre_step_velocity_m_s": [
+        -1.159739375114441,
+        -2.0737533569335938,
+        -0.8481795191764832
+      ],
+      "actual_pre_step_tilt_rad": 0.30043225014192027,
+      "reference_pvaj": [
+        [
+          12.675,
+          -1.5561538176382257e-16,
+          2.0192521294528335e-14,
+          -2.2730891187966043e-13
+        ],
+        [
+          -3.474999999999999,
+          -8.571856388708359e-17,
+          -9.844687124945512e-16,
+          -2.5511901316347607e-15
+        ],
+        [
+          1.0250000000000001,
+          3.046716533141324e-15,
+          -1.5152983136481062e-14,
+          1.7077661622528995e-13
+        ]
+      ],
+      "reference_yaw_and_rate": [
+        0.045703589331318385,
+        1.3877787807814457e-17
+      ],
+      "attitude_error_rad": 0.5376598264079794,
+      "feedback_force_world_N": [
+        4.812887072563195,
+        17.624753069877634,
+        19.821830410483557
+      ],
+      "vertical_force_ff_p_v_N": [
+        7.374563199999987,
+        7.52782599925995,
+        4.91944121122362
+      ],
+      "requested_wrench": [
+        23.611481250832245,
+        0.15365535402606112,
+        -0.1205174661194271,
+        0.054603486690372925
+      ],
+      "allocated_wrench": [
+        23.611480712890625,
+        0.15365540981292725,
+        -0.12051752209663391,
+        0.05460347235202789
+      ]
+    },
+    {
+      "step_start_sim_s": 19.490000000000002,
+      "step_end_sim_s": 19.500000000000004,
+      "command_sim_s": 19.490000000000002,
+      "active_plan_id": 87,
+      "on_backup": false,
+      "fsm_state": 4,
+      "actual_pre_step_position_m": [
+        12.783400535583496,
+        -3.9003028869628906,
+        0.4933212399482727
+      ],
+      "actual_pre_step_velocity_m_s": [
+        -1.186263084411621,
+        -1.8740755319595337,
+        -0.45553508400917053
+      ],
+      "actual_pre_step_tilt_rad": 0.3685079934673328,
+      "reference_pvaj": [
+        [
+          12.774999815263469,
+          -7.320867092789731e-05,
+          -0.021621401424881174,
+          -4.188860485215631
+        ],
+        [
+          -3.874999261053877,
+          0.0002928346837115902,
+          0.08648560569952496,
+          16.755441940862582
+        ],
+        [
+          0.47500101605091893,
+          0.00040264769010343675,
+          0.11891770783684694,
+          23.038732668686066
+        ]
+      ],
+      "reference_yaw_and_rate": [
+        -0.14907953980984906,
+        0.2718619017686922
+      ],
+      "attitude_error_rad": 0.6343349279996521,
+      "feedback_force_world_N": [
+        6.741831540784109,
+        11.303276277697561,
+        9.842784913637468
+      ],
+      "vertical_force_ff_p_v_N": [
+        7.463989316293309,
+        -0.2656432465116297,
+        2.644438843855789
+      ],
+      "requested_wrench": [
+        13.252791578546883,
+        -0.23863326949420052,
+        0.09828219851197977,
+        -0.23059358540732466
+      ],
+      "allocated_wrench": [
+        13.48416519165039,
+        -0.21549579501152039,
+        0.08092913031578064,
+        -0.2255033552646637
+      ]
+    },
+    {
+      "step_start_sim_s": 20.2,
+      "step_end_sim_s": 20.21,
+      "command_sim_s": 20.14,
+      "active_plan_id": 107,
+      "on_backup": false,
+      "fsm_state": 3,
+      "actual_pre_step_position_m": [
+        12.50094223022461,
+        -3.2480881214141846,
+        1.3978381156921387
+      ],
+      "actual_pre_step_velocity_m_s": [
+        0.05801817774772644,
+        0.4993935525417328,
+        0.6429232358932495
+      ],
+      "actual_pre_step_tilt_rad": 1.6010305147940884,
+      "reference_pvaj": [
+        [
+          12.674999999999999,
+          1.210954712810538e-14,
+          2.7893735288129677e-14,
+          -3.740244690682218e-13
+        ],
+        [
+          -3.474999999999996,
+          -1.520879520552457e-14,
+          -6.139298741601841e-14,
+          1.888451286145906e-12
+        ],
+        [
+          1.0250000000000123,
+          -1.3670172096283301e-14,
+          -4.9350822653763896e-14,
+          4.758653458019926e-12
+        ]
+      ],
+      "reference_yaw_and_rate": [
+        1.8157749899217626,
+        0.0
+      ],
+      "attitude_error_rad": 1.0939086425144446,
+      "feedback_force_world_N": [
+        2.1873322308064265,
+        -6.186704844236452,
+        -1.7605442457167952
+      ],
+      "vertical_force_ff_p_v_N": [
+        7.374563199999963,
+        -5.4061526775358315,
+        -3.7289547681809263
+      ],
+      "requested_wrench": [
+        6.390301179410489,
+        0.12743901240079936,
+        -0.20174338467334987,
+        0.18247582415492838
+      ],
+      "allocated_wrench": [
+        7.342328071594238,
+        0.19821509718894958,
+        -0.14866133034229279,
+        0.1615312099456787
+      ]
+    },
+    {
+      "step_start_sim_s": 20.21,
+      "step_end_sim_s": 20.220000000000002,
+      "command_sim_s": 20.21,
+      "active_plan_id": 114,
+      "on_backup": false,
+      "fsm_state": 4,
+      "actual_pre_step_position_m": [
+        12.501788139343262,
+        -3.243481397628784,
+        1.4036376476287842
+      ],
+      "actual_pre_step_velocity_m_s": [
+        0.10035204142332077,
+        0.43775472044944763,
+        0.541978657245636
+      ],
+      "actual_pre_step_tilt_rad": 1.6222574212861067,
+      "reference_pvaj": [
+        [
+          12.525000416473882,
+          0.00016487351197897823,
+          0.04860895004351514,
+          9.383491392720241
+        ],
+        [
+          -3.225000694123136,
+          -0.00027478918663162937,
+          -0.0810149167391916,
+          -15.639152321200346
+        ],
+        [
+          1.3749990282276097,
+          -0.0003847048612842811,
+          -0.11342088343486821,
+          -21.894813249680478
+        ]
+      ],
+      "reference_yaw_and_rate": [
+        0.6034934600205726,
+        -0.27727993449939065
+      ],
+      "attitude_error_rad": 1.2633553982930263,
+      "feedback_force_world_N": [
+        -0.2079536250590719,
+        -2.3335241724452325,
+        3.7283032141198116
+      ],
+      "vertical_force_ff_p_v_N": [
+        7.289270695656979,
+        -0.41525998131703046,
+        -3.1457075002201376
+      ],
+      "requested_wrench": [
+        1.6087722411868135,
+        -2.2463939764389824,
+        -0.8691651958724149,
+        2.0352815680614413
+      ],
+      "allocated_wrench": [
+        17.0,
+        -1.1175870895385742e-08,
+        2.2351741790771484e-08,
+        0.37400001287460327
+      ]
+    },
+    {
+      "step_start_sim_s": 20.25,
+      "step_end_sim_s": 20.26,
+      "command_sim_s": 20.25,
+      "active_plan_id": 115,
+      "on_backup": false,
+      "fsm_state": 4,
+      "actual_pre_step_position_m": [
+        12.511088371276855,
+        -3.233555316925049,
+        1.4162768125534058
+      ],
+      "actual_pre_step_velocity_m_s": [
+        0.3834955096244812,
+        0.03386963903903961,
+        0.10710330307483673
+      ],
+      "actual_pre_step_tilt_rad": 1.683893788750419,
+      "reference_pvaj": [
+        [
+          12.52521980520023,
+          0.016631184132947587,
+          0.9054395604709151,
+          29.165535720765494
+        ],
+        [
+          -3.2253663420003846,
+          -0.02771864022157921,
+          -1.509065934118186,
+          -48.60922620127562
+        ],
+        [
+          1.3744871211994618,
+          -0.03880609631021089,
+          -2.1126923077654602,
+          -68.05291668178586
+        ]
+      ],
+      "reference_yaw_and_rate": [
+        0.5716227121609743,
+        -1.290751198838307
+      ],
+      "attitude_error_rad": 1.7303081305970576,
+      "feedback_force_world_N": [
+        -1.2420167464878373,
+        -1.373289465760834,
+        4.33359354349491
+      ],
+      "vertical_force_ff_p_v_N": [
+        5.785818584560373,
+        -0.6059505246321872,
+        -0.8462745164332762
+      ],
+      "requested_wrench": [
+        -0.09506191309561676,
+        -1.8801428739969148,
+        -1.2356356507470687,
+        1.7276482269100566
+      ],
+      "allocated_wrench": [
+        17.0,
+        -1.1175870895385742e-08,
+        2.2351741790771484e-08,
+        0.37400001287460327
+      ]
+    },
+    {
+      "step_start_sim_s": 20.76,
+      "step_end_sim_s": 20.770000000000003,
+      "command_sim_s": 20.76,
+      "active_plan_id": 132,
+      "on_backup": false,
+      "fsm_state": 4,
+      "actual_pre_step_position_m": [
+        13.276449203491211,
+        -3.977071762084961,
+        0.010782376863062382
+      ],
+      "actual_pre_step_velocity_m_s": [
+        1.643376111984253,
+        -1.6821905374526978,
+        -5.319586277008057
+      ],
+      "actual_pre_step_tilt_rad": 2.1556733547334432,
+      "reference_pvaj": [
+        [
+          12.674969801506075,
+          0.003927319690569304,
+          -0.3744670399275522,
+          22.390915304663512
+        ],
+        [
+          -3.474949669176793,
+          -0.006545532817610112,
+          0.6241117332125506,
+          -37.31819217443988
+        ],
+        [
+          1.0250704631524912,
+          -0.00916374594467935,
+          0.8737564264974763,
+          -52.2454690442157
+        ]
+      ],
+      "reference_yaw_and_rate": [
+        -1.01828288756507,
+        -0.797811388562133
+      ],
+      "attitude_error_rad": 2.399448818513025,
+      "feedback_force_world_N": [
+        -18.511853538113357,
+        17.46884339742778,
+        53.53925596409041
+      ],
+      "vertical_force_ff_p_v_N": [
+        8.031628032726102,
+        14.707177251196718,
+        30.800450680167586
+      ],
+      "requested_wrench": [
+        -42.5368705224684,
+        -1.4078172568300433,
+        -0.007287028417085794,
+        -0.6759253829906874
+      ],
+      "allocated_wrench": [
+        0.5905857086181641,
+        -0.059058573096990585,
+        -0.044293928891420364,
+        -0.012992885895073414
+      ]
+    }
+  ],
+  "fsm": [
+    {
+      "time": 15.09,
+      "from": "INIT",
+      "to": "WAIT_GOAL",
+      "callback": "MainFsmCallback"
+    },
+    {
+      "time": 15.1,
+      "from": "WAIT_GOAL",
+      "to": "GENERATE_TRAJ",
+      "callback": "MainFsmCallback"
+    },
+    {
+      "time": 15.27,
+      "from": "GENERATE_TRAJ",
+      "to": "FOLLOW_TRAJ",
+      "callback": "MainFsmCallback"
+    },
+    {
+      "time": 19.47,
+      "from": "FOLLOW_TRAJ",
+      "to": "GENERATE_TRAJ",
+      "callback": "PubCmdCallback"
+    },
+    {
+      "time": 19.490000000000002,
+      "from": "GENERATE_TRAJ",
+      "to": "FOLLOW_TRAJ",
+      "callback": "MainFsmCallback"
+    },
+    {
+      "time": 20.14,
+      "from": "FOLLOW_TRAJ",
+      "to": "GENERATE_TRAJ",
+      "callback": "PubCmdCallback"
+    },
+    {
+      "time": 20.21,
+      "from": "GENERATE_TRAJ",
+      "to": "FOLLOW_TRAJ",
+      "callback": "MainFsmCallback"
+    },
+    {
+      "time": 20.79,
+      "from": "FOLLOW_TRAJ",
+      "to": "GENERATE_TRAJ",
+      "callback": "PubCmdCallback"
+    }
+  ],
+  "interface_contract": {
+    "finding": "No quaternion-order, angular-velocity frame, force-axis or force/torque-unit mismatch found in the active interface.",
+    "sources": {
+      "Newton quaternion xyzw": ".runtime/isaaclab/source/isaaclab_newton/isaaclab_newton/assets/rigid_object/rigid_object_data.py:633-642",
+      "Newton body omega inverse rotation": ".runtime/isaaclab/source/isaaclab_newton/isaaclab_newton/assets/rigid_object/rigid_object_data.py:595-614",
+      "wrench units and frame flag": ".runtime/isaaclab/source/isaaclab/isaaclab/utils/wrench_composer.py:294-320",
+      "Newton body-to-world wrench rotation": ".runtime/isaaclab/source/isaaclab_newton/isaaclab_newton/assets/kernels.py:25-36",
+      "physical state and body wrench call": "src/isaac_pathcover/simulation/environment.py:98-114",
+      "tracker expectations": "src/isaac_pathcover/control/tracking.py:21-39",
+      "body rotor wrench": "src/isaac_pathcover/dynamics/motor.py:14-19"
+    },
+    "quaternion": "SDK xyzw -> environment wxyz -> SciPy xyzw. Rotation maps body vectors to world.",
+    "angular_velocity": "SDK inverse-rotates world omega to body; tracker uses body omega in rad/s.",
+    "wrench": "Actuator sums body-frame rotor force N and torque Nm about CoM; is_global=False; Newton rotates both once into world.",
+    "quaternion_difference_vs_recorded_body_omega": {
+      "samples_with_rate_above_0_1_rad_s": 2263,
+      "comparison": "log(R_i.T @ R_i+1)/0.0025 versus omega_i+1 (implicitfast orientation update)",
+      "rmse_rad_s": 2.091277945781968e-05,
+      "p95_rad_s": 4.185794110590012e-05,
+      "max_rad_s": 7.976738903173483e-05
+    },
+    "measured_acceleration_plus_g_vs_body_z": {
+      "samples_with_acc_norm_above_1_m_s2": 8154,
+      "p95_angle_rad": 4.5598251253906104e-06,
+      "max_angle_rad": 6.58275421362623e-05
+    },
+    "source_sha256": {
+      ".runtime/isaaclab/source/isaaclab_newton/isaaclab_newton/assets/rigid_object/rigid_object_data.py": "2ec4fbaab0ae86513887f3b1b68c2942c05984dcbd75adfb99735302efad6a0f",
+      ".runtime/isaaclab/source/isaaclab/isaaclab/utils/wrench_composer.py": "ca503f2f35e54c7d3f93c31c02c455aa1abd181a6a361d8210f07ade4857bf58",
+      ".runtime/isaaclab/source/isaaclab_newton/isaaclab_newton/assets/kernels.py": "9d76f4a358045d6f0dc0ef052d37ffc1013aac0d4972f40fb2a9a0faee1ada62",
+      "src/isaac_pathcover/simulation/environment.py": "69dbfb77fc38fd046275fecdad469a86c721b87a8c7d794bdba3d5da29038dd5",
+      "src/isaac_pathcover/control/tracking.py": "903090d2c5c7152e58e992a0e04d6d0fd3b15cb07cec7835b236e5cd1328a18c",
+      "src/isaac_pathcover/dynamics/motor.py": "dc906310f1f14f57d66463d5df180e3086203c69463439ddf803ba3b0464b98e"
+    }
+  },
+  "diagnosis": {
+    "observed": "Transient tracking and attitude errors precede both backup intervals. Near-goal Exp braking commands a_z < -g. The first goal command ends while the vehicle is still moving and displaced, causing source FSM PlanFromRest restarts. Before the second restart, actual tilt already exceeds pi/2. Persistent negative thrust then prevents height recovery; no obstacle contact occurs.",
+    "scope": "This is a reconstruction of this fixed failed flight, not a general claim about controller feasibility.",
+    "reference_clock": "Stored command/time/PVAJ mapping and non-backup yaw reproduce published references; all replan handoffs are continuous to floating-point precision. The cold-start reference discontinuities follow source rest-to-rest initialization.",
+    "backup": "The last backup interval ends at 17.67 s; terminal braking, both later cold starts, and the boundary crossing are on Exp without backup.",
+    "unchanged": "No controller, runtime, planner parameter, acceptance rule or physical integration setting was changed for this analysis."
+  }
+}

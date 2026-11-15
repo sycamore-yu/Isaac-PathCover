@@ -1,0 +1,678 @@
+{
+  "source_commit": "2ad3419c127a617c6d7df6925e81a14175a9c096",
+  "source_sha256_verified": true,
+  "error_definition": "max(abs(python-cpp)/(1+abs(cpp))); physical trajectory differences are Euclidean norm on101 common-time samples",
+  "fixed_cases": [
+    {
+      "case": "exp_type1_energy1",
+      "fixed_cost_scaled_error": 5.825238697418131e-15,
+      "fixed_gradient_scaled_error": 1.7525678672211662e-14,
+      "minco_scaled_errors": {
+        "coefficients": 0.0,
+        "energy": 3.0048268823663976e-14,
+        "energy_grad_coefficients": 1.099527430347103e-13,
+        "energy_grad_time": 7.707817854152677e-14,
+        "energy_grad_points": 7.517937746264733e-14,
+        "energy_total_grad_time": 6.976709552588526e-14,
+        "energy_grad_head": 7.868610759756984e-13,
+        "energy_grad_tail": 6.655712022163091e-14
+      },
+      "full_optimization": {
+        "status": 1,
+        "cost": 212.02464665354964,
+        "iterations": 21,
+        "evaluations": 23,
+        "cost_scaled_error": 1.0673585381555358e-15,
+        "position_max_error_m": 3.265188376504788e-14,
+        "velocity_max_error_m_s": 2.7401980193816692e-14,
+        "duration_error_s": 3.552713678800501e-15
+      },
+      "cpp_status": 1,
+      "cpp_iterations": 21,
+      "cpp_evaluations": 23
+    },
+    {
+      "case": "exp_type1_energy0",
+      "fixed_cost_scaled_error": 1.7224042479062087e-16,
+      "fixed_gradient_scaled_error": 1.6759743033078018e-14,
+      "minco_scaled_errors": {
+        "coefficients": 0.0,
+        "energy": 3.0048268823663976e-14,
+        "energy_grad_coefficients": 1.099527430347103e-13,
+        "energy_grad_time": 7.707817854152677e-14,
+        "energy_grad_points": 7.517937746264733e-14,
+        "energy_total_grad_time": 6.976709552588526e-14,
+        "energy_grad_head": 7.868610759756984e-13,
+        "energy_grad_tail": 6.655712022163091e-14
+      },
+      "full_optimization": {
+        "status": 1,
+        "cost": 158.1953950491545,
+        "iterations": 43,
+        "evaluations": 70,
+        "cost_scaled_error": 2.0709884811108695e-14,
+        "position_max_error_m": 7.561719715805176e-11,
+        "velocity_max_error_m_s": 7.554869595912502e-11,
+        "duration_error_s": 1.6644463585180347e-12
+      },
+      "cpp_status": 1,
+      "cpp_iterations": 43,
+      "cpp_evaluations": 70
+    },
+    {
+      "case": "exp_type2_energy1",
+      "fixed_cost_scaled_error": 2.0480158910410558e-14,
+      "fixed_gradient_scaled_error": 5.587357720292226e-14,
+      "minco_scaled_errors": {
+        "coefficients": 3.4021364438011724e-15,
+        "energy": 2.522578848574992e-15,
+        "energy_grad_coefficients": 9.5176233510779e-14,
+        "energy_grad_time": 3.248646244199388e-13,
+        "energy_grad_points": 1.0447916101163914e-13,
+        "energy_total_grad_time": 2.701389875036678e-13,
+        "energy_grad_head": 9.092688688629216e-13,
+        "energy_grad_tail": 9.963291418892087e-14
+      },
+      "full_optimization": {
+        "status": 1,
+        "cost": 212.02577779825407,
+        "iterations": 19,
+        "evaluations": 22,
+        "cost_scaled_error": 1.867867523537417e-15,
+        "position_max_error_m": 2.7678196230656995e-14,
+        "velocity_max_error_m_s": 2.361066504550002e-14,
+        "duration_error_s": 5.329070518200751e-15
+      },
+      "cpp_status": 1,
+      "cpp_iterations": 19,
+      "cpp_evaluations": 22
+    },
+    {
+      "case": "exp_type2_energy0",
+      "fixed_cost_scaled_error": 9.172032167911333e-15,
+      "fixed_gradient_scaled_error": 5.683893445513942e-14,
+      "minco_scaled_errors": {
+        "coefficients": 3.4021364438011724e-15,
+        "energy": 2.522578848574992e-15,
+        "energy_grad_coefficients": 9.5176233510779e-14,
+        "energy_grad_time": 3.248646244199388e-13,
+        "energy_grad_points": 1.0447916101163914e-13,
+        "energy_total_grad_time": 2.701389875036678e-13,
+        "energy_grad_head": 9.092688688629216e-13,
+        "energy_grad_tail": 9.963291418892087e-14
+      },
+      "full_optimization": {
+        "status": 1,
+        "cost": 158.19517845492766,
+        "iterations": 38,
+        "evaluations": 61,
+        "cost_scaled_error": 7.681056780120178e-12,
+        "position_max_error_m": 7.43077469615672e-08,
+        "velocity_max_error_m_s": 7.297731791008458e-08,
+        "duration_error_s": 3.2048808051854394e-10
+      },
+      "cpp_status": 1,
+      "cpp_iterations": 38,
+      "cpp_evaluations": 61
+    },
+    {
+      "case": "backup_uniform0",
+      "fixed_cost_scaled_error": 2.4136564306340156e-14,
+      "fixed_gradient_scaled_error": 3.7191061701021353e-11,
+      "minco_scaled_errors": {
+        "coefficients": 6.426703870985009e-15,
+        "energy": 7.868196620973533e-14,
+        "energy_grad_coefficients": 1.4397200140191667e-12,
+        "energy_grad_time": 7.001706033830386e-14,
+        "energy_grad_points": 5.5763337530192694e-14,
+        "energy_total_grad_time": 5.1390306191583e-13,
+        "energy_grad_head": 1.0081386085443386e-13,
+        "energy_grad_tail": 4.838250886079363e-14
+      },
+      "full_optimization": {
+        "status": 1,
+        "cost": 499.87960242360737,
+        "iterations": 82,
+        "evaluations": 95,
+        "cost_scaled_error": 9.209300012077641e-06,
+        "position_max_error_m": 0.0027459461923603377,
+        "velocity_max_error_m_s": 0.0017794607660903262,
+        "duration_error_s": 0.00017076434063678647
+      },
+      "cpp_status": 1,
+      "cpp_iterations": 81,
+      "cpp_evaluations": 94
+    },
+    {
+      "case": "backup_uniform1",
+      "fixed_cost_scaled_error": 1.4783645637636328e-13,
+      "fixed_gradient_scaled_error": 1.0874354867781687e-13,
+      "minco_scaled_errors": {
+        "coefficients": 3.6100776733044337e-14,
+        "energy": 2.483766545278014e-13,
+        "energy_grad_coefficients": 9.598133426786767e-13,
+        "energy_grad_time": 3.754961930415926e-13,
+        "energy_grad_points": 1.865114660574553e-13,
+        "energy_total_grad_time": 2.0542586838505666e-12,
+        "energy_grad_head": 3.2484466275327163e-13,
+        "energy_grad_tail": 1.6693012797427877e-13
+      },
+      "full_optimization": {
+        "status": 1,
+        "cost": 500.1068724148297,
+        "iterations": 74,
+        "evaluations": 89,
+        "cost_scaled_error": 1.7316962177964454e-08,
+        "position_max_error_m": 0.00012789522643453767,
+        "velocity_max_error_m_s": 9.035063965761155e-05,
+        "duration_error_s": 6.712834679634128e-05
+      },
+      "cpp_status": 1,
+      "cpp_iterations": 74,
+      "cpp_evaluations": 89
+    }
+  ],
+  "minco_max_scaled_errors": {
+    "coefficients": 3.6100776733044337e-14,
+    "energy": 2.483766545278014e-13,
+    "energy_grad_coefficients": 1.4397200140191667e-12,
+    "energy_grad_time": 3.754961930415926e-13,
+    "energy_grad_points": 1.865114660574553e-13,
+    "energy_total_grad_time": 2.0542586838505666e-12,
+    "energy_grad_head": 9.092688688629216e-13,
+    "energy_grad_tail": 1.6693012797427877e-13
+  },
+  "yaw_cases": [
+    {
+      "case": "exp_type1_energy1",
+      "order": 3,
+      "coefficient_scaled_error": 2.887000262501698e-16,
+      "duration_max_abs_s": 0.0,
+      "yaw_sample_max_abs_rad": 1.942890293094024e-16
+    },
+    {
+      "case": "exp_type1_energy1",
+      "order": 5,
+      "coefficient_scaled_error": 5.13435685987291e-16,
+      "duration_max_abs_s": 0.0,
+      "yaw_sample_max_abs_rad": 1.6653345369377348e-16
+    },
+    {
+      "case": "exp_type1_energy1",
+      "order": 7,
+      "coefficient_scaled_error": 7.180905084008982e-15,
+      "duration_max_abs_s": 0.0,
+      "yaw_sample_max_abs_rad": 2.9698465908722937e-15
+    },
+    {
+      "case": "exp_type1_energy0",
+      "order": 3,
+      "coefficient_scaled_error": 3.3308933596731354e-16,
+      "duration_max_abs_s": 0.0,
+      "yaw_sample_max_abs_rad": 2.220446049250313e-16
+    },
+    {
+      "case": "exp_type1_energy0",
+      "order": 5,
+      "coefficient_scaled_error": 2.3457825540053272e-15,
+      "duration_max_abs_s": 0.0,
+      "yaw_sample_max_abs_rad": 1.887379141862766e-15
+    },
+    {
+      "case": "exp_type1_energy0",
+      "order": 7,
+      "coefficient_scaled_error": 2.0224071053944483e-14,
+      "duration_max_abs_s": 0.0,
+      "yaw_sample_max_abs_rad": 9.71445146547012e-15
+    },
+    {
+      "case": "exp_type2_energy1",
+      "order": 3,
+      "coefficient_scaled_error": 8.550927836594581e-16,
+      "duration_max_abs_s": 0.0,
+      "yaw_sample_max_abs_rad": 3.3306690738754696e-16
+    },
+    {
+      "case": "exp_type2_energy1",
+      "order": 5,
+      "coefficient_scaled_error": 1.2174871060697462e-15,
+      "duration_max_abs_s": 0.0,
+      "yaw_sample_max_abs_rad": 3.608224830031759e-16
+    },
+    {
+      "case": "exp_type2_energy1",
+      "order": 7,
+      "coefficient_scaled_error": 4.2179179615406604e-15,
+      "duration_max_abs_s": 0.0,
+      "yaw_sample_max_abs_rad": 2.1094237467877974e-15
+    },
+    {
+      "case": "exp_type2_energy0",
+      "order": 3,
+      "coefficient_scaled_error": 1.2084388498164111e-15,
+      "duration_max_abs_s": 0.0,
+      "yaw_sample_max_abs_rad": 7.216449660063518e-16
+    },
+    {
+      "case": "exp_type2_energy0",
+      "order": 5,
+      "coefficient_scaled_error": 7.774496896595171e-16,
+      "duration_max_abs_s": 0.0,
+      "yaw_sample_max_abs_rad": 1.2351231148954867e-15
+    },
+    {
+      "case": "exp_type2_energy0",
+      "order": 7,
+      "coefficient_scaled_error": 1.769724523280622e-14,
+      "duration_max_abs_s": 0.0,
+      "yaw_sample_max_abs_rad": 1.2573275753879898e-14
+    },
+    {
+      "case": "backup_uniform0",
+      "order": 3,
+      "coefficient_scaled_error": 1.2086458919044835e-16,
+      "duration_max_abs_s": 0.0,
+      "yaw_sample_max_abs_rad": 1.3877787807814457e-16
+    },
+    {
+      "case": "backup_uniform0",
+      "order": 5,
+      "coefficient_scaled_error": 1.7128206371978341e-15,
+      "duration_max_abs_s": 0.0,
+      "yaw_sample_max_abs_rad": 5.551115123125783e-16
+    },
+    {
+      "case": "backup_uniform0",
+      "order": 7,
+      "coefficient_scaled_error": 1.601840700280111e-14,
+      "duration_max_abs_s": 0.0,
+      "yaw_sample_max_abs_rad": 5.134781488891349e-15
+    },
+    {
+      "case": "backup_uniform1",
+      "order": 3,
+      "coefficient_scaled_error": 5.320135089375796e-16,
+      "duration_max_abs_s": 0.0,
+      "yaw_sample_max_abs_rad": 1.6653345369377348e-16
+    },
+    {
+      "case": "backup_uniform1",
+      "order": 5,
+      "coefficient_scaled_error": 1.7414076149788446e-15,
+      "duration_max_abs_s": 0.0,
+      "yaw_sample_max_abs_rad": 2.498001805406602e-16
+    },
+    {
+      "case": "backup_uniform1",
+      "order": 7,
+      "coefficient_scaled_error": 7.299097629666385e-15,
+      "duration_max_abs_s": 0.0,
+      "yaw_sample_max_abs_rad": 2.942091015256665e-15
+    }
+  ],
+  "yaw_max_by_order": {
+    "3": {
+      "coefficient_scaled_error": 1.2084388498164111e-15,
+      "duration_max_abs_s": 0.0,
+      "yaw_sample_max_abs_rad": 7.216449660063518e-16
+    },
+    "5": {
+      "coefficient_scaled_error": 2.3457825540053272e-15,
+      "duration_max_abs_s": 0.0,
+      "yaw_sample_max_abs_rad": 1.887379141862766e-15
+    },
+    "7": {
+      "coefficient_scaled_error": 2.0224071053944483e-14,
+      "duration_max_abs_s": 0.0,
+      "yaw_sample_max_abs_rad": 1.2573275753879898e-14
+    }
+  },
+  "legacy_primitive_source_commit": "8723a05d1993bf0199a453b47dc6ee167d493c23",
+  "legacy_minco_cases": [
+    {
+      "order": 3,
+      "scaled_errors": {
+        "coefficients": 3.7697912465395566e-15,
+        "energy": 1.002798101359948e-14,
+        "grad_c": 9.490524321447502e-14,
+        "partial_grad_t": 5.556124079698734e-14,
+        "grad_points": 8.938797748083432e-15,
+        "grad_times": 2.063643152316562e-14
+      }
+    },
+    {
+      "order": 4,
+      "scaled_errors": {
+        "coefficients": 6.395026457923119e-14,
+        "energy": 2.3116854365763716e-15,
+        "grad_c": 1.6389758734754937e-13,
+        "partial_grad_t": 6.927558259225163e-14,
+        "grad_points": 5.764258382968556e-14,
+        "grad_times": 9.100680393223145e-13
+      }
+    }
+  ],
+  "legacy_flatness_runtime_kernel_scaled_errors": {
+    "thrust": 0.0,
+    "quat": 0.0,
+    "omega": 2.6248195757857038e-17,
+    "grad_pos": 0.0,
+    "grad_vel": 2.553437976976447e-17,
+    "grad_acc": 1.4531700486535403e-16,
+    "grad_jer": 3.4471680673909788e-18,
+    "grad_yaw": 0.0,
+    "grad_yaw_rate": 0.0
+  },
+  "hotstart": {
+    "fixture": "tests/fixtures/super_trajectory_hotstart.json",
+    "source_sha256_verified": true,
+    "input_groups": 4,
+    "explicit_calls": 5,
+    "state_comparison_scope": "Each stage inherits the recorded original C++ total_time from the preceding heuristic or explicit optimization; Python receives that scalar as heu_duration.",
+    "calls": [
+      {
+        "case": "exp_hot_type1",
+        "stage": 0,
+        "initial_x_scaled_error": 0.0,
+        "initial_cost_scaled_error": 2.191325250950196e-16,
+        "initial_gradient_scaled_error": 5.6110820936026616e-14,
+        "initial_coefficients_scaled_error": 1.0045138526840136e-14,
+        "initial_durations_scaled_error": 1.4325458382260084e-16,
+        "stored_init_times_scaled_error": 0.0,
+        "stored_init_points_scaled_error": 0.0,
+        "attractors_scaled_error": 0.0,
+        "attractor_radii_scaled_error": 0.0,
+        "common_initial_cost_scaled_error": 2.191325250950196e-16,
+        "common_initial_gradient_scaled_error": 5.6110820936026616e-14,
+        "cpp_public_overload_final_x_repeat_scaled_error": 0.0,
+        "cpp_optimizer_status": 1,
+        "cpp_optimizer_iterations": 12,
+        "cpp_optimizer_evaluations": 81,
+        "success": true,
+        "cpp_success": true,
+        "optimizer_status": "relative cost convergence",
+        "optimizer_status_code": 1,
+        "iterations": 12,
+        "evaluations": 81,
+        "optimized_cost_scaled_error": 2.2339893050278446e-10,
+        "position_max_error_m": 6.117528859829914e-09,
+        "velocity_max_error_m_s": 1.662279225342281e-08,
+        "duration_error_s": 3.72032626927421e-10,
+        "switch_time_error_s": 0.0,
+        "final_point_cross_evaluation": [
+          {
+            "name": "cpp_final",
+            "cost_scaled_error": 0.0,
+            "gradient_scaled_error": 9.883181213247813e-09,
+            "coefficients_scaled_error": 0.0
+          },
+          {
+            "name": "python_final",
+            "cost_scaled_error": 7.617712133425771e-16,
+            "gradient_scaled_error": 3.5819717849954375e-08,
+            "coefficients_scaled_error": 6.39991997359204e-15
+          }
+        ]
+      },
+      {
+        "case": "exp_hot_type2",
+        "stage": 0,
+        "initial_x_scaled_error": 7.848826288786474e-11,
+        "initial_cost_scaled_error": 6.573975752852115e-16,
+        "initial_gradient_scaled_error": 4.3626711935986215e-09,
+        "initial_coefficients_scaled_error": 8.089300085557432e-10,
+        "initial_durations_scaled_error": 1.4325458382260084e-16,
+        "stored_init_times_scaled_error": 0.0,
+        "stored_init_points_scaled_error": 0.0,
+        "attractors_scaled_error": 0.0,
+        "attractor_radii_scaled_error": 0.0,
+        "common_initial_cost_scaled_error": 2.191325250950705e-16,
+        "common_initial_gradient_scaled_error": 5.0655150950141755e-14,
+        "cpp_public_overload_final_x_repeat_scaled_error": 0.0,
+        "cpp_optimizer_status": 1,
+        "cpp_optimizer_iterations": 136,
+        "cpp_optimizer_evaluations": 342,
+        "success": true,
+        "cpp_success": true,
+        "optimizer_status": "relative cost convergence",
+        "optimizer_status_code": 1,
+        "iterations": 114,
+        "evaluations": 331,
+        "optimized_cost_scaled_error": 1.6870339405193904e-05,
+        "position_max_error_m": 0.007839694603941306,
+        "velocity_max_error_m_s": 0.021257854441965117,
+        "duration_error_s": 8.492133015458592e-06,
+        "switch_time_error_s": 0.0,
+        "final_point_cross_evaluation": [
+          {
+            "name": "cpp_final",
+            "cost_scaled_error": 1.3077761567314547e-14,
+            "gradient_scaled_error": 1.0032541085647299e-08,
+            "coefficients_scaled_error": 2.3283468451463828e-14
+          },
+          {
+            "name": "python_final",
+            "cost_scaled_error": 1.0157656075582885e-15,
+            "gradient_scaled_error": 1.703515047076965e-08,
+            "coefficients_scaled_error": 1.9321147433882316e-14
+          }
+        ]
+      },
+      {
+        "case": "backup_hot_uniform0",
+        "stage": 0,
+        "initial_x_scaled_error": 3.2758538145046853e-14,
+        "initial_cost_scaled_error": 0.0,
+        "initial_gradient_scaled_error": 2.797024133245045e-17,
+        "initial_coefficients_scaled_error": 5.043232906900404e-13,
+        "initial_durations_scaled_error": 0.0,
+        "stored_init_times_scaled_error": 0.0,
+        "stored_init_points_scaled_error": 0.0,
+        "common_initial_cost_scaled_error": 0.0,
+        "common_initial_gradient_scaled_error": 3.167605430933152e-20,
+        "cpp_public_overload_final_x_repeat_scaled_error": 0.0,
+        "cpp_optimizer_status": 1,
+        "cpp_optimizer_iterations": 139,
+        "cpp_optimizer_evaluations": 411,
+        "success": true,
+        "cpp_success": true,
+        "optimizer_status": "relative cost convergence",
+        "optimizer_status_code": 1,
+        "iterations": 123,
+        "evaluations": 377,
+        "optimized_cost_scaled_error": 0.0006468673869021103,
+        "position_max_error_m": 0.00502278792171373,
+        "velocity_max_error_m_s": 0.017083450992796432,
+        "duration_error_s": 0.0005156932211817233,
+        "switch_time_error_s": 8.524292383071952e-13,
+        "cpp_switch_time_s": 1.399999999999122,
+        "python_switch_time_s": 1.3999999999999744,
+        "cpp_duration_s": 0.7908078840627659,
+        "python_duration_s": 0.7913235772839476,
+        "cpp_tail_position": [
+          4.012739018263591,
+          0.45498715878782353,
+          1.199507560237299
+        ],
+        "python_tail_position": [
+          4.015193669484602,
+          0.45103200978163965,
+          1.1976207951915983
+        ],
+        "tail_position_error_m": 0.005022787932573383,
+        "absolute_command_position_max_error_m": 0.0050227879217141285,
+        "absolute_command_sample_count": 1001,
+        "final_point_cross_evaluation": [
+          {
+            "name": "cpp_final",
+            "cost_scaled_error": 7.60593500530216e-15,
+            "gradient_scaled_error": 4.379284376081564e-07,
+            "coefficients_scaled_error": 8.47296104068355e-14
+          },
+          {
+            "name": "python_final",
+            "cost_scaled_error": 3.464650135562538e-14,
+            "gradient_scaled_error": 2.0400449066287923e-07,
+            "coefficients_scaled_error": 2.1828349107798006e-13
+          }
+        ]
+      },
+      {
+        "case": "backup_hot_uniform1",
+        "stage": 0,
+        "initial_x_scaled_error": 7.286861174171331e-14,
+        "initial_cost_scaled_error": 1.1759304253543643e-14,
+        "initial_gradient_scaled_error": 2.579816954528366e-13,
+        "initial_coefficients_scaled_error": 4.55141215639938e-13,
+        "initial_durations_scaled_error": 0.0,
+        "stored_init_times_scaled_error": 0.0,
+        "stored_init_points_scaled_error": 0.0,
+        "common_initial_cost_scaled_error": 1.902240393955589e-15,
+        "common_initial_gradient_scaled_error": 1.0619330377318531e-13,
+        "cpp_public_overload_final_x_repeat_scaled_error": 0.0,
+        "cpp_optimizer_status": 1,
+        "cpp_optimizer_iterations": 138,
+        "cpp_optimizer_evaluations": 571,
+        "success": true,
+        "cpp_success": true,
+        "optimizer_status": "relative cost convergence",
+        "optimizer_status_code": 1,
+        "iterations": 461,
+        "evaluations": 1126,
+        "optimized_cost_scaled_error": 0.041454751837333326,
+        "position_max_error_m": 0.6766780187169686,
+        "velocity_max_error_m_s": 2.595791694217753,
+        "duration_error_s": 0.004558762284082696,
+        "switch_time_error_s": 1.432631790976302e-12,
+        "cpp_switch_time_s": 1.3999999999948511,
+        "python_switch_time_s": 1.3999999999962838,
+        "cpp_duration_s": 0.6160733952472788,
+        "python_duration_s": 0.6115146329631961,
+        "cpp_tail_position": [
+          3.318110239056322,
+          0.15326412978821324,
+          1.264753080668204
+        ],
+        "python_tail_position": [
+          3.1134420027187932,
+          0.7050620672504847,
+          0.9308023529044229
+        ],
+        "tail_position_error_m": 0.676678017469971,
+        "absolute_command_position_max_error_m": 0.6766780216878144,
+        "absolute_command_sample_count": 1001,
+        "final_point_cross_evaluation": [
+          {
+            "name": "cpp_final",
+            "cost_scaled_error": 0.0,
+            "gradient_scaled_error": 7.399645855842136e-16,
+            "coefficients_scaled_error": 7.459022010573849e-14
+          },
+          {
+            "name": "python_final",
+            "cost_scaled_error": 5.4874910122635745e-14,
+            "gradient_scaled_error": 2.0468157941177323e-08,
+            "coefficients_scaled_error": 1.1484528007927483e-14
+          }
+        ]
+      },
+      {
+        "case": "backup_hot_uniform1",
+        "stage": 1,
+        "initial_x_scaled_error": 4.4546094725124326e-14,
+        "initial_cost_scaled_error": 4.677524247776711e-15,
+        "initial_gradient_scaled_error": 2.3266763918906864e-13,
+        "initial_coefficients_scaled_error": 2.922292679693643e-13,
+        "initial_durations_scaled_error": 0.0,
+        "stored_init_times_scaled_error": 0.0,
+        "stored_init_points_scaled_error": 0.0,
+        "common_initial_cost_scaled_error": 1.2278501150413867e-14,
+        "common_initial_gradient_scaled_error": 8.145502813320412e-14,
+        "cpp_public_overload_final_x_repeat_scaled_error": 0.0,
+        "cpp_optimizer_status": 1,
+        "cpp_optimizer_iterations": 1335,
+        "cpp_optimizer_evaluations": 3078,
+        "success": true,
+        "cpp_success": true,
+        "optimizer_status": "relative cost convergence",
+        "optimizer_status_code": 1,
+        "iterations": 2054,
+        "evaluations": 4114,
+        "optimized_cost_scaled_error": 0.044295437495271914,
+        "position_max_error_m": 0.030961249586539324,
+        "velocity_max_error_m_s": 0.2880620625649887,
+        "duration_error_s": 0.005700923066663477,
+        "switch_time_error_s": 6.106226635438361e-14,
+        "cpp_switch_time_s": 1.3999999999999861,
+        "python_switch_time_s": 1.399999999999925,
+        "cpp_duration_s": 0.29727580655034713,
+        "python_duration_s": 0.3029767296170106,
+        "cpp_tail_position": [
+          2.4559369997992295,
+          0.26544444049881216,
+          1.188055126485951
+        ],
+        "python_tail_position": [
+          2.464279353927675,
+          0.23610237240069445,
+          1.1933558260571426
+        ],
+        "tail_position_error_m": 0.03096206144013995,
+        "absolute_command_position_max_error_m": 0.03096124958653943,
+        "absolute_command_sample_count": 1001,
+        "final_point_cross_evaluation": [
+          {
+            "name": "cpp_final",
+            "cost_scaled_error": 0.0,
+            "gradient_scaled_error": 0.0002494527397027627,
+            "coefficients_scaled_error": 5.958562578715639e-13
+          },
+          {
+            "name": "python_final",
+            "cost_scaled_error": 9.015487400500863e-13,
+            "gradient_scaled_error": 1.6239175784500484e-06,
+            "coefficients_scaled_error": 5.253338676704167e-13
+          }
+        ]
+      }
+    ]
+  },
+  "precision_diagnostic": {
+    "fixture": "tests/fixtures/super_trajectory_precision_diagnostic.json",
+    "minco_system_condition_2": 5435228931.342048,
+    "longdouble_mantissa_bits": 63,
+    "interpreted_float64_max_scaled_gradient_error_to_numba": 0.0,
+    "cpp_max_scaled_gradient_error_to_longdouble": 3.751190955872045e-05,
+    "numba_max_scaled_gradient_error_to_longdouble": 0.000286974006710094
+  },
+  "focused_test_result": {
+    "passed": 62,
+    "xfailed_strict_final_point_gradient_matching": 9,
+    "unmarked_failures": 0,
+    "elapsed_s": 71.05,
+    "log": ".runtime/super_trajectory_final_tests.log",
+    "files": [
+      "tests/test_super_trajectory.py",
+      "tests/test_super_trajectory_hotstart.py",
+      "tests/test_trajectory_reference.py"
+    ]
+  },
+  "case_counts": {
+    "super_fixed_objective_minco": 6,
+    "exp_fixed_objective": 4,
+    "backup_fixed_objective": 2,
+    "yaw_per_degree": 6,
+    "yaw_degrees": [
+      3,
+      5,
+      7
+    ],
+    "yaw_total": 18,
+    "explicit_hotstart": 5,
+    "hotstart_final_points_cross_evaluated": 10,
+    "real_medium_replay_problems": 2,
+    "legacy_minco_primitive_inputs": 2,
+    "legacy_flatness_primitive_inputs": 1,
+    "standalone_lbfgs_analytical_boundary_inputs": 2
+  }
+}
