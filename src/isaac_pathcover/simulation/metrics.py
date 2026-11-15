@@ -96,7 +96,7 @@ def summarize(scene, times, states, references, substeps, contact_force, motor_s
         "planning_p50_s": float(np.median(durations)) if len(durations) else None,
         "planning_p95_s": float(np.quantile(durations, .95)) if len(durations) else None,
         "planning_max_s": float(durations.max()) if len(durations) else None,
-        "planning_deadline_misses_0_5s": int((durations > .5).sum()),
+        "planning_cycles_over_0_5s": int((durations > .5).sum()),
         "physics_hz": 400, "tracking_hz": 100, "replan_period_s": .5,
         "time_contract": "synchronous planning between Newton steps; wall latency measured separately",
         "finite": bool(finite),

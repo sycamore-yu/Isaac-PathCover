@@ -8,7 +8,7 @@ Requires Python 3.12, NumPy and `rerun-sdk` (validated with Rerun 0.38.1). Use a
 
 ```bash
 python scripts/record_rerun.py --scene both --seed 0 \
-  --source results/simplified_validation_20261115 \
+  --source results/replan_policy_validation_20261115 \
   --output results/rerun_20261115 --fps 12
 rerun rrd verify results/rerun_20261115/medium_seed000.rrd
 rerun rrd verify results/rerun_20261115/dense_seed000.rrd
@@ -31,7 +31,7 @@ Recordings include:
 
 | Recording | Simulated flight duration | Frames | Collisions | Destination reached |
 | --- | ---: | ---: | ---: | --- |
-| `medium_seed000.rrd` | 16.74 s | 211 | 0 | yes |
-| `dense_seed000.rrd` | 19.34 s | 243 | 0 | yes |
+| `medium_seed000.rrd` | 21.72 s | 273 | 0 | yes |
+| `dense_seed000.rrd` | 19.09 s | 240 | 0 | yes |
 
-Both recordings use the actual 2026-11-15 five-seed Newton validation data. The Rerun Viewer can select either recording under **Sources** and play its `sim_time` timeline. Offline Rerun screenshots were independently checked at simulated times 9 s and 11 s.
+Both recordings were replaced using the 2026-11-15 five-seed Newton retest **after removing the fixed wall-clock rejection rules**. The existing Web Viewer at `http://100.92.244.71:9114` was restarted with these files. Select either recording under **Sources** and play its `sim_time` timeline. Preview screenshots were regenerated from the revised recordings at 8 s and 9.5 s respectively.

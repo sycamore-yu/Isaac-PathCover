@@ -167,7 +167,7 @@ def finish_episode(scene, seed, output, flight, plans, map_updates, wall,
 
     report.update({"complete_cycle_p50_s": float(np.median(cycles)) if len(cycles) else None,
                    "complete_cycle_p95_s": float(np.quantile(cycles, .95)) if len(cycles) else None,
-                   "complete_cycle_deadline_misses_0_5s": int((cycles > .5).sum()),
+                   "complete_cycles_over_0_5s": int((cycles > .5).sum()),
                    "max_requested_thrust_N": finite_float(np.max(arrays["requested_wrench"][:, 0])),
                    "max_allocated_thrust_N": finite_float(np.max(arrays["allocated_wrench"][:, 0])),
                    "peak_wrench_allocation_difference": [finite_float(x) for x in
@@ -182,7 +182,7 @@ def finish_episode(scene, seed, output, flight, plans, map_updates, wall,
                                "numpy": np.__version__, "newton": importlib.metadata.version("newton"),
                                "isaaclab_release": "3.0.0", "isaaclab_core_distribution": importlib.metadata.version("isaaclab")}})
     if mode == "asynchronous":
-        report["time_contract"] = "separate CPU planner process; Newton advances during planning; wall-clock solve budget"
+        report["time_contract"] = "separate CPU planner; Newton advances during planning; handoff gated by measured state and physical constraints"
         report["lidar"]["nominal_request_hz"] = 2.
         report["lidar"]["update_hz"] = (len(map_updates) / flight.times[-1]) if flight.times else 0.
         report.update(extra or {})
@@ -194,20 +194,19 @@ def finish_episode(scene, seed, output, flight, plans, map_updates, wall,
     return report
 
 
-def run_episode_async(env, scene, seed, duration, output, *, budget_s=1.5,
-                      startup_budget_s=4.0, forward_s=0.8, update_map=True):
+def run_episode_async(env, scene, seed, duration, output, *, forward_s=0.8, update_map=True):
     """Keep stepping Newton while a separate process plans from a future state.
 
     Following SUPER's forward-state handoff, the new candidate is initialized
     on the active reference at a predicted time at least ``forward_s`` ahead.
-    The active trajectory continues until that exact handoff. Late, overbudget,
-    dynamically inconsistent and soft-constraint-violating plans are rejected.
-    This has no backup planner and makes no hard real-time guarantee.
+    The active trajectory continues until handoff. Candidates are accepted
+    whenever the measured state still matches their start and their sampled
+    physical constraints pass, even if the planned handoff time has passed.
     """
     from isaac_pathcover.control.async_planner import AsyncPlanningWorker, handoff_horizon
 
-    if budget_s <= 0 or startup_budget_s <= 0 or forward_s <= 0:
-        raise ValueError("planning budget and forward horizon must be positive")
+    if forward_s <= 0:
+        raise ValueError("forward horizon must be positive")
     output.mkdir(parents=True, exist_ok=True)
     env.reset()
     execution = TrajectoryExecution(scene.start)
@@ -218,16 +217,15 @@ def run_episode_async(env, scene, seed, duration, output, *, budget_s=1.5,
     next_replan = 0.
     inflight = pending = None
     ready_at_sim_s = None
-    launched = skipped = steps_while_busy = ready_scheduled = deadline_misses = stale = 0
+    launched = skipped = steps_while_busy = ready_scheduled = mismatches = 0
     max_progress = 0.
-    observed_sim_per_wall = 1.
-    max_observed_sim_per_wall = 1.
+    previous_solve_progress_s = forward_s
     started_wall = time.perf_counter()
     dt = flight.dt
     worker = AsyncPlanningWorker(scene.name, seed)
 
     def finish_candidate(record, result, validation, state, now, predicted):
-        nonlocal initial_result, stale
+        nonlocal initial_result, mismatches, previous_solve_progress_s
         measured = np.column_stack((state[:3], state[7:10], flight.acceleration))
         start = np.column_stack([result.trajectory.evaluate(0., derivative=k) for k in range(3)])
         record["prediction_error_pva"] = np.linalg.norm(predicted - measured, axis=0).tolist()
@@ -238,12 +236,15 @@ def run_episode_async(env, scene, seed, duration, output, *, budget_s=1.5,
                                   "rejection_reason": ["predicted_state_mismatch"],
                                   "start_error_p_m": float(error[0]),
                                   "start_error_v_m_s": float(error[1])}
-            stale += 1
+            mismatches += 1
         else:
             record["handoff"] = execution.replace(result, now, measured, validation=validation)
+            if record["handoff"]["accepted"]:
+                previous_solve_progress_s = record["physics_progress_during_solve_s"]
             if record["handoff"]["accepted"] and initial_result is None:
                 initial_result = result
         record["activation_t"] = now
+        record["activation_delay_sim_s"] = now - record["target_t"] if record["target_t"] is not None else 0.0
         record["activation_state_error_pva"] = np.linalg.norm(start - measured, axis=0).tolist()
         plans.append(record)
 
@@ -262,18 +263,15 @@ def run_episode_async(env, scene, seed, duration, output, *, budget_s=1.5,
                 inflight = None
                 elapsed = time.perf_counter() - request["submitted_wall"]
                 max_progress = max(max_progress, now - request["t"])
-                observed_sim_per_wall = (now - request["t"]) / elapsed
-                max_observed_sim_per_wall = max(max_observed_sim_per_wall, observed_sim_per_wall)
                 if message["mapping"] is not None:
                     map_updates.append(message["mapping"])
                 result = message["result"]
                 validation = message["validation"]
                 record = {"t": request["t"], "target_t": request["target_t"],
                           "result_t": now, "physics_progress_during_solve_s": now - request["t"],
-                          "budget_s": request["budget_s"], "success": result.success,
+                          "success": result.success,
                           "status": result.status, "timings": result.timings,
                           "cycle_wall_s": elapsed, "worker_s": message["elapsed_wall_s"],
-                          "deadline_exceeded": message["deadline_exceeded"] or elapsed > request["budget_s"],
                           "execution_check": validation}
                 if result.optimization is not None:
                     record.update({"iterations": result.optimization.iterations,
@@ -285,22 +283,16 @@ def run_episode_async(env, scene, seed, duration, output, *, budget_s=1.5,
                     if message["diagnostics"] is not None:
                         record["trajectory_diagnostics"] = finite_json(message["diagnostics"])
                 rejection = None
-                if record["deadline_exceeded"]:
-                    deadline_misses += 1
-                    rejection = "wall_clock_budget_exceeded"
-                elif not result.success:
+                if not result.success:
                     rejection = "solver_failure"
                 elif validation is None or not validation["accepted"]:
                     rejection = "execution_check_failed"
-                elif request["target_t"] is not None and now > request["target_t"] + dt * .5:
-                    stale += 1
-                    rejection = "late_result"
                 if rejection is not None:
                     record["handoff"] = {"accepted": False,
                                           "retained_previous": execution.trajectory is not None,
                                           "rejection_reason": [rejection]}
                     plans.append(record)
-                elif request["target_t"] is None:
+                elif request["target_t"] is None or now + dt * .5 >= request["target_t"]:
                     finish_candidate(record, result, validation, state, now, request["start_state"])
                 else:
                     pending = (record, result, validation, request["target_t"], request["start_state"])
@@ -314,10 +306,9 @@ def run_episode_async(env, scene, seed, duration, output, *, budget_s=1.5,
             if now + 1e-9 >= next_replan and not flight.arrived_ticks:
                 if worker.ready and not worker.busy and pending is None:
                     measured = np.column_stack((state[:3], state[7:10], flight.acceleration))
-                    horizon = handoff_horizon(budget_s, forward_s, observed_sim_per_wall)
+                    horizon = handoff_horizon(forward_s, previous_solve_progress_s)
                     target = round(now + horizon, 6) if execution.trajectory is not None else None
                     predicted = execution.reference(target)[:, :3] if target is not None else measured
-                    allocated_budget = budget_s if target is not None else startup_budget_s
                     launched += 1
                     request = {"kind": "plan", "id": launched, "t": now,
                                "position": state[:3].copy(), "quaternion": state[3:7].copy(),
@@ -325,8 +316,7 @@ def run_episode_async(env, scene, seed, duration, output, *, budget_s=1.5,
                                "guide": execution.trajectory, "guide_elapsed":
                                    (target - execution.start_time) if target is not None else 0.,
                                "target_t": target, "scan": update_map and target is not None,
-                               "submitted_wall": time.perf_counter(), "budget_s": allocated_budget}
-                    request["deadline"] = request["submitted_wall"] + allocated_budget
+                               "submitted_wall": time.perf_counter()}
                     worker.submit(request)
                     inflight = request
                 else:
@@ -351,15 +341,13 @@ def run_episode_async(env, scene, seed, duration, output, *, budget_s=1.5,
     # Compress and serialize large debug artifacts only after the flight loop.
     for index, result in finished_candidates:
         save_plan(output / "plans" / f"{index:04d}", result)
-    extra = {"solve_budget_wall_s": budget_s, "startup_budget_wall_s": startup_budget_s,
-             "forward_horizon_sim_s": forward_s, "planner_ready_sim_s": ready_at_sim_s,
-             "max_observed_sim_per_wall_s": max_observed_sim_per_wall,
+    extra = {"forward_horizon_sim_s": forward_s, "planner_ready_sim_s": ready_at_sim_s,
              "planning_jobs_submitted": launched, "planning_jobs_returned": len(plans),
              "planning_slots_skipped": skipped, "physics_steps_while_worker_busy": steps_while_busy,
              "physics_progress_while_planning_sim_s": steps_while_busy * dt,
              "max_progress_during_one_solve_sim_s": max_progress,
              "scheduled_handoffs_examined": ready_scheduled,
-             "budget_expired_jobs": deadline_misses, "stale_or_mismatch_rejections": stale,
+             "handoff_state_mismatch_rejections": mismatches,
              "job_running_at_episode_end": busy_at_end}
     return finish_episode(scene, seed, output, flight, plans, map_updates, wall,
                           initial_result, worker_init, mode="asynchronous", extra=extra)
@@ -375,10 +363,6 @@ def main():
     parser.add_argument("--plan-only", action="store_true")
     parser.add_argument("--synchronous", action="store_true",
                         help="Use the original paused-simulation baseline")
-    parser.add_argument("--solve-budget", type=float, default=1.5,
-                        help="Wall-clock seconds per asynchronous replanning job")
-    parser.add_argument("--startup-budget", type=float, default=4.0,
-                        help="Wall-clock seconds for the initial path from hover")
     parser.add_argument("--forward-horizon", type=float, default=0.8,
                         help="Simulation-time seconds to predict the next handoff")
     args = parser.parse_args()
@@ -391,8 +375,7 @@ def main():
                 command.append("--plan-only")
             if args.synchronous:
                 command.append("--synchronous")
-            command += ["--solve-budget", str(args.solve_budget), "--startup-budget",
-                        str(args.startup_budget), "--forward-horizon", str(args.forward_horizon)]
+            command += ["--forward-horizon", str(args.forward_horizon)]
             subprocess.run(command, check=True)
         return
     scene = Scene(args.scene)
@@ -418,8 +401,7 @@ def main():
     startup = time.perf_counter() - boot
     try:
         runner = run_episode if args.synchronous else run_episode_async
-        runner_kwargs = {} if args.synchronous else {"budget_s": args.solve_budget,
-            "startup_budget_s": args.startup_budget, "forward_s": args.forward_horizon}
+        runner_kwargs = {} if args.synchronous else {"forward_s": args.forward_horizon}
         reports = [runner(env, scene, seed, args.duration,
                           args.output / f"seed{seed:03d}", **runner_kwargs) for seed in args.seeds]
     finally:

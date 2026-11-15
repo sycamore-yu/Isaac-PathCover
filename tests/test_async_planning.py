@@ -1,62 +1,26 @@
-"""Cooperative solve deadlines and forward-handoff semantics."""
+"""Unbounded source optimizer and measured-progress handoff semantics."""
 
-from time import perf_counter
 from types import SimpleNamespace
 
 import numpy as np
 
 from isaac_pathcover.control.execution import TrajectoryExecution
 from isaac_pathcover.control.async_planner import handoff_horizon
-from isaac_pathcover.planning.pipeline import Planner
 from isaac_pathcover.trajectory.lbfgs import LBFGSParameters, minimize
 from isaac_pathcover.trajectory.minco import PiecewisePolynomial
 
 
-def test_expired_optimizer_budget_evaluates_no_objectives():
-    calls = []
-
-    def objective(x):
-        calls.append(x.copy())
-        return float(x @ x), 2 * x
-
-    result = minimize(objective, [3., -4.], LBFGSParameters(max_iterations=20),
-                      deadline=perf_counter() - 1.)
-    assert result.message == "wall-clock budget exceeded"
-    assert result.status == -1013 and result.evaluations == 0
-    assert calls == []
-
-
-def test_deadline_does_not_modify_unbudgeted_lbfgs_result():
+def test_source_optimizer_converges_without_external_wall_deadline():
     objective = lambda x: (float(x @ x), 2 * x)
-    regular = minimize(objective, [3., -4.], LBFGSParameters(max_iterations=10))
-    budgeted = minimize(objective, [3., -4.], LBFGSParameters(max_iterations=10),
-                        deadline=perf_counter() + 10.)
-    np.testing.assert_array_equal(regular.x, budgeted.x)
-    assert regular.status == budgeted.status
+    result = minimize(objective, [3., -4.], LBFGSParameters(max_iterations=10))
+    assert result.success and result.evaluations > 0
+    np.testing.assert_allclose(result.x, np.zeros(2), atol=1e-12)
 
 
-def test_forward_shift_covers_budget_and_observed_clock_rate():
-    assert handoff_horizon(1.5, .8, 1.) == 1.5
-    assert handoff_horizon(1.5, .8, 2.) == 3.
-    np.testing.assert_allclose(handoff_horizon(1.5, .8, .8), 1.2)
-    assert handoff_horizon(.2, .8, .25) == .8
-
-
-def test_planner_expired_deadline_does_not_refresh_map():
-    class Scene:
-        lower = np.array([-1., -1., 0.])
-        upper = np.array([1., 1., 2.])
-        goal = np.array([.5, .5, 1.])
-
-        def point_cloud(self):
-            return np.array([[0., 0., 0.]])
-
-    planner = Planner(Scene())
-    result = planner.plan(np.column_stack((np.array([0., 0., 1.]), np.zeros((3, 2)))),
-                          deadline=perf_counter() - 1.)
-    assert not result.success and result.trajectory is None
-    assert "PlanningDeadline" in result.status
-    assert planner.grid is None
+def test_forward_shift_uses_measured_progress_without_budget_cutoff():
+    assert handoff_horizon(.8, 1.2) == 1.2
+    assert handoff_horizon(.8, 3.0) == 3.0
+    assert handoff_horizon(.8, .25) == .8
 
 
 def test_predicted_start_matches_old_active_reference_at_handoff():

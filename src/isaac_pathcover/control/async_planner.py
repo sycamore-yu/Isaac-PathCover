@@ -1,9 +1,4 @@
-"""Persistent CPU planning process; Newton and its CUDA context stay in the flight process.
-
-The process receives one snapshot at a time, never blocks the physics loop,
-and returns only fully solved candidates. A monotonic wall-clock deadline is
-enforced cooperatively inside the unchanged GCOPTER objective/line search.
-"""
+"""Persistent CPU planner; Newton and its CUDA context stay in the flight process."""
 
 from __future__ import annotations
 
@@ -12,9 +7,9 @@ from time import perf_counter
 import traceback
 
 
-def handoff_horizon(budget_wall_s, minimum_sim_s, observed_sim_per_wall):
-    """Predict the simulation advance during a wall-clock planning budget."""
-    return max(minimum_sim_s, budget_wall_s * observed_sim_per_wall)
+def handoff_horizon(minimum_sim_s, previous_solve_sim_s):
+    """Predict the next handoff from measured simulation progress per solve."""
+    return max(minimum_sim_s, previous_solve_sim_s)
 
 
 def _planning_process(connection, scene_name, seed):
@@ -41,17 +36,16 @@ def _planning_process(connection, scene_name, seed):
                 mapping = {"t": request["t"], "points": len(endpoints),
                            "sensor_s": sensor_elapsed, "sensor_origin": origin.tolist(), **update}
             result = planner.plan(request["start_state"], guide=request["guide"],
-                                  guide_elapsed=request["guide_elapsed"], deadline=request["deadline"])
+                                  guide_elapsed=request["guide_elapsed"])
             diagnostics = validation = None
-            if result.success and perf_counter() < request["deadline"]:
+            if result.success:
                 diagnostics = trajectory_diagnostics(result.trajectory, result.corridor.polytopes,
                                                      planner.config)
                 validation = execution_check(diagnostics, planner.config)
             ended = perf_counter()
             connection.send({"kind": "result", "id": request["id"], "result": result,
                              "mapping": mapping, "diagnostics": diagnostics,
-                             "validation": validation, "elapsed_wall_s": ended - started,
-                             "deadline_exceeded": ended > request["deadline"]})
+                             "validation": validation, "elapsed_wall_s": ended - started})
     except EOFError:
         pass
     except Exception:
