@@ -14,7 +14,7 @@ OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 .venv/bin/python -m isaac_pathcover.dem
 
 `--duration` 是每次试验的最大仿真时长。满足到达条件后提前结束。批量验收使用固定种子：
 
-默认运行模式为**异步规划**：独立 CPU 进程承担地图更新和 GCOPTER 求解，Newton 在规划期间持续推进。首次规划预算 4.0 s，后续预算 1.5 s。上一条轨迹继续执行，新的规划必须在预测交接时刻前完成。旧版暂停仿真时间的同步对照可以使用 `--synchronous`。实现与预算指标见[异步重规划](docs/async_replanning.md)。
+默认运行模式为**异步规划**：独立 CPU 进程承担地图更新和 GCOPTER 求解，Newton 在规划期间持续推进。首次求解截止时间为 4.0 s，后续为 1.5 s，均可配置。它们是拒绝过期轨迹的策略参数，不是算法性能目标。验收关注实际求解耗时、有效交接频率和无碰撞到达率。旧版暂停仿真时间的同步对照可以使用 `--synchronous`。实现见[异步重规划](docs/async_replanning.md)。
 
 ```bash
 OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 .venv/bin/python -m isaac_pathcover.demo --scene both --seeds 0 1 2 3 4 --duration 60 --output results/validation

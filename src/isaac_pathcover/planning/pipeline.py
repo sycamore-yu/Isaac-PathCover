@@ -61,7 +61,6 @@ class Planner:
         self._map_version = -1
         self.inflated_points = np.empty((0, 3))
         self.grid = self.jps = self.dmp = None
-        self.last_result = None
         self.previous_path = None
 
     @staticmethod
@@ -202,7 +201,5 @@ class Planner:
         except (SearchFailure, GeometryError, QhullError, np.linalg.LinAlgError, PlanningDeadline) as error:
             status = f"{stage}: {type(error).__name__}: {error}"
         timings["total"] = perf_counter() - started
-        result = PlanResult(trajectory, corridor, search, optimization, timings,
-                            success, status, self.map.version)
-        self.last_result = result
-        return result
+        return PlanResult(trajectory, corridor, search, optimization, timings,
+                          success, status, self.map.version)

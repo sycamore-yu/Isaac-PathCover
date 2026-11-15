@@ -42,34 +42,70 @@ def save_plan(path, result):
     (path / "corridor.json").write_text(json.dumps(corridor, indent=2) + "\n")
 
 
+class FlightTrace:
+    """The common Newton control step, flight samples and arrival condition."""
+
+    def __init__(self, env, scene, execution):
+        self.env, self.scene, self.execution = env, scene, execution
+        self.dt = env.step_dt
+        self.tracker = GeometricTracker()
+        self.previous_velocity = np.zeros(3)
+        self.acceleration = np.zeros(3)
+        self.arrived_ticks = 0
+        self.times, self.states, self.references = [], [], []
+        self.motor_states, self.contacts, self.substeps = [], [], []
+        self.commands, self.allocated = [], []
+
+    @property
+    def arrived(self):
+        return self.arrived_ticks >= round(.5 / self.dt)
+
+    def state(self, tick):
+        state = self.env.physical_state()[0].detach().cpu().numpy().astype(float)
+        if tick:
+            self.acceleration = (state[7:10] - self.previous_velocity) / self.dt
+        self.previous_velocity = state[7:10].copy()
+        return state
+
+    def step(self, now, state):
+        import torch
+
+        reference = self.execution.reference(now)
+        wrench, _ = self.tracker.command(state, reference[:, 0], reference[:, 1], reference[:, 2], self.dt)
+        self.env.step(torch.as_tensor(wrench[None], dtype=torch.float32, device=self.env.device))
+        after = self.env.physical_state()[0].detach().cpu().numpy().astype(float)
+        self.times.append(now + self.dt)
+        self.states.append(after)
+        self.references.append(self.execution.reference(now + self.dt))
+        self.contacts.append(float(self.env.contact_force()))
+        self.motor_states.append(self.env.actuator.motor_state[0].detach().cpu().numpy().copy())
+        self.commands.append(wrench)
+        self.allocated.append(self.env.actuator.allocated_wrench[0].detach().cpu().numpy().copy())
+        self.substeps.extend(torch.stack(self.env.substep_states).detach().cpu().numpy())
+        if not np.isfinite(after).all():
+            return True
+        distance = np.linalg.norm(after[:3] - self.scene.goal)
+        self.arrived_ticks = self.arrived_ticks + 1 if distance < .2 and np.linalg.norm(after[7:10]) < .3 else 0
+        return (self.arrived or np.any(after[:3] < self.scene.lower - 1.)
+                or np.any(after[:3] > self.scene.upper + 1.))
+
+
 def run_episode(env, scene, seed, duration, output, update_map=True):
-    import torch
-    from isaac_pathcover.simulation.metrics import summarize
-    from isaac_pathcover.simulation.visualization import save_preview
     from isaac_pathcover.trajectory.diagnostics import trajectory_diagnostics
 
     output.mkdir(parents=True, exist_ok=True)
     env.reset()
-    tracker = GeometricTracker()
     planner = Planner(scene, seed=seed)
     execution = TrajectoryExecution(scene.start)
-    times, states, references, motor_states, contacts, substeps = [], [], [], [], [], []
-    commands, allocated = [], []
+    flight = FlightTrace(env, scene, execution)
     plans, map_updates = [], []
-    last_velocity = np.zeros(3)
-    acceleration = np.zeros(3)
     initial_result = None
     next_replan = 0.
     started = time.perf_counter()
-    dt = env.step_dt
-    arrived_ticks = 0
-    for tick in range(int(round(duration / dt))):
-        now = tick * dt
-        state = env.physical_state()[0].detach().cpu().numpy().astype(float)
-        if tick:
-            acceleration = (state[7:10] - last_velocity) / dt
-        last_velocity = state[7:10].copy()
-        if now + 1e-9 >= next_replan and not arrived_ticks:
+    for tick in range(int(round(duration / flight.dt))):
+        now = tick * flight.dt
+        state = flight.state(tick)
+        if now + 1e-9 >= next_replan and not flight.arrived_ticks:
             cycle_started = time.perf_counter()
             if update_map and tick:
                 scan_started = time.perf_counter()
@@ -78,7 +114,7 @@ def run_episode(env, scene, seed, duration, output, update_map=True):
                 update = planner.update_map(sensor_origin, endpoints)
                 map_updates.append({"t": now, "points": len(endpoints), "sensor_s": scan_elapsed,
                                     "sensor_origin": sensor_origin.tolist(), **update})
-            measured = np.column_stack((state[:3], state[7:10], acceleration))
+            measured = np.column_stack((state[:3], state[7:10], flight.acceleration))
             result = planner.plan(measured, guide=execution.trajectory,
                                   guide_elapsed=now - execution.start_time)
             diagnostics = validation = None
@@ -103,49 +139,28 @@ def run_episode(env, scene, seed, duration, output, update_map=True):
             plans.append(record)
             print(json.dumps({"scene": scene.name, "seed": seed, **record}), flush=True)
             next_replan = now + .5
-        reference = execution.reference(now)
-        wrench, _ = tracker.command(state, reference[:, 0], reference[:, 1], reference[:, 2], dt)
-        env.step(torch.as_tensor(wrench[None], dtype=torch.float32, device=env.device))
-        after = env.physical_state()[0].detach().cpu().numpy().astype(float)
-        times.append(now + dt)
-        states.append(after)
-        references.append(execution.reference(now + dt))
-        contacts.append(float(env.contact_force()))
-        motor_states.append(env.actuator.motor_state[0].detach().cpu().numpy().copy())
-        commands.append(wrench)
-        allocated.append(env.actuator.allocated_wrench[0].detach().cpu().numpy().copy())
-        substeps.extend(torch.stack(env.substep_states).detach().cpu().numpy())
-        if not np.isfinite(after).all():
-            break
-        distance = np.linalg.norm(after[:3] - scene.goal)
-        arrived_ticks = arrived_ticks + 1 if distance < .2 and np.linalg.norm(after[7:10]) < .3 else 0
-        if arrived_ticks >= round(.5 / dt):
-            break
-        if np.any(after[:3] < scene.lower - 1.) or np.any(after[:3] > scene.upper + 1.):
+        if flight.step(now, state):
             break
     wall = time.perf_counter() - started
-    return finish_episode(scene, seed, output, times, states, references, substeps, contacts,
-                          motor_states, commands, allocated, plans, map_updates, wall,
-                          arrived_ticks >= round(.5 / dt), initial_result,
-                          planner.initialization_timings, env, mode="synchronous")
+    return finish_episode(scene, seed, output, flight, plans, map_updates, wall,
+                          initial_result, planner.initialization_timings, mode="synchronous")
 
 
-def finish_episode(scene, seed, output, times, states, references, substeps, contacts,
-                   motor_states, commands, allocated, plans, map_updates, wall, arrived,
-                   initial_result, planner_initialization, env, *, mode, extra=None):
+def finish_episode(scene, seed, output, flight, plans, map_updates, wall,
+                   initial_result, planner_initialization, *, mode, extra=None):
     import torch
     from isaac_pathcover.simulation.metrics import summarize
     from isaac_pathcover.simulation.visualization import save_preview
-    dt = env.step_dt
 
-    arrays = dict(time=np.asarray(times), states=np.asarray(states), references=np.asarray(references),
-                  physics_states=np.asarray(substeps), contact_force=np.asarray(contacts), motor_states=np.asarray(motor_states),
-                  requested_wrench=np.asarray(commands), allocated_wrench=np.asarray(allocated))
+    arrays = dict(time=np.asarray(flight.times), states=np.asarray(flight.states),
+                  references=np.asarray(flight.references), physics_states=np.asarray(flight.substeps),
+                  contact_force=np.asarray(flight.contacts), motor_states=np.asarray(flight.motor_states),
+                  requested_wrench=np.asarray(flight.commands), allocated_wrench=np.asarray(flight.allocated))
     np.savez_compressed(output / "flight.npz", **arrays)
     (output / "planning.json").write_text(json.dumps(plans, indent=2, allow_nan=False) + "\n")
     (output / "mapping.json").write_text(json.dumps(map_updates, indent=2, allow_nan=False) + "\n")
-    report = summarize(scene, times, states, references, substeps, contacts, motor_states, plans, wall,
-                       arrived=arrived)
+    report = summarize(scene, flight.times, flight.states, flight.references, flight.substeps,
+                       flight.contacts, flight.motor_states, plans, wall, arrived=flight.arrived)
     cycles = np.asarray([p["cycle_wall_s"] for p in plans])
     def finite_float(value):
         return float(value) if np.isfinite(value) else None
@@ -158,17 +173,18 @@ def finish_episode(scene, seed, output, times, states, references, substeps, con
                    "peak_wrench_allocation_difference": [finite_float(x) for x in
                        np.max(np.abs(arrays["requested_wrench"] - arrays["allocated_wrench"]), axis=0)],
                    "max_observed_acceleration_m_s2": finite_float(np.linalg.norm(
-                       np.diff(arrays["states"][:, 7:10], axis=0) / dt, axis=1).max(initial=0.)),
+                       np.diff(arrays["states"][:, 7:10], axis=0) / flight.dt, axis=1).max(initial=0.)),
                    "lidar": {"horizontal_rays": 440, "vertical_rays": 16, "min_range_m": .1,
                              "max_range_m": 100., "body_translation_m": [0., 0., .25], "update_hz": 2}})
     report.update({"seed": seed, "map_updates": len(map_updates), "mapping_initialization": planner_initialization,
-                   "runtime": {"python": sys.version, "torch": torch.__version__, "gpu": torch.cuda.get_device_name(env.device),
+                   "runtime": {"python": sys.version, "torch": torch.__version__,
+                               "gpu": torch.cuda.get_device_name(flight.env.device),
                                "numpy": np.__version__, "newton": importlib.metadata.version("newton"),
                                "isaaclab_release": "3.0.0", "isaaclab_core_distribution": importlib.metadata.version("isaaclab")}})
     if mode == "asynchronous":
         report["time_contract"] = "separate CPU planner process; Newton advances during planning; wall-clock solve budget"
         report["lidar"]["nominal_request_hz"] = 2.
-        report["lidar"]["update_hz"] = (len(map_updates) / times[-1]) if times else 0.
+        report["lidar"]["update_hz"] = (len(map_updates) / flight.times[-1]) if flight.times else 0.
         report.update(extra or {})
     (output / "result.json").write_text(json.dumps(report, indent=2, allow_nan=False) + "\n")
     if initial_result is not None:
@@ -183,38 +199,36 @@ def run_episode_async(env, scene, seed, duration, output, *, budget_s=1.5,
     """Keep stepping Newton while a separate process plans from a future state.
 
     Following SUPER's forward-state handoff, the new candidate is initialized
-    at the active reference evaluated ``forward_s`` simulated seconds ahead.
+    on the active reference at a predicted time at least ``forward_s`` ahead.
     The active trajectory continues until that exact handoff. Late, overbudget,
     dynamically inconsistent and soft-constraint-violating plans are rejected.
     This has no backup planner and makes no hard real-time guarantee.
     """
-    import torch
     from isaac_pathcover.control.async_planner import AsyncPlanningWorker, handoff_horizon
 
     if budget_s <= 0 or startup_budget_s <= 0 or forward_s <= 0:
         raise ValueError("planning budget and forward horizon must be positive")
     output.mkdir(parents=True, exist_ok=True)
     env.reset()
-    tracker = GeometricTracker()
     execution = TrajectoryExecution(scene.start)
-    times, states, references, motor_states, contacts, substeps = [], [], [], [], [], []
-    commands, allocated, plans, map_updates = [], [], [], []
+    flight = FlightTrace(env, scene, execution)
+    plans, map_updates = [], []
     finished_candidates = []
     initial_result = None
-    next_replan, previous_velocity, acceleration = 0., np.zeros(3), np.zeros(3)
+    next_replan = 0.
     inflight = pending = None
     ready_at_sim_s = None
     launched = skipped = steps_while_busy = ready_scheduled = deadline_misses = stale = 0
     max_progress = 0.
+    observed_sim_per_wall = 1.
     max_observed_sim_per_wall = 1.
-    arrived_ticks = 0
     started_wall = time.perf_counter()
-    dt = env.step_dt
+    dt = flight.dt
     worker = AsyncPlanningWorker(scene.name, seed)
 
     def finish_candidate(record, result, validation, state, now, predicted):
         nonlocal initial_result, stale
-        measured = np.column_stack((state[:3], state[7:10], acceleration))
+        measured = np.column_stack((state[:3], state[7:10], flight.acceleration))
         start = np.column_stack([result.trajectory.evaluate(0., derivative=k) for k in range(3)])
         record["prediction_error_pva"] = np.linalg.norm(predicted - measured, axis=0).tolist()
         error = np.linalg.norm(start[:, :2] - measured[:, :2], axis=0)
@@ -236,10 +250,7 @@ def run_episode_async(env, scene, seed, duration, output, *, budget_s=1.5,
     try:
         for tick in range(int(round(duration / dt))):
             now = tick * dt
-            state = env.physical_state()[0].detach().cpu().numpy().astype(float)
-            if tick:
-                acceleration = (state[7:10] - previous_velocity) / dt
-            previous_velocity = state[7:10].copy()
+            state = flight.state(tick)
 
             # Nonblocking check: the Newton step is never held for a solve.
             message = worker.poll()
@@ -251,8 +262,8 @@ def run_episode_async(env, scene, seed, duration, output, *, budget_s=1.5,
                 inflight = None
                 elapsed = time.perf_counter() - request["submitted_wall"]
                 max_progress = max(max_progress, now - request["t"])
-                max_observed_sim_per_wall = max(max_observed_sim_per_wall,
-                                                (now - request["t"]) / max(elapsed, 1e-6))
+                observed_sim_per_wall = (now - request["t"]) / elapsed
+                max_observed_sim_per_wall = max(max_observed_sim_per_wall, observed_sim_per_wall)
                 if message["mapping"] is not None:
                     map_updates.append(message["mapping"])
                 result = message["result"]
@@ -300,10 +311,10 @@ def run_episode_async(env, scene, seed, duration, output, *, budget_s=1.5,
                 ready_scheduled += 1
                 finish_candidate(record, result, validation, state, now, predicted)
 
-            if now + 1e-9 >= next_replan and not arrived_ticks:
+            if now + 1e-9 >= next_replan and not flight.arrived_ticks:
                 if worker.ready and not worker.busy and pending is None:
-                    measured = np.column_stack((state[:3], state[7:10], acceleration))
-                    horizon = handoff_horizon(budget_s, forward_s, max_observed_sim_per_wall)
+                    measured = np.column_stack((state[:3], state[7:10], flight.acceleration))
+                    horizon = handoff_horizon(budget_s, forward_s, observed_sim_per_wall)
                     target = round(now + horizon, 6) if execution.trajectory is not None else None
                     predicted = execution.reference(target)[:, :3] if target is not None else measured
                     allocated_budget = budget_s if target is not None else startup_budget_s
@@ -322,27 +333,9 @@ def run_episode_async(env, scene, seed, duration, output, *, budget_s=1.5,
                     skipped += 1
                 next_replan += .5
 
-            reference = execution.reference(now)
-            wrench, _ = tracker.command(state, reference[:, 0], reference[:, 1], reference[:, 2], dt)
             if worker.busy:
                 steps_while_busy += 1
-            env.step(torch.as_tensor(wrench[None], dtype=torch.float32, device=env.device))
-            after = env.physical_state()[0].detach().cpu().numpy().astype(float)
-            times.append(now + dt)
-            states.append(after)
-            references.append(execution.reference(now + dt))
-            contacts.append(float(env.contact_force()))
-            motor_states.append(env.actuator.motor_state[0].detach().cpu().numpy().copy())
-            commands.append(wrench)
-            allocated.append(env.actuator.allocated_wrench[0].detach().cpu().numpy().copy())
-            substeps.extend(torch.stack(env.substep_states).detach().cpu().numpy())
-            if not np.isfinite(after).all():
-                break
-            distance = np.linalg.norm(after[:3] - scene.goal)
-            arrived_ticks = arrived_ticks + 1 if distance < .2 and np.linalg.norm(after[7:10]) < .3 else 0
-            if arrived_ticks >= round(.5 / dt):
-                break
-            if np.any(after[:3] < scene.lower - 1.) or np.any(after[:3] > scene.upper + 1.):
+            if flight.step(now, state):
                 break
     finally:
         wall = time.perf_counter() - started_wall
@@ -368,10 +361,8 @@ def run_episode_async(env, scene, seed, duration, output, *, budget_s=1.5,
              "scheduled_handoffs_examined": ready_scheduled,
              "budget_expired_jobs": deadline_misses, "stale_or_mismatch_rejections": stale,
              "job_running_at_episode_end": busy_at_end}
-    return finish_episode(scene, seed, output, times, states, references, substeps, contacts,
-                          motor_states, commands, allocated, plans, map_updates, wall,
-                          arrived_ticks >= round(.5 / dt), initial_result,
-                          worker_init, env, mode="asynchronous", extra=extra)
+    return finish_episode(scene, seed, output, flight, plans, map_updates, wall,
+                          initial_result, worker_init, mode="asynchronous", extra=extra)
 
 
 def main():

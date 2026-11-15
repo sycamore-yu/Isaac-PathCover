@@ -1,0 +1,248 @@
+{
+  "date": "2026-11-15",
+  "purpose": "Simplify forward lookahead, consolidate flight steps, remove unused Planner.last_result",
+  "basis": "Seed-matched Newton runs, 35s simulation limit; shared CPU/GPU timing is workload-dependent",
+  "previous_root": "results/async_validation_20261115",
+  "current_root": "results/simplified_validation_20261115",
+  "scenes": {
+    "medium": {
+      "previous": {
+        "episodes": 5,
+        "collision_free_arrivals": 5,
+        "collisions": 0,
+        "goals_reached": 5,
+        "simulation_duration_mean_s": 18.360000000000003,
+        "pooled_tracking_rmse_m": 0.013572636405520297,
+        "completed_decisions": 52,
+        "accepted_handoffs": 25,
+        "stale_or_mismatch_rejections": 0,
+        "decision_wall_p50_s": 1.3762489834334701,
+        "decision_wall_p95_s": 2.3300714678480285,
+        "lookahead_sim_p50_s": 1.9000000000000004,
+        "lookahead_sim_min_s": 1.8999999999999986,
+        "lookahead_sim_max_s": 1.9000000000000004,
+        "physics_steps_while_worker_busy": 5385,
+        "per_seed": [
+          {
+            "seed": 0,
+            "collision_free_arrival": true,
+            "sim_duration_s": 16.130000000000003,
+            "planning_jobs": 9,
+            "handoffs": 5
+          },
+          {
+            "seed": 1,
+            "collision_free_arrival": true,
+            "sim_duration_s": 20.660000000000004,
+            "planning_jobs": 13,
+            "handoffs": 5
+          },
+          {
+            "seed": 2,
+            "collision_free_arrival": true,
+            "sim_duration_s": 18.910000000000004,
+            "planning_jobs": 10,
+            "handoffs": 5
+          },
+          {
+            "seed": 3,
+            "collision_free_arrival": true,
+            "sim_duration_s": 16.270000000000003,
+            "planning_jobs": 9,
+            "handoffs": 5
+          },
+          {
+            "seed": 4,
+            "collision_free_arrival": true,
+            "sim_duration_s": 19.830000000000002,
+            "planning_jobs": 11,
+            "handoffs": 5
+          }
+        ]
+      },
+      "simplified": {
+        "episodes": 5,
+        "collision_free_arrivals": 5,
+        "collisions": 0,
+        "goals_reached": 5,
+        "simulation_duration_mean_s": 16.712,
+        "pooled_tracking_rmse_m": 0.01448452046236191,
+        "completed_decisions": 52,
+        "accepted_handoffs": 29,
+        "stale_or_mismatch_rejections": 0,
+        "decision_wall_p50_s": 1.29424334585201,
+        "decision_wall_p95_s": 2.297442491224501,
+        "lookahead_sim_p50_s": 1.2587890000000002,
+        "lookahead_sim_min_s": 1.155182,
+        "lookahead_sim_max_s": 1.3427030000000002,
+        "physics_steps_while_worker_busy": 5447,
+        "per_seed": [
+          {
+            "seed": 0,
+            "collision_free_arrival": true,
+            "sim_duration_s": 16.740000000000002,
+            "planning_jobs": 10,
+            "handoffs": 6
+          },
+          {
+            "seed": 1,
+            "collision_free_arrival": true,
+            "sim_duration_s": 18.880000000000003,
+            "planning_jobs": 12,
+            "handoffs": 5
+          },
+          {
+            "seed": 2,
+            "collision_free_arrival": true,
+            "sim_duration_s": 15.89,
+            "planning_jobs": 10,
+            "handoffs": 6
+          },
+          {
+            "seed": 3,
+            "collision_free_arrival": true,
+            "sim_duration_s": 17.96,
+            "planning_jobs": 11,
+            "handoffs": 5
+          },
+          {
+            "seed": 4,
+            "collision_free_arrival": true,
+            "sim_duration_s": 14.09,
+            "planning_jobs": 9,
+            "handoffs": 7
+          }
+        ]
+      },
+      "source_changes_after_run": []
+    },
+    "dense": {
+      "previous": {
+        "episodes": 5,
+        "collision_free_arrivals": 5,
+        "collisions": 0,
+        "goals_reached": 5,
+        "simulation_duration_mean_s": 17.742,
+        "pooled_tracking_rmse_m": 0.01498647309310474,
+        "completed_decisions": 45,
+        "accepted_handoffs": 34,
+        "stale_or_mismatch_rejections": 0,
+        "decision_wall_p50_s": 1.2078702731523663,
+        "decision_wall_p95_s": 2.5014204109087586,
+        "lookahead_sim_p50_s": 1.9000000000000004,
+        "lookahead_sim_min_s": 1.8999999999999986,
+        "lookahead_sim_max_s": 1.9000000000000004,
+        "physics_steps_while_worker_busy": 4717,
+        "per_seed": [
+          {
+            "seed": 0,
+            "collision_free_arrival": true,
+            "sim_duration_s": 22.35,
+            "planning_jobs": 13,
+            "handoffs": 6
+          },
+          {
+            "seed": 1,
+            "collision_free_arrival": true,
+            "sim_duration_s": 17.89,
+            "planning_jobs": 9,
+            "handoffs": 7
+          },
+          {
+            "seed": 2,
+            "collision_free_arrival": true,
+            "sim_duration_s": 16.19,
+            "planning_jobs": 8,
+            "handoffs": 7
+          },
+          {
+            "seed": 3,
+            "collision_free_arrival": true,
+            "sim_duration_s": 15.99,
+            "planning_jobs": 7,
+            "handoffs": 7
+          },
+          {
+            "seed": 4,
+            "collision_free_arrival": true,
+            "sim_duration_s": 16.290000000000003,
+            "planning_jobs": 8,
+            "handoffs": 7
+          }
+        ]
+      },
+      "simplified": {
+        "episodes": 5,
+        "collision_free_arrivals": 5,
+        "collisions": 0,
+        "goals_reached": 5,
+        "simulation_duration_mean_s": 17.816000000000003,
+        "pooled_tracking_rmse_m": 0.016653824395897566,
+        "completed_decisions": 61,
+        "accepted_handoffs": 41,
+        "stale_or_mismatch_rejections": 0,
+        "decision_wall_p50_s": 1.197088432032615,
+        "decision_wall_p95_s": 2.5104079148732126,
+        "lookahead_sim_p50_s": 1.0333439999999996,
+        "lookahead_sim_min_s": 0.9681049999999995,
+        "lookahead_sim_max_s": 1.2957280000000004,
+        "physics_steps_while_worker_busy": 5356,
+        "per_seed": [
+          {
+            "seed": 0,
+            "collision_free_arrival": true,
+            "sim_duration_s": 19.340000000000003,
+            "planning_jobs": 12,
+            "handoffs": 8
+          },
+          {
+            "seed": 1,
+            "collision_free_arrival": true,
+            "sim_duration_s": 16.750000000000004,
+            "planning_jobs": 11,
+            "handoffs": 9
+          },
+          {
+            "seed": 2,
+            "collision_free_arrival": true,
+            "sim_duration_s": 17.200000000000003,
+            "planning_jobs": 12,
+            "handoffs": 8
+          },
+          {
+            "seed": 3,
+            "collision_free_arrival": true,
+            "sim_duration_s": 14.81,
+            "planning_jobs": 11,
+            "handoffs": 8
+          },
+          {
+            "seed": 4,
+            "collision_free_arrival": true,
+            "sim_duration_s": 20.98,
+            "planning_jobs": 15,
+            "handoffs": 8
+          }
+        ]
+      },
+      "source_changes_after_run": []
+    }
+  },
+  "synchronous_flight_smoke": {
+    "scene": "medium",
+    "seed": 0,
+    "duration_sim_s": 2.0,
+    "finite": true,
+    "collision": false,
+    "planning_attempts": 4,
+    "historical_reference": "results/validation_execution_20261114/medium/seed000/flight.npz",
+    "comparison_control_samples": 49,
+    "bitwise_match": {
+      "time": true,
+      "states": true,
+      "references": true,
+      "motor_states": true,
+      "requested_wrench": true
+    }
+  }
+}

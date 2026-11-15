@@ -15,14 +15,14 @@ Source: `hku-mars/SUPER`, `super_planner/src/super_core/super_planner.cpp`.
 At each nominal 0.5 s **simulation-time** planning slot:
 
 1. If the worker is busy or the previous candidate is awaiting activation, skip the slot rather than enqueueing an obsolete request. The old accepted trajectory continues to execute and Newton keeps advancing.
-2. Estimate a future activation time from the configured minimum prediction horizon and the measured simulator-clock/wall-clock ratio. The lead-time formula is `max(minimum_horizon, 1.2 * regular_wall_budget * max(1, observed_sim_per_wall) + 0.1)` simulated seconds. The multiplier and final 0.1 s provide a scheduling margin, **not a strict latency guarantee**.
+2. Estimate a future activation time from the minimum prediction horizon and the most recently measured simulator-clock/wall-clock ratio. The lead-time formula is `max(minimum_horizon, regular_wall_budget * observed_sim_per_wall)` simulated seconds. The previous 20% multiplier, 0.1 s addition, and forced ratio of at least 1 have been removed. Late candidates still fail the existing handoff deadline check.
 3. Evaluate the **currently accepted** trajectory's position, velocity and acceleration at the future time; pass this hard start boundary to the independent worker. The current measured pose and quaternion are used to simulate the most recent LiDAR scan.
 4. The worker checks an absolute monotonic deadline at planning stages and on every L-BFGS line-search evaluation. If the complete job, including LiDAR acquisition and trajectory diagnostics, exceeds the wall-clock budget, its result cannot replace the active plan. Original GCOPTER objective terms, analytic gradients and default cold-start optimizer settings are unchanged.
 5. If the result arrives before the predicted activation time, keep executing the old trajectory until the target time. At handoff, require position error ≤0.2 m and speed-vector error ≤0.5 m/s relative to the new polynomial's start. Apply the pre-existing execution constraint check; reject late or inconsistent trajectories without changing the active reference. Record the predicted-state mismatch and actual reference jump separately.
 
 The first route is planned **without stopping Newton**, while the quadrotor maintains initial hover. Its wall budget is separate from normal replanning. The planning worker's one-time initialization is logged independently of its first solve.
 
-Default budgets: **4.0 s initial**, **1.5 s subsequent**; minimum handoff horizon **0.8 s simulation time**, automatically increased according to measured clock speed and budget. These parameters trade latency against availability and are not a claim of hard 2 Hz wall-clock planning. To change them:
+Default budgets: **4.0 s initial**, **1.5 s subsequent**; minimum handoff horizon **0.8 s simulation time**, adjusted using the measured clock speed. These timeouts are configurable rejection policies, not performance acceptance targets. Evaluate actual planning latency, effective handoff rate, and collision-free arrival independently. To change them:
 
 ```bash
 OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 .venv/bin/python -m isaac_pathcover.demo \
@@ -39,7 +39,7 @@ In asynchronous runs, `planning.json` records request time, target activation ti
 
 - **Nonblocking simulation**: physics advances while the planner is solving; test this by `physics_steps_while_worker_busy > 0` and `physics_progress_while_planning_sim_s > 0`.
 - **Correct trajectory handoff**: the solver may succeed while the trajectory is refused because of delay, dynamic mismatch, or soft-constraint residual.
-- **True wall-clock 2 Hz planning**: a complete solver decision would need ≤0.5 s wall time every cycle, and the actual control loop would also need at least 1× wall-time simulation throughput. The present algorithm does **not** meet that condition.
+- **Wall-clock 2 Hz planning**: a complete solver decision would need ≤0.5 s wall time every cycle. The simulation real-time factor measures test throughput, not planner correctness or its scheduling deadline.
 
 All debug serialization and offline 3-D HTML rendering occurs **after** the continuous stepping loop. The reported `wall_time_s` measures the flight loop rather than post-flight file writes or initial Isaac Lab boot.
 
@@ -75,3 +75,23 @@ There were 97 completed decisions and 10,102 physics control steps while the ind
 The medium five-seed run's source snapshot differs from the final repository **only in `demo.py`**: the changed lines report actual instead of nominal LiDAR fusion rate after the flight. No control, mapping, prediction or optimizer logic changed. The dense five-seed run's source snapshot matches the finalized Python source. The raw source snapshots and source hashes are preserved with the results.
 
 The observed maximum body angular-rate norms were 4.04 rad/s (medium) and 2.96 rad/s (dense), versus the GCOPTER planned 3 rad/s upper bound. The work therefore establishes nonblocking, collision-free flight for these ten seeds, **not** guaranteed adherence to every actuator constraint or guaranteed real-time execution.
+
+The five-seed results above precede the simplified forward-horizon policy. The complete new results must be evaluated separately; the old report remains an immutable baseline.
+
+## Simplified lookahead and shared flight recorder
+
+The latest implementation removes the fixed 20%/0.1 s lead-time margins and uses the last observed ratio of simulation-time progress to wall-clock solve time. Synchronous and asynchronous modes share `FlightTrace` for state sampling, Newton control steps, arrival criteria and flight records. The unused `Planner.last_result` field has been removed; the separate `GCopter.last_result` remains available for numerical oracle tests.
+
+Five fixed seeds per scene were rerun with the shorter lookahead. Both versions use the same scenes, planning objective and collision criteria; CPU/GPU load was not isolated between runs. Compact measurements: [`data/simplified_validation.json`](data/simplified_validation.json).
+
+| Metric | medium: prior → simplified | dense: prior → simplified |
+| --- | ---: | ---: |
+| Collision-free arrivals | 5/5 → **5/5** | 5/5 → **5/5** |
+| Median forward horizon (sim s) | 1.900 → **1.259** | 1.900 → **1.033** |
+| Decision wall-time P50 (s) | 1.376 → 1.294 | 1.208 → 1.197 |
+| Accepted handoffs | 25 → 29 | 34 → 41 |
+| Stale/mismatched handoffs | 0 → 0 | 0 → 0 |
+
+The 1.5 s default is an **optional policy cutoff** for accepting completed trajectories. It is not the primary performance metric. Actual solver latency, valid handoff frequency and collision-free arrival remain the evaluation criteria.
+
+The original `--synchronous` mode was also exercised for 2 s in medium. It completed 4 planning attempts with finite state and no collision. The first 49 recorded control samples (0.49 s) matched the historical synchronous reference bit-for-bit for time, physical state, trajectory reference, motor state, and requested wrench. The sample-by-sample comparison is recorded in [`data/simplified_validation.json`](data/simplified_validation.json).

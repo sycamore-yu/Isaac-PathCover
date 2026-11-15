@@ -13,13 +13,8 @@ import traceback
 
 
 def handoff_horizon(budget_wall_s, minimum_sim_s, observed_sim_per_wall):
-    """SUPER-style forward shift, scaled to the measured Newton clock rate.
-
-    Allow 20% schedule slack and 0.1 s simulation time for IPC and control.
-    The measured ratio is advisory; unexpectedly fast simulation can still
-    produce a stale result, which the flight runner must reject explicitly.
-    """
-    return max(minimum_sim_s, 1.2 * budget_wall_s * max(1., observed_sim_per_wall) + .1)
+    """Predict the simulation advance during a wall-clock planning budget."""
+    return max(minimum_sim_s, budget_wall_s * observed_sim_per_wall)
 
 
 def _planning_process(connection, scene_name, seed):

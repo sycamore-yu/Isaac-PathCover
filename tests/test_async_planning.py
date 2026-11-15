@@ -36,8 +36,9 @@ def test_deadline_does_not_modify_unbudgeted_lbfgs_result():
 
 
 def test_forward_shift_covers_budget_and_observed_clock_rate():
-    assert handoff_horizon(1.5, .8, 1.) == 1.9
-    assert handoff_horizon(1.5, .8, 2.) == 3.6999999999999997
+    assert handoff_horizon(1.5, .8, 1.) == 1.5
+    assert handoff_horizon(1.5, .8, 2.) == 3.
+    np.testing.assert_allclose(handoff_horizon(1.5, .8, .8), 1.2)
     assert handoff_horizon(.2, .8, .25) == .8
 
 
