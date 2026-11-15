@@ -1,0 +1,436 @@
+{
+  "date": "2026-11-15",
+  "timezone": "Asia/Hong_Kong",
+  "base_commit": "7938a89e5bb9c895790c8da180a32eb0e0dcba85",
+  "results_root": "results/turbompc_tracking_20261115_222728",
+  "changes": [
+    "torque-direction preserving allocation by uniform torque scaling and feasible collective shift",
+    "body-rate PD feedback with measured angular acceleration, wn=40rad/s and zeta=0.9",
+    "thrust error weight 0.015 -> 1.0; body-rate input cost centered on zero",
+    "warm-up state stride matches runtime: (10,1)"
+  ],
+  "unchanged": [
+    "10D source prediction model, SQP/ADMM/nvmath solver, horizon16, dt0.02",
+    "mass, inertia, rotor geometry/limits, motor time constant0.033s, Newton",
+    "SUPER/RISP planner, planner parameters, time predicates, FSM, sensors",
+    "Ideal execution and historical experiment data"
+  ],
+  "verification": {
+    "actuation_tests": {
+      "passed": 9,
+      "deselected": 1,
+      "log": "results/turbompc_tracking_20261115_222728/actuation_regression_after.txt"
+    },
+    "hover": {
+      "controller": "nmpc",
+      "duration_s": 5.0,
+      "initial_position_offset_m": [
+        0.1,
+        -0.1,
+        0.05
+      ],
+      "initial_roll_rad": 0.05,
+      "tracking_max_m": 0.15146764393396056,
+      "final_position_error_m": 0.0013366792980838156,
+      "final_speed_m_s": 0.006058715283870697,
+      "rotor_thrust_min_N": 1.5436809062957764,
+      "rotor_thrust_max_N": 2.008437156677246,
+      "requested_rotor_thrust_min_N": 1.5436809062957764,
+      "requested_rotor_thrust_max_N": 2.008437395095825,
+      "rotor_limits_satisfied": true,
+      "hover_stable": true,
+      "nmpc_solve_p50_s": 0.00928333995398134,
+      "nmpc_solve_p95_s": 0.03060054975794628,
+      "controller_config": {
+        "name": "nmpc",
+        "control_hz": 50.0,
+        "prediction_dt_s": 0.02,
+        "horizon_steps": 16,
+        "horizon_s": 0.32,
+        "sqp_max_iter": 3,
+        "admm_max_iter": 500,
+        "admm_eps_abs": 1e-05,
+        "admm_eps_rel": 0.0001,
+        "state_dim": 10,
+        "control_dim": 4,
+        "state_order": "position, quaternion_wxyz, world_velocity",
+        "input": "collective_thrust_acceleration_mps2, body_rate_radps",
+        "solver_input": "total_thrust_N, body_rate_radps",
+        "mass_kg": 0.752,
+        "cost_weights_p_qwxyz_v_thrust_body_rate": [
+          80.0,
+          80.0,
+          100.0,
+          50.0,
+          50.0,
+          50.0,
+          30.0,
+          6.0,
+          6.0,
+          8.0,
+          1.0,
+          0.8,
+          0.8,
+          0.4
+        ],
+        "input_cost_target": "reference thrust, zero body rates",
+        "rate_controller": {
+          "natural_frequency_rad_s": 40.0,
+          "damping_ratio": 0.9,
+          "rate_gain_per_s": [
+            52.79999923706055,
+            52.79999923706055,
+            52.79999923706055
+          ],
+          "rate_damping": [
+            1.375999927520752,
+            1.375999927520752,
+            1.375999927520752
+          ],
+          "rate_limit_rad_s": [
+            10.0,
+            10.0,
+            4.0
+          ]
+        },
+        "rotor_allocation": "uniform torque scaling and collective shift within rotor bounds",
+        "ctbr_lower": [
+          0.0,
+          -10.0,
+          -10.0,
+          -4.0
+        ],
+        "ctbr_upper": [
+          45.212765957446805,
+          10.0,
+          10.0,
+          4.0
+        ],
+        "prewarm_seconds": 10.248706947080791,
+        "source_commit": "e36743e8076bfe12b3e11911e2f1f866d61ae158",
+        "solver": "Isaac-L2F Python SQP/ADMM/nvmath-cuDSS"
+      },
+      "passed": true
+    },
+    "fixed_command_replays": [
+      {
+        "variant": "baseline",
+        "source_directory": "results/turbompc_tracking_20261115_222728/fixed_medium/baseline",
+        "tracking_max_m": 2.980630727724402,
+        "tracking_rmse_m": 1.585884591174512,
+        "first_actual_collision_s": 6.1075,
+        "out_of_bounds": true,
+        "allocation_saturated_steps": 231,
+        "torque_sign_reversed_steps": 133,
+        "nmpc_solve_p50_s": 0.02979687904007733,
+        "nmpc_solve_p95_s": 0.036564055539201945
+      },
+      {
+        "variant": "allocation",
+        "source_directory": "results/turbompc_tracking_20261115_222728/fixed_medium/allocation",
+        "tracking_max_m": 2.4827724527572284,
+        "tracking_rmse_m": 1.609552663919286,
+        "first_actual_collision_s": null,
+        "out_of_bounds": true,
+        "allocation_saturated_steps": 226,
+        "torque_sign_reversed_steps": 0,
+        "nmpc_solve_p50_s": 0.030194133054465055,
+        "nmpc_solve_p95_s": 0.03538971405941993
+      },
+      {
+        "variant": "rate_damping",
+        "source_directory": "results/turbompc_tracking_20261115_222728/fixed_medium/rate_damping",
+        "tracking_max_m": 0.21135122787178087,
+        "tracking_rmse_m": 0.1229282477322435,
+        "first_actual_collision_s": null,
+        "out_of_bounds": false,
+        "allocation_saturated_steps": 78,
+        "torque_sign_reversed_steps": 0,
+        "nmpc_solve_p50_s": 0.024731295416131616,
+        "nmpc_solve_p95_s": 0.028597111231647432
+      },
+      {
+        "variant": "input_cost",
+        "source_directory": "results/turbompc_tracking_20261115_222728/fixed_medium/input_cost",
+        "tracking_max_m": 0.20308828461471629,
+        "tracking_rmse_m": 0.10345452347904079,
+        "first_actual_collision_s": null,
+        "out_of_bounds": false,
+        "allocation_saturated_steps": 3,
+        "torque_sign_reversed_steps": 0,
+        "nmpc_solve_p50_s": 0.023399179917760193,
+        "nmpc_solve_p95_s": 0.025741676916368306
+      }
+    ],
+    "nmpc_flights": [
+      {
+        "scene": "medium",
+        "seed": 2,
+        "arrived": true,
+        "collision": false,
+        "out_of_bounds": false,
+        "tracking_max_m": 0.29009596672909405,
+        "tracking_rmse_m": 0.07934251340373416,
+        "planning_attempts": 188,
+        "planning_failures": 53,
+        "nmpc_solves": 754,
+        "nmpc_solve_p50_s": 0.01139131747186184,
+        "nmpc_solve_p95_s": 0.026636719319503756,
+        "duration_sim_s": 15.08,
+        "wall_time_s": 42.665456515038386,
+        "rotor_thrust_min_N": 0.0,
+        "rotor_thrust_max_N": 8.5,
+        "resolved_goal_error_m": 0.018185792382098557,
+        "finite": true,
+        "source_directory": "results/turbompc_tracking_20261115_222728/nmpc/medium/seed002",
+        "first_motion_s": 9.08,
+        "motion_to_end_s": 6.0,
+        "backup_entries": 1,
+        "planning_status_counts": {
+          "SUCCESS_WITH_BACKUP": 15,
+          "REPLAN_OVERTIME": 52,
+          "SUCCESS_NO_BACKUP": 117,
+          "SUCCESS_NO_BACKUP_RETAINED_COMMAND": 3,
+          "EXP_OPT_FAILED": 1
+        },
+        "allocation_saturated_steps": 47,
+        "torque_sign_reversed_steps": 0,
+        "actual_rotor_thrust_min_N": 0.0009590378216168646,
+        "actual_rotor_thrust_max_N": 7.696206614065915,
+        "actual_rotor_limits_satisfied": true,
+        "first_solve_ms": 14.646418858319521,
+        "max_solve_ms": 35.35737795755267,
+        "motion_solve_p50_ms": 23.761927150189877,
+        "motion_solve_p95_ms": 27.98713442170993,
+        "motion_solve_count": 300,
+        "controller_config": {
+          "name": "nmpc",
+          "control_hz": 50.0,
+          "prediction_dt_s": 0.02,
+          "horizon_steps": 16,
+          "horizon_s": 0.32,
+          "sqp_max_iter": 3,
+          "admm_max_iter": 500,
+          "admm_eps_abs": 1e-05,
+          "admm_eps_rel": 0.0001,
+          "state_dim": 10,
+          "control_dim": 4,
+          "state_order": "position, quaternion_wxyz, world_velocity",
+          "input": "collective_thrust_acceleration_mps2, body_rate_radps",
+          "solver_input": "total_thrust_N, body_rate_radps",
+          "mass_kg": 0.752,
+          "cost_weights_p_qwxyz_v_thrust_body_rate": [
+            80.0,
+            80.0,
+            100.0,
+            50.0,
+            50.0,
+            50.0,
+            30.0,
+            6.0,
+            6.0,
+            8.0,
+            1.0,
+            0.8,
+            0.8,
+            0.4
+          ],
+          "input_cost_target": "reference thrust, zero body rates",
+          "rate_controller": {
+            "natural_frequency_rad_s": 40.0,
+            "damping_ratio": 0.9,
+            "rate_gain_per_s": [
+              52.79999923706055,
+              52.79999923706055,
+              52.79999923706055
+            ],
+            "rate_damping": [
+              1.375999927520752,
+              1.375999927520752,
+              1.375999927520752
+            ],
+            "rate_limit_rad_s": [
+              10.0,
+              10.0,
+              4.0
+            ]
+          },
+          "rotor_allocation": "uniform torque scaling and collective shift within rotor bounds",
+          "ctbr_lower": [
+            0.0,
+            -10.0,
+            -10.0,
+            -4.0
+          ],
+          "ctbr_upper": [
+            45.212765957446805,
+            10.0,
+            10.0,
+            4.0
+          ],
+          "prewarm_seconds": 10.69391606003046,
+          "source_commit": "e36743e8076bfe12b3e11911e2f1f866d61ae158",
+          "solver": "Isaac-L2F Python SQP/ADMM/nvmath-cuDSS"
+        }
+      },
+      {
+        "scene": "dense",
+        "seed": 4,
+        "arrived": true,
+        "collision": false,
+        "out_of_bounds": false,
+        "tracking_max_m": 0.32720089641171385,
+        "tracking_rmse_m": 0.08654401227606043,
+        "planning_attempts": 137,
+        "planning_failures": 67,
+        "nmpc_solves": 873,
+        "nmpc_solve_p50_s": 0.010015170089900494,
+        "nmpc_solve_p95_s": 0.02545902645215392,
+        "duration_sim_s": 17.46,
+        "wall_time_s": 46.27186254505068,
+        "rotor_thrust_min_N": 0.0,
+        "rotor_thrust_max_N": 8.5,
+        "resolved_goal_error_m": 0.08340856238451748,
+        "finite": true,
+        "source_directory": "results/turbompc_tracking_20261115_222728/nmpc/dense/seed004",
+        "first_motion_s": 11.51,
+        "motion_to_end_s": 5.950000000000001,
+        "backup_entries": 3,
+        "planning_status_counts": {
+          "SUCCESS_WITH_BACKUP": 26,
+          "REPLAN_OVERTIME": 63,
+          "BACKUP_CORRIDOR_FAILED": 1,
+          "ON_BACKUP_WAIT_FOR_REST": 3,
+          "SUCCESS_NO_BACKUP": 44
+        },
+        "allocation_saturated_steps": 3,
+        "torque_sign_reversed_steps": 0,
+        "actual_rotor_thrust_min_N": 0.49397717318267276,
+        "actual_rotor_thrust_max_N": 5.454010254454333,
+        "actual_rotor_limits_satisfied": true,
+        "first_solve_ms": 9.119998896494508,
+        "max_solve_ms": 32.779434928670526,
+        "motion_solve_p50_ms": 23.573342012241483,
+        "motion_solve_p95_ms": 26.60126630216837,
+        "motion_solve_count": 297,
+        "controller_config": {
+          "name": "nmpc",
+          "control_hz": 50.0,
+          "prediction_dt_s": 0.02,
+          "horizon_steps": 16,
+          "horizon_s": 0.32,
+          "sqp_max_iter": 3,
+          "admm_max_iter": 500,
+          "admm_eps_abs": 1e-05,
+          "admm_eps_rel": 0.0001,
+          "state_dim": 10,
+          "control_dim": 4,
+          "state_order": "position, quaternion_wxyz, world_velocity",
+          "input": "collective_thrust_acceleration_mps2, body_rate_radps",
+          "solver_input": "total_thrust_N, body_rate_radps",
+          "mass_kg": 0.752,
+          "cost_weights_p_qwxyz_v_thrust_body_rate": [
+            80.0,
+            80.0,
+            100.0,
+            50.0,
+            50.0,
+            50.0,
+            30.0,
+            6.0,
+            6.0,
+            8.0,
+            1.0,
+            0.8,
+            0.8,
+            0.4
+          ],
+          "input_cost_target": "reference thrust, zero body rates",
+          "rate_controller": {
+            "natural_frequency_rad_s": 40.0,
+            "damping_ratio": 0.9,
+            "rate_gain_per_s": [
+              52.79999923706055,
+              52.79999923706055,
+              52.79999923706055
+            ],
+            "rate_damping": [
+              1.375999927520752,
+              1.375999927520752,
+              1.375999927520752
+            ],
+            "rate_limit_rad_s": [
+              10.0,
+              10.0,
+              4.0
+            ]
+          },
+          "rotor_allocation": "uniform torque scaling and collective shift within rotor bounds",
+          "ctbr_lower": [
+            0.0,
+            -10.0,
+            -10.0,
+            -4.0
+          ],
+          "ctbr_upper": [
+            45.212765957446805,
+            10.0,
+            10.0,
+            4.0
+          ],
+          "prewarm_seconds": 10.100877898046747,
+          "source_commit": "e36743e8076bfe12b3e11911e2f1f866d61ae158",
+          "solver": "Isaac-L2F Python SQP/ADMM/nvmath-cuDSS"
+        }
+      }
+    ],
+    "ideal_baselines": [
+      {
+        "source_directory": "results/ideal_turbompc_20261115_1927/ideal/medium/seed002",
+        "reused_baseline": true,
+        "scene": "medium",
+        "seed": 2,
+        "arrived": true,
+        "collision": false,
+        "out_of_bounds": false,
+        "tracking_max_m": 4.842352791017467e-07,
+        "planning_failures": 30,
+        "duration_sim_s": 16.540000000000003
+      },
+      {
+        "source_directory": "results/ideal_turbompc_20261115_1927/ideal/dense/seed004",
+        "reused_baseline": true,
+        "scene": "dense",
+        "seed": 4,
+        "arrived": true,
+        "collision": false,
+        "out_of_bounds": false,
+        "tracking_max_m": 4.938480775088803e-07,
+        "planning_failures": 221,
+        "duration_sim_s": 30.580000000000002
+      }
+    ]
+  },
+  "metric_definitions": {
+    "tracking": "post-step actual position versus held published reference",
+    "planning_failures": "returned success=false, including backup wait",
+    "solve": "all synchronized solver calls, including pre-motion waiting; constructor prewarm excluded",
+    "motion": "after speed first exceeds0.5m/s",
+    "arrival": "within0.1m of source-resolved goal and speed below0.3m/s for0.5s"
+  },
+  "provenance": {
+    "runtime_source_hashes_match_final_source": true,
+    "physical_asset_and_planner_files_unchanged_from_base": true,
+    "fixed_replay_source": "results/ideal_turbompc_20261115_1927/nmpc/medium/seed002",
+    "fixed_replay_window_s": [
+      4.28,
+      6.99
+    ]
+  },
+  "diagnostics_files": [
+    "results/turbompc_tracking_20261115_222728/cost_diagnostics.json",
+    "results/turbompc_tracking_20261115_222728/fixed_replay_solver_diagnostics.json"
+  ],
+  "viewer_url": "http://100.92.244.71:9118?url=rerun%2Bhttp%3A%2F%2F100%2E92%2E244%2E71%3A9898%2Fproxy",
+  "download_url": "http://100.92.244.71:9119/"
+}

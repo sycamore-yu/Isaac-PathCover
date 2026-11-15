@@ -143,7 +143,7 @@ class FlightEnv(DirectRLEnv):
         if self._ideal_state is None:
             if self._ctbr_command is not None:
                 self.command.copy_(self.rate_controller.wrench(
-                    self._ctbr_command, self.robot.data.root_com_ang_vel_b.torch))
+                    self._ctbr_command, self.robot.data.root_com_ang_vel_b.torch, self.physics_dt))
                 self.actuator.command(self.command)
             force, torque = self.actuator.step(self.physics_dt)
         else:
@@ -177,6 +177,7 @@ class FlightEnv(DirectRLEnv):
         super()._reset_idx(env_ids)
         ids = torch.as_tensor(env_ids, dtype=torch.long, device=self.device)
         self.actuator.reset(ids)
+        self.rate_controller.reset(ids)
         self.command[ids] = 0.
         self.command[ids, 0] = -self.params.mass[ids] * self.params.gravity[ids, 2]
         pose = torch.zeros((len(ids), 7), device=self.device)

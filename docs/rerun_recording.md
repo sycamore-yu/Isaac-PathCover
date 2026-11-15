@@ -3,16 +3,36 @@
 录制直接读取 Ideal 或 NMPC 飞行数据，不重新运行仿真。
 每条录制使用同一批 `flight.npz`、`planning.json`、`fsm.json` 和轨迹多项式。
 
-## Ideal 与 10D TurboMPC 对照
+## 10D TurboMPC 修复后的对照
 
-本次输出目录为 `results/ideal_turbompc_20261115_1927/rerun/`。
+本次输出目录为 `results/turbompc_tracking_20261115_222728/rerun/`。
+`nmpc/` 保存修复后的 Medium seed2 与 Dense seed4。
+`ideal_baseline/` 保存原 Ideal 录制的副本，SHA256 与原文件一致。
+两个场景的两种控制模式均无碰撞到达。
+
+2 条新 NMPC 录制均通过 `rrd verify`。Ideal 沿用已验证的录制。
+结果、固定轨迹诊断和验证见 [跟踪修复报告](controller_tracking_fix.md)。
+
+- [本次 Rerun 回放](http://100.92.244.71:9118?url=rerun%2Bhttp%3A%2F%2F100%2E92%2E244%2E71%3A9898%2Fproxy)
+- [本次录制与统计下载](http://100.92.244.71:9119/)
+
+```bash
+/home/tong/.local/share/pipx/venvs/rerun-sdk/bin/python scripts/record_rerun.py \
+  --scene both --source results/turbompc_tracking_20261115_222728/nmpc \
+  --output results/turbompc_tracking_20261115_222728/rerun/nmpc --fps 12
+/home/tong/.local/bin/rerun results/turbompc_tracking_20261115_222728/rerun/*/*.rrd
+```
+
+## 初版 Ideal 与 10D TurboMPC 对照（保留）
+
+原输出目录为 `results/ideal_turbompc_20261115_1927/rerun/`。
 `ideal/` 和 `nmpc/` 分别保存 Medium seed2 与 Dense seed4。
 录制名称包含控制器。NMPC 另有实际求解耗时曲线，单位为 ms。
 
 4 条录制均通过 `rrd verify`。结果和归因见 [对照报告](controller_comparison.md)。
 
-- [本次 Rerun 回放](http://100.92.244.71:9116?url=rerun%2Bhttp%3A%2F%2F100%2E92%2E244%2E71%3A9897%2Fproxy)
-- [本次录制与统计下载](http://100.92.244.71:9117/)
+- [初版 Rerun 回放](http://100.92.244.71:9116?url=rerun%2Bhttp%3A%2F%2F100%2E92%2E244%2E71%3A9897%2Fproxy)
+- [初版录制与统计下载](http://100.92.244.71:9117/)
 
 ```bash
 /home/tong/.local/share/pipx/venvs/rerun-sdk/bin/python scripts/record_rerun.py \

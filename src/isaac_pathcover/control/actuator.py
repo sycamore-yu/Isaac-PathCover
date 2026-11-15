@@ -31,7 +31,15 @@ class RotorActuator:
 
     def command(self, wrench):
         self.requested_wrench.copy_(wrench)
-        thrust = torch.einsum("nij,nj->ni", self.allocation_inverse, wrench)
+        differential = torch.einsum("nij,nj->ni", self.allocation_inverse[:, :, 1:], wrench[:, 1:])
+        span = differential.amax(dim=-1, keepdim=True) - differential.amin(dim=-1, keepdim=True)
+        available = self.upper[:, :1] - self.lower[:, :1]
+        differential *= available / span.maximum(available)
+        collective_min = (self.lower - differential).amax(dim=-1, keepdim=True)
+        collective_max = (self.upper - differential).amin(dim=-1, keepdim=True)
+        collective = (wrench[:, :1] / 4).maximum(collective_min).minimum(collective_max)
+        thrust = collective + differential
+        # The common collective shift and uniform torque scale preserve torque direction.
         self.allocated_thrust.copy_(thrust.maximum(self.lower).minimum(self.upper))
         self.allocated_wrench.copy_(torch.einsum("nij,nj->ni", self.allocation, self.allocated_thrust))
         self.motor_command.copy_(self._inverse_thrust(self.allocated_thrust))

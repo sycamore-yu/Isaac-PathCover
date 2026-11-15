@@ -4,7 +4,7 @@
 
 执行层提供 Ideal 和 TurboMPC 两种模式。两种模式共享 SUPER + RISP 规划、CmdTraj、状态机与传感器。旧几何控制器的 9 次飞行保留在 [历史验收记录](docs/super_validation.md)。
 
-本次 [Ideal / 10D TurboMPC 对照](docs/controller_comparison.md) 已完成：两个 Ideal 场景均无碰撞到达。10D TurboMPC 通过扰动悬停，但 Medium 碰撞、Dense 下坠越界。记录将直接失败指向控制跟踪与分配饱和。规划参数、时间判断和状态机保持原样。
+本次 [10D TurboMPC 跟踪修复与对照](docs/controller_tracking_fix.md) 已完成：修复后的 NMPC 与已有 Ideal 基线在 Medium seed2、Dense seed4 均无碰撞到达。NMPC 最大跟踪误差为 0.290 m、0.327 m。修复涉及旋翼分配、角速度反馈和输入成本。规划参数、时间判断和状态机保持原样。[初版对照及失败记录](docs/controller_comparison.md) 完整保留。
 
 ## 运行
 
@@ -46,8 +46,9 @@ OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 .venv/bin/python -m isaac_pathcover.dem
 | `control/ideal.py` | SUPER perfect_drone_sim 的位置、速度与平坦性姿态赋值 |
 | `control/nmpc.py` | 未来参考采样、10 维状态跟踪、滚动求解并输出推力加速度和机体系角速度 |
 | `control/solvers/` | 从 Isaac-L2F 复制的 Python SQP、ADMM 与 nvmath/cuDSS 求解组件 |
-| `control/rate.py` | 角速度内环，将期望机体系角速度转换为力矩 |
-| `simulation/` | 保留的 Newton 刚体、旋翼分配、电机滞后、场景与传感器 |
+| `control/rate.py` | 角速度内环，使用角速度反馈和实测角加速度阻尼生成力矩 |
+| `control/actuator.py` | 保持力矩方向的旋翼分配，以及原电机一阶响应 |
+| `simulation/` | 保留的 Newton 刚体、场景与传感器 |
 
 规划使用 Python、NumPy、SciPy 和 Numba。数值核由 Numba 在 CPU 编译并缓存，保留一套 Python 算法源码。运行时不调用 ROS、C++ 对照程序或自定义 C++/CUDA 扩展。现有 Newton 仿真使用 Isaac Lab、PyTorch、Warp 和 Newton 官方依赖。旧 NanoVox、JPS/DMP、GCOPTER 规划器与同步演示入口已经移除。
 
@@ -90,17 +91,14 @@ SUPER 源码保留以下时间判断：
 
 ```bash
 /home/tong/.local/share/pipx/venvs/rerun-sdk/bin/python scripts/record_rerun.py \
-  --scene both --source results/ideal_turbompc_20261115_1927/ideal \
-  --output results/ideal_turbompc_20261115_1927/rerun/ideal
-/home/tong/.local/share/pipx/venvs/rerun-sdk/bin/python scripts/record_rerun.py \
-  --scene both --source results/ideal_turbompc_20261115_1927/nmpc \
-  --output results/ideal_turbompc_20261115_1927/rerun/nmpc
-/home/tong/.local/bin/rerun results/ideal_turbompc_20261115_1927/rerun/*/*.rrd
+  --scene both --source results/turbompc_tracking_20261115_222728/nmpc \
+  --output results/turbompc_tracking_20261115_222728/rerun/nmpc
+/home/tong/.local/bin/rerun results/turbompc_tracking_20261115_222728/rerun/*/*.rrd
 ```
 
 回放包含无人机姿态、主轨迹、备用轨迹、实际与参考速度、规划耗时、NMPC 求解耗时、状态机和接触力。录制名称包含控制器，旧记录标为历史几何控制器。
 
-[打开本次 4 条回放](http://100.92.244.71:9116?url=rerun%2Bhttp%3A%2F%2F100%2E92%2E244%2E71%3A9897%2Fproxy) · [下载录制与统计](http://100.92.244.71:9117/)。生成方法与历史入口见 [Rerun 说明](docs/rerun_recording.md)。
+[打开本次 4 条回放](http://100.92.244.71:9118?url=rerun%2Bhttp%3A%2F%2F100%2E92%2E244%2E71%3A9898%2Fproxy) · [下载录制与统计](http://100.92.244.71:9119/)。其中 Ideal 使用原基线录制。生成方法与历史入口见 [Rerun 说明](docs/rerun_recording.md)。
 
 ## 验证与来源
 

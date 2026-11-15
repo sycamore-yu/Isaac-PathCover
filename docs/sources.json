@@ -26,7 +26,7 @@
       "file": "src/isaac_l2f/control/ctbr.py",
       "sha256": "7744a7ecaf107b6a28571cd9d1ef016a770e98275b7472263a22d50a8c0a3be9"
     },
-    "adapted": "Copied 10-state thrust/body-rate model and Python SQP/ADMM/nvmath code; external CTBR thrust is converted from N to m/s^2, with body-rate control and motor response in the existing Newton plant. No symlinks or runtime imports from Isaac-L2F."
+    "adapted": "Copied 10-state thrust/body-rate model and Python SQP/ADMM/nvmath code; external CTBR thrust is converted from N to m/s^2. The Newton plant uses body-rate feedback with measured angular-acceleration damping, torque-direction preserving rotor allocation, and the original motor response. Tracking uses reference thrust and zero-centered body-rate input costs. No symlinks or runtime imports from Isaac-L2F."
   },
   "isaaclab": {
     "release": "3.0.0",
