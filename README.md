@@ -33,6 +33,8 @@ OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 .venv/bin/python -m isaac_pathcover.dem
 | `plans/NNNN/corridor.json` | 对应多面体、种子点和局部终点 |
 | `trajectory.npz`、`corridor.json` | 首次接受的轨迹和走廊 |
 
+可以使用 [`scripts/record_rerun.py`](scripts/record_rerun.py) 将已录制的 Newton 轨迹转成 Rerun `.rrd`，交互回放障碍物、无人机姿态、实际轨迹、参考轨迹和速度曲线。使用说明见 [Rerun 回放](docs/rerun_recording.md)。
+
 场景目录中的 `summary.json` 汇总所有种子。`source_hashes.json` 固定本次运行的 Python 源码。候选求解成功但执行检查失败时，候选仍会保存；以 `handoff.accepted` 判断是否执行。
 
 ## 安装
